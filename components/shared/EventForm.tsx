@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { eventFormSchema } from "@/lib/validator"; //! Schema du formulaire
-import { eventDefaultValues } from "@/constants"; //! Valeur initiale du formulaire (vide)
+import { departements, eventDefaultValues } from "@/constants"; //! Valeur initiale du formulaire (vide)
 import { useState } from "react";
 import Image from "next/image";
 
@@ -16,6 +16,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Dropdown from "./Dropdown";
@@ -155,7 +162,7 @@ const EventForm = ({ userId, type }: EventFormProps) => {
 
           <FormField
             control={form.control}
-            name="city"
+            name="departement"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
@@ -166,11 +173,22 @@ const EventForm = ({ userId, type }: EventFormProps) => {
                       height={24}
                       alt="location icon"
                     />
-                    <Input
-                      placeholder="Ville"
-                      {...field}
-                      className="input-field"
-                    />
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger className="select-field">
+                        <SelectValue placeholder="Département" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {departements.departements.map((departement) => (
+                          <SelectItem
+                            key={departement.numero}
+                            value={departement.numero}
+                            className="select-item p-regular-14 "
+                          >
+                            {departement.nom} - {departement.numero}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </FormControl>
                 <FormMessage />

@@ -22,7 +22,7 @@ export type CreateEventParams = {
     title: string;
     description: string;
     location: string;
-    city: string;
+    departement: string;
     imageUrl: string;
     startDateTime: Date;
     endDateTime: Date;
@@ -42,7 +42,7 @@ export type UpdateEventParams = {
     imageUrl: string;
     description: string;
     location: string;
-    city: string;
+    departement: string;
     startDateTime: Date;
     endDateTime: Date;
     categoryId: string;
@@ -86,7 +86,7 @@ export type Event = {
   isFree: boolean;
   imageUrl: string;
   location: string;
-  city: string;
+  departement: string;
   startDateTime: Date;
   endDateTime: Date;
   url: string;

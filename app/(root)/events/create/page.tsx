@@ -5,7 +5,7 @@ import React from "react";
 export default function CreateEvent() {
   const { sessionClaims } = auth();
 
-  const userId = sessionClaims?.userId as string;
+  const userId = sessionClaims?.userId as string; // Pour récupérer l'id de l'utilisateur connecté, on modifie la session Clerk (depuis le site : customize session token) et ajouter { "userId": "{{user.public_metadata.userId}}"}
 
   return (
     <>

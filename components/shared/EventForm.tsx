@@ -33,6 +33,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
+import { useUploadThing } from "../../lib/uploadthing";
+import { useRouter } from "next/navigation";
+import { createEvent } from "@/lib/actions/event.actions";
 
 //! On va afficher soit le form pour CREER soit pour UPDATE grâce au TYPE que l'on passe au composant EVENTFORM
 type EventFormProps = {
@@ -41,11 +44,15 @@ type EventFormProps = {
 };
 
 const EventForm = ({ userId, type }: EventFormProps) => {
+  const router = useRouter();
+
   registerLocale("fr", fr); // On enregistre la locale fr pour les dates
 
   const [files, setFiles] = useState<File[]>([]); // Pour la gestion des fichiers (images)
 
   const initialValues = eventDefaultValues;
+
+  const { startUpload } = useUploadThing("imageUploader"); //! Hook pour uploader des images
 
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
@@ -53,8 +60,34 @@ const EventForm = ({ userId, type }: EventFormProps) => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof eventFormSchema>) {
+  async function onSubmit(values: z.infer<typeof eventFormSchema>) {
     console.log(values);
+
+    let uploadedImgUrl = values.imageUrl;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+
+      if (!uploadedImages) return;
+
+      uploadedImgUrl = uploadedImages[0].url;
+    }
+
+    if (type === "Créer") {
+      try {
+        const newEvent = await createEvent({
+          event: { ...values, imageUrl: uploadedImgUrl },
+          userId,
+          path: "/profil",
+        });
+        if (newEvent) {
+          form.reset();
+          router.push(`/events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 
   return (

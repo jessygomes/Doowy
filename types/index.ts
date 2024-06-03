@@ -61,6 +61,7 @@ export type DeleteEventParams = {
 export type GetAllEventsParams = {
   query: string;
   category: string;
+  departement: string;
   limit: number;
   page: number;
 };

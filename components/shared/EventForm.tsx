@@ -35,22 +35,32 @@ import { registerLocale, setDefaultLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import { useUploadThing } from "../../lib/uploadthing";
 import { useRouter } from "next/navigation";
-import { createEvent } from "@/lib/actions/event.actions";
+import { createEvent, updateEvent } from "@/lib/actions/event.actions";
+import { IEvent } from "@/lib/mongoDb/database/models/Event";
 
 //! On va afficher soit le form pour CREER soit pour UPDATE grâce au TYPE que l'on passe au composant EVENTFORM
 type EventFormProps = {
   userId: string;
   type: "Créer" | "Modifier";
+  event?: IEvent;
+  eventId?: string;
 };
 
-const EventForm = ({ userId, type }: EventFormProps) => {
+const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   const router = useRouter();
 
   registerLocale("fr", fr); // On enregistre la locale fr pour les dates
 
   const [files, setFiles] = useState<File[]>([]); // Pour la gestion des fichiers (images)
 
-  const initialValues = eventDefaultValues;
+  const initialValues =
+    event && type === "Modifier"
+      ? {
+          ...event,
+          startDateTime: new Date(event.startDateTime),
+          endDateTime: new Date(event.endDateTime),
+        }
+      : eventDefaultValues;
 
   const { startUpload } = useUploadThing("imageUploader"); //! Hook pour uploader des images
 
@@ -83,6 +93,27 @@ const EventForm = ({ userId, type }: EventFormProps) => {
         if (newEvent) {
           form.reset();
           router.push(`/events/${newEvent._id}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    if (type === "Modifier") {
+      if (!eventId) {
+        router.back();
+        return;
+      }
+
+      try {
+        const updatedEvent = await updateEvent({
+          event: { ...values, imageUrl: uploadedImgUrl, _id: eventId },
+          userId,
+          path: `/events/${eventId}`,
+        });
+        if (updatedEvent) {
+          form.reset();
+          router.push(`/events/${updatedEvent._id}`);
         }
       } catch (error) {
         console.error(error);

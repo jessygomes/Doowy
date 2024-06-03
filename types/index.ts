@@ -6,6 +6,7 @@ export type CreateUserParams = {
   username: string;
   email: string;
   photo: string;
+  wishlist: string[];
 };
 
 export type UpdateUserParams = {
@@ -13,6 +14,7 @@ export type UpdateUserParams = {
   lastName: string;
   username: string;
   photo: string;
+  wishlist: string[];
 };
 
 // ====== EVENT PARAMS

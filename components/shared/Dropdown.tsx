@@ -1,6 +1,6 @@
 "use client";
 import { ICategory } from "@/lib/mongoDb/database/models/Category";
-import { startTransition, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 
 import {
   Select,
@@ -21,6 +21,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "../ui/input";
+import { createCategory, getAllCategory } from "@/lib/actions/category.actions";
 
 type DropDownProps = {
   value?: string;
@@ -31,7 +32,23 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
   const [newCategory, setNewCategory] = useState("");
 
-  const handleAddCategory = () => {};
+  //! Méthode pour créer une catégorie en appelant l'actions créé dans lib/actions/category.actions.ts
+  const handleAddCategory = () => {
+    createCategory({ categoryName: newCategory.trim() }).then((category) => {
+      setCategories((prevState) => [...prevState, category]);
+    });
+  };
+
+  //! Chargment des catégories en appelant l'actions créé dans lib/actions/category.actions.ts
+  useEffect(() => {
+    const getCategories = async () => {
+      const categoryList = await getAllCategory();
+
+      categoryList && setCategories(categoryList as ICategory[]); // On vérifie si la liste des catégories est définie avant de la mettre à jour dans le state
+    };
+
+    getCategories();
+  }, [setCategories]);
 
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
@@ -53,7 +70,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
         {/* Créer la catégorie */}
         <AlertDialog>
           <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 text-primary-500 hover:bg-primary-50 focus:text-primary-500">
-            Open
+            Ajouter une catégorie
           </AlertDialogTrigger>
 
           <AlertDialogContent className="bg-white">

@@ -7,7 +7,7 @@ const UserSchema = new Schema({
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
   photo: { type: String, required: true },
-  wishlist: [{ type: Schema.Types.ObjectId, ref: "Event" }],
+  wishlist: [{ type: Schema.Types.ObjectId, ref: "Event", default: [] }],
 });
 
 const User = models.User || model("User", UserSchema);

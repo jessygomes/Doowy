@@ -1,3 +1,4 @@
+import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
 import Collection from "@/components/shared/Collection";
 import {
   getEventById,
@@ -85,6 +86,7 @@ export default async function EventDetail({
                 />
                 <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
               </div>
+              <BtnAddFavorite event={event} />
             </div>
 
             <div className="flex flex-col gap-2">

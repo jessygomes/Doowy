@@ -1,12 +1,15 @@
 import { IEvent } from "@/lib/mongoDb/database/models/Event";
-import React from "react";
 import Card from "./Card";
 
 type CollectionProps = {
   data: IEvent[];
   emptyTitle: string;
   emptyStateSubtext: string;
-  collectionType?: "Events_Organized" | "My_tickets" | "All_Events";
+  collectionType?:
+    | "Events_Organized"
+    | "My_tickets"
+    | "All_Events"
+    | "All_Events_Favorite";
   limit: number;
   page: number | string;
   totalPages?: number;
@@ -31,6 +34,7 @@ const Collection = ({
             {data.map((event) => {
               const hasOrderLink = collectionType === "Events_Organized";
               const hidePrice = collectionType === "My_tickets";
+              const removeFavorite = collectionType === "All_Events_Favorite";
 
               return (
                 <li key={event._id} className="flex justify-center">
@@ -38,6 +42,7 @@ const Collection = ({
                     event={event}
                     hasOrderLink={hasOrderLink}
                     hidePrice={hidePrice}
+                    removeFavorite={removeFavorite}
                   />
                 </li>
               );

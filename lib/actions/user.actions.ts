@@ -6,7 +6,9 @@ import { connectToDb } from "../mongoDb/database";
 import User from "../mongoDb/database/models/User";
 import Event from "../mongoDb/database/models/Event";
 import Order from "../mongoDb/database/models/Order";
+import Category from "../mongoDb/database/models/Category";
 
+//! CREER UN USER
 export const createUser = async (user: CreateUserParams) => {
   try {
     await connectToDb();
@@ -19,6 +21,7 @@ export const createUser = async (user: CreateUserParams) => {
   }
 };
 
+//! GET USER BY ID
 export async function getUserById(userId: string) {
   try {
     await connectToDb();
@@ -32,6 +35,7 @@ export async function getUserById(userId: string) {
   }
 }
 
+//! UPDATE USER
 export async function updateUser(clerkId: string, user: UpdateUserParams) {
   try {
     await connectToDb();
@@ -47,6 +51,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
   }
 }
 
+//! DELETE USER
 export async function deleteUser(clerkId: string) {
   try {
     await connectToDb();
@@ -78,6 +83,71 @@ export async function deleteUser(clerkId: string) {
     revalidatePath("/");
 
     return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+//! AJOUTER AUX FAVORIS
+export async function addFavoriteEvent({
+  userId,
+  eventId,
+}: {
+  userId: string;
+  eventId: string;
+}) {
+  try {
+    await connectToDb();
+
+    const user = await User.findById(userId);
+
+    if (!user) throw new Error("User not found");
+
+    const isLiked = user.wishlist
+      .map((event: any) => event._id.toString())
+      .includes(eventId);
+
+    if (isLiked) {
+      user.wishlist = user.wishlist.filter(
+        (event: any) => event._id.toString() !== eventId
+      );
+    } else {
+      user.wishlist.push(eventId);
+    }
+    await user.save();
+
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+//! GET LA WISHLIST
+export async function getWishlist({
+  userId,
+  page = 1,
+}: {
+  userId: string;
+  page: number;
+}) {
+  try {
+    await connectToDb();
+
+    const skipAmount = (Number(page) - 1) * 6;
+
+    const user = await User.findById(userId).populate({
+      path: "wishlist",
+      populate: [
+        { path: "organizer" },
+        { path: "category", model: Category, select: "_id name" },
+      ],
+
+      options: { sort: { createdAt: "desc" }, skip: skipAmount, limit: 6 },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    return JSON.parse(JSON.stringify(user.wishlist));
   } catch (error) {
     handleError(error);
   }

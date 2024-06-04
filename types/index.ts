@@ -6,7 +6,6 @@ export type CreateUserParams = {
   username: string;
   email: string;
   photo: string;
-  wishlist: string[];
 };
 
 export type UpdateUserParams = {
@@ -14,7 +13,6 @@ export type UpdateUserParams = {
   lastName: string;
   username: string;
   photo: string;
-  wishlist: string[];
 };
 
 // ====== EVENT PARAMS
@@ -76,6 +74,13 @@ export type GetEventsByUserParams = {
 
 export type GetRelatedEventsByCategoryParams = {
   categoryId: string;
+  eventId: string;
+  limit?: number;
+  page: number | string;
+};
+
+export type GetFavoriteEvent = {
+  userId: string;
   eventId: string;
   limit?: number;
   page: number | string;

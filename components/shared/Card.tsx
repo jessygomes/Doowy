@@ -4,19 +4,30 @@ import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 import { DeleteConfirmation } from "./DeleteConfirmation";
-import { Button } from "../ui/button";
+import BtnAddFavorite from "./BtnAddFavorite";
 
 type CardProps = {
   event: IEvent;
   hasOrderLink: boolean;
   hidePrice: boolean;
+  removeFavorite: boolean;
 };
 
-const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
+const Card = ({
+  event,
+  hasOrderLink,
+  hidePrice,
+  removeFavorite,
+}: CardProps) => {
   //! Vérifier si l'ID du User actuelle correspond au userId d'un event --> pour afficher l'event différemment
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
-  const isEventCreator = userId === event.organizer._id.toString();
+  const isEventCreator =
+    event.organizer && event.organizer._id
+      ? userId === event.organizer._id.toString()
+      : false;
+  console.log("USER ID ---- ", userId);
+  // console.log("EVENT ORGANIZER ---- ", event.organizer._id.toString());
 
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
@@ -67,7 +78,7 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
             {event.organizer.firstName} {event.organizer.lastName}
           </p>
 
-          {hasOrderLink && (
+          {/* {hasOrderLink && (
             <Link href={`/orders?eventId=${event._id}`} className="flex gap-2">
               <p className=" text-primary-500">Order Details</p>
               <Image
@@ -77,9 +88,9 @@ const Card = ({ event, hasOrderLink, hidePrice }: CardProps) => {
                 height={10}
               />
             </Link>
-          )}
+          )} */}
 
-          <Button>Ajouter aux favoris</Button>
+          <BtnAddFavorite removeFavorite={removeFavorite} event={event} />
         </div>
       </div>
     </div>

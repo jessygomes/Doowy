@@ -10,7 +10,7 @@ const Header = () => {
     <header className="w-full border-b">
       <div className="wrapper flex items-center justify-between">
         <Link href="/" className="font-bold text-4xl">
-          TurnUp!
+          vibey!
         </Link>
 
         <SignedIn>

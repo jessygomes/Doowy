@@ -1,5 +1,6 @@
 import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
 import Collection from "@/components/shared/Collection";
+import { Button } from "@/components/ui/button";
 import {
   getEventById,
   getRelatedEventsByCategory,
@@ -9,6 +10,7 @@ import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default async function EventDetail({
@@ -77,12 +79,11 @@ export default async function EventDetail({
                   width={32}
                   height={32}
                 />
-                <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center">
+                <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
                   <p>
                     {formatDateTime(event.startDateTime).dateOnly} -{" "}
-                    {formatDateTime(event.startDateTime).timeOnly}
+                    {formatDateTime(event.startDateTime).timeOnly} |{" "}
                   </p>
-
                   <p>
                     {formatDateTime(event.endDateTime).dateOnly} -{" "}
                     {formatDateTime(event.endDateTime).timeOnly}
@@ -99,7 +100,14 @@ export default async function EventDetail({
                 />
                 <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
               </div>
-              <BtnAddFavorite isFavorite={isFavorite} event={event} />
+              <div className="flex justify-center gap-8">
+                <Link href={event.url} className="w-full">
+                  <Button className="rounded-full w-full">
+                    Prendre mon billet
+                  </Button>
+                </Link>
+                <BtnAddFavorite isFavorite={isFavorite} event={event} />
+              </div>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -107,9 +115,10 @@ export default async function EventDetail({
                 Ce qu&apos;il faut savoir :{" "}
               </p>
               <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
-              <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
+
+              {/* <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
                 {event.url}
-              </p>
+              </p> */}
             </div>
           </div>
         </div>

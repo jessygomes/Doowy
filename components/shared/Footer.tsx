@@ -7,7 +7,7 @@ const Footer = () => {
     <footer className="border-t">
       <div className="flex-center wrapper flex-between flex flex-col gap-4 p-5 text-center sm:flex-row">
         <Link href="/" className="font-bold text-2xl">
-          TurnUp!
+          vibey!
           {/* <Image
             src="/assets/images/logo.svg"
             alt="logo"
@@ -16,7 +16,7 @@ const Footer = () => {
           /> */}
         </Link>
 
-        <p>2024 TurnUp! | All Rights reserved</p>
+        <p>2024 vibey! | All Rights reserved</p>
       </div>
     </footer>
   );

@@ -29,7 +29,7 @@ const Card = async ({
   if (userId) {
     //! Réupération du tableau des favoris de l'utilisateur
     const favoriteEvent = await getWishlist({ userId, page: 1 });
-    console.log("WISHLIST ---- ", favoriteEvent);
+    // console.log("WISHLIST ---- ", favoriteEvent);
 
     //! Véririe si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
     isFavorite = favoriteEvent.some(
@@ -42,7 +42,7 @@ const Card = async ({
     event.organizer && event.organizer._id
       ? userId === event.organizer._id.toString()
       : false;
-  console.log("USER ID ---- ", userId);
+  // console.log("USER ID ---- ", userId);
 
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">

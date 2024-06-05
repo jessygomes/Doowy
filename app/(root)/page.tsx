@@ -15,8 +15,6 @@ export default async function Home() {
     nbFav: 0,
   });
 
-  console.log(events);
-
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
@@ -37,13 +35,13 @@ export default async function Home() {
             </Button>
           </div>
 
-          <Image
+          {/* <Image
             src="/assets/images/hero.png"
             alt="Hero"
             width={1000}
             height={1000}
             className="max-h-[70vh] object-contain object-center 2xl:max-h-[50vh]"
-          />
+          /> */}
         </div>
       </section>
 

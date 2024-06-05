@@ -52,7 +52,9 @@ const BtnAddFavorite = ({
             {isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
           </Button>
         ) : (
-          <div className="rounded-full">{event.nbFav} favoris</div>
+          <Button disabled className="rounded-full">
+            {event.nbFav} favoris
+          </Button>
         )}
       </SignedIn>
     </>

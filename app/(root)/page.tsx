@@ -12,6 +12,7 @@ export default async function Home() {
     departement: "",
     page: 1,
     limit: 6,
+    nbFav: 0,
   });
 
   console.log(events);

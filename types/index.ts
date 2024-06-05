@@ -64,6 +64,7 @@ export type GetAllEventsParams = {
   departement: string;
   limit: number;
   page: number;
+  nbFav: number;
 };
 
 export type GetEventsByUserParams = {
@@ -77,6 +78,7 @@ export type GetRelatedEventsByCategoryParams = {
   eventId: string;
   limit?: number;
   page: number | string;
+  nbFav?: number;
 };
 
 export type GetFavoriteEvent = {
@@ -107,6 +109,7 @@ export type Event = {
     _id: string;
     name: string;
   };
+  nbFav: number;
 };
 
 // ====== CATEGORY PARAMS

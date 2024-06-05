@@ -20,6 +20,7 @@ export interface IEvent extends Document {
     firstName: string;
     lastName: string;
   };
+  nbFav?: number;
 }
 
 const EventSchema = new Schema({
@@ -36,6 +37,7 @@ const EventSchema = new Schema({
   url: { type: String },
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   organizer: { type: Schema.Types.ObjectId, ref: "User" },
+  nbFav: { type: Number },
 });
 
 const Event = models.Event || model("Event", EventSchema);

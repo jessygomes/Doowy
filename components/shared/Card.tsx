@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { DeleteConfirmation } from "./DeleteConfirmation";
 import BtnAddFavorite from "./BtnAddFavorite";
+import { getWishlist } from "@/lib/actions/user.actions";
 
 type CardProps = {
   event: IEvent;
@@ -13,7 +14,7 @@ type CardProps = {
   removeFavorite: boolean;
 };
 
-const Card = ({
+const Card = async ({
   event,
   hasOrderLink,
   hidePrice,
@@ -22,12 +23,26 @@ const Card = ({
   //! Vérifier si l'ID du User actuelle correspond au userId d'un event --> pour afficher l'event différemment
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
+
+  let isFavorite = false;
+
+  if (userId) {
+    //! Réupération du tableau des favoris de l'utilisateur
+    const favoriteEvent = await getWishlist({ userId, page: 1 });
+    console.log("WISHLIST ---- ", favoriteEvent);
+
+    //! Véririe si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
+    isFavorite = favoriteEvent.some(
+      (favorite: any) => favorite._id === event._id
+    );
+  }
+
+  //! Vérifier si le User est le créateur de l'event
   const isEventCreator =
     event.organizer && event.organizer._id
       ? userId === event.organizer._id.toString()
       : false;
   console.log("USER ID ---- ", userId);
-  // console.log("EVENT ORGANIZER ---- ", event.organizer._id.toString());
 
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
@@ -90,7 +105,7 @@ const Card = ({
             </Link>
           )} */}
 
-          <BtnAddFavorite removeFavorite={removeFavorite} event={event} />
+          <BtnAddFavorite isFavorite={isFavorite} event={event} />
         </div>
       </div>
     </div>

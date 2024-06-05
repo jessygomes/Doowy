@@ -4,8 +4,10 @@ import {
   getEventById,
   getRelatedEventsByCategory,
 } from "@/lib/actions/event.actions";
+import { getWishlist } from "@/lib/actions/user.actions";
 import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import React from "react";
 
@@ -20,6 +22,17 @@ export default async function EventDetail({
     eventId: event._id,
     page: searchParams.page as string,
   });
+
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
+
+  let isFavorite = false;
+  if (userId) {
+    const favoriteEvent = await getWishlist({ userId, page: 1 });
+    isFavorite = favoriteEvent.some(
+      (favorite: any) => favorite._id === event._id
+    );
+  }
 
   return (
     <>
@@ -86,7 +99,7 @@ export default async function EventDetail({
                 />
                 <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
               </div>
-              <BtnAddFavorite event={event} />
+              <BtnAddFavorite isFavorite={isFavorite} event={event} />
             </div>
 
             <div className="flex flex-col gap-2">

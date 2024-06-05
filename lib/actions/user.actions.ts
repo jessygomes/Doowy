@@ -107,12 +107,21 @@ export async function addFavoriteEvent({
       .map((event: any) => event._id.toString())
       .includes(eventId);
 
+    // Trouver l'événement et incrémenter nbFav
+    const event = await Event.findById(eventId);
+    if (!event) throw new Error("Event not found");
+
     if (isLiked) {
       user.wishlist = user.wishlist.filter(
         (event: any) => event._id.toString() !== eventId
       );
+      event.nbFav = Math.max(event.nbFav - 1, 0);
+      await event.save();
     } else {
       user.wishlist.push(eventId);
+
+      event.nbFav = event.nbFav + 1;
+      await event.save();
     }
     await user.save();
 

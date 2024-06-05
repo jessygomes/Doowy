@@ -410,7 +410,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         <Button
           type="submit"
           size="lg"
-          disabled={form.formState.isSubmitted}
+          // disabled={form.formState.isSubmitted}
           className="button col-span-2 w-full"
         >
           {form.formState.isSubmitted ? "En cours..." : `${type} l'événement`}

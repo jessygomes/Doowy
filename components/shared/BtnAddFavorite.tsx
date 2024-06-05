@@ -8,14 +8,16 @@ import { useState } from "react";
 
 const BtnAddFavorite = ({
   event,
-  removeFavorite,
+  isFavorite,
 }: {
   event: IEvent;
-  removeFavorite: any;
+  isFavorite: any;
 }) => {
   const { user } = useUser();
   const userId = user?.publicMetadata.userId as string;
   // const hasEventFinished = new Date(event.endDateTime) < new Date();
+
+  const [isFav, setIsFav] = useState(isFavorite);
 
   //! Vérifier si l'ID du User actuelle correspond au userId d'un event --> pour afficher l'event différemment
   // const isEventCreator = userId === event.organizer._id.toString();
@@ -29,7 +31,8 @@ const BtnAddFavorite = ({
   const handleAddFavorite = async () => {
     try {
       await addFavoriteEvent({ userId, eventId: event._id });
-      removeFavorite(!removeFavorite);
+
+      setIsFav(!isFav);
     } catch (error) {
       console.error("Erreur lors de l'ajout aux favoris", error);
     }
@@ -46,10 +49,10 @@ const BtnAddFavorite = ({
       <SignedIn>
         {!isEventCreator ? (
           <Button onClick={handleAddFavorite} className="rounded-full">
-            {!removeFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+            {isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
           </Button>
         ) : (
-          <div className="rounded-full">(nb) favoris</div>
+          <div className="rounded-full">{event.nbFav} favoris</div>
         )}
       </SignedIn>
     </>

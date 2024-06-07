@@ -8,6 +8,10 @@ const UserSchema = new Schema({
   lastName: { type: String, required: true },
   photo: { type: String, required: true },
   wishlist: [{ type: Schema.Types.ObjectId, ref: "Event", default: [] }],
+  description: { type: String, default: "" },
+  instagram: { type: String, default: "" },
+  twitter: { type: String, default: "" },
+  tiktok: { type: String, default: "" },
 });
 
 const User = models.User || model("User", UserSchema);

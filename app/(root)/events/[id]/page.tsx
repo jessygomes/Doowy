@@ -64,9 +64,12 @@ export default async function EventDetail({
 
                 <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
                   by{" "}
-                  <span className="text-primary-500">
+                  <Link
+                    href={`/profil/${event.organizer._id}`}
+                    className="text-primary-500"
+                  >
                     {event.organizer.firstName} {event.organizer.lastName}
-                  </span>
+                  </Link>
                 </p>
               </div>
             </div>

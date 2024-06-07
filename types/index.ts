@@ -13,6 +13,21 @@ export type UpdateUserParams = {
   lastName: string;
   username: string;
   photo: string;
+  description: string;
+  instagram: string;
+  twitter: string;
+  tiktok: string;
+};
+
+export type GetUserParams = {
+  firstName: string;
+  lastName: string;
+  username: string;
+  photo: string;
+  description: string;
+  instagram: string;
+  twitter: string;
+  tiktok: string;
 };
 
 // ====== EVENT PARAMS

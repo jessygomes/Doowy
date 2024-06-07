@@ -35,6 +35,20 @@ export async function getUserById(userId: string) {
   }
 }
 
+//! GET USER BY ID
+export async function getUserByIdForProfile(userId: string, fields: string) {
+  try {
+    await connectToDb();
+
+    const user = await User.findById(userId, fields);
+
+    if (!user) throw new Error("User not found");
+    return JSON.parse(JSON.stringify(user));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
 //! UPDATE USER
 export async function updateUser(clerkId: string, user: UpdateUserParams) {
   try {

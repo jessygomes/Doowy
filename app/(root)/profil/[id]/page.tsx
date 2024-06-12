@@ -1,7 +1,14 @@
+import BtnFollow from "@/components/shared/BtnFollow";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
 import { getEventsByUser } from "@/lib/actions/event.actions";
-import { getUserByIdForProfile } from "@/lib/actions/user.actions";
+import {
+  getFollowers,
+  getUserById,
+  getUserByIdForProfile,
+} from "@/lib/actions/user.actions";
+import { GetUserParams } from "@/types";
+import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
 interface Props {
@@ -13,7 +20,7 @@ interface Props {
 export default async function ProfilPublic({ params: { id } }: Props) {
   const userProfile = await getUserByIdForProfile(
     id,
-    "firstName lastName photo username"
+    "firstName lastName username description instagram twitter tiktok followers"
   );
 
   const eventsByUser = await getEventsByUser({
@@ -21,7 +28,21 @@ export default async function ProfilPublic({ params: { id } }: Props) {
     page: 1,
     limit: 6,
   });
-  console.log("EVENTS BY USER ---- ", eventsByUser);
+
+  const { sessionClaims } = auth();
+  const currentUserId = sessionClaims?.userId as string;
+
+  let isFollowing = false;
+
+  if (currentUserId) {
+    const currentUser = await getUserById(currentUserId);
+
+    isFollowing = currentUser.following
+      ? currentUser.following.some(
+          (follower: any) => follower.id === userProfile.id
+        )
+      : false;
+  }
 
   return (
     <>
@@ -30,22 +51,26 @@ export default async function ProfilPublic({ params: { id } }: Props) {
           <h3 className="h3-bold text-center sm:text-left">
             {userProfile.firstName} {userProfile.lastName}
           </h3>
-          <Button size="lg" className="button hidden sm:flex">
-            S&apos;abonner
-          </Button>
+          {currentUserId === id ? (
+            <Button asChild size="lg" className="button hidden sm:flex">
+              <Link href="/profil">Modifier mon profil</Link>
+            </Button>
+          ) : (
+            <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+          )}
+          <p>Followers : {userProfile.followers.length}</p>
         </div>
 
         <div className="wrapper">
-          <p>
-            Description : Lorem ipsum dolor sit, amet consectetur adipisicing
-            elit. Nulla, voluptatibus neque totam provident porro ea labore
-            fuga, suscipit hic quae laudantium reprehenderit eaque similique
-            maiores? Tenetur rerum illo quisquam vitae.
-          </p>
+          <p>{userProfile.description}</p>
           <div className="flex gap-8 mt-4">
-            <Link href="https://www.instagram.com/">Instagram</Link>
-            <Link href="https://www.instagram.com/">Twitter</Link>
-            <Link href="https://www.instagram.com/">TikTok</Link>
+            {userProfile.instagram && (
+              <Link href={userProfile.instagram}>Instagram</Link>
+            )}
+            {userProfile.twitter && <Link href={userProfile.instagram}>X</Link>}
+            {userProfile.tiktok && (
+              <Link href={userProfile.instagram}>TikTok</Link>
+            )}
           </div>
         </div>
       </section>

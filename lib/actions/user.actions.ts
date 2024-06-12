@@ -50,13 +50,19 @@ export async function getUserByIdForProfile(userId: string, fields: string) {
 }
 
 //! UPDATE USER
-export async function updateUser(clerkId: string, user: UpdateUserParams) {
+export async function updateUser({ userId, user, path }: UpdateUserParams) {
+  console.log("UPDATE USER", userId, user, path);
   try {
     await connectToDb();
 
-    const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
-      new: true,
-    });
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      { ...user },
+      {
+        new: true,
+      }
+    );
+    revalidatePath(path);
 
     if (!updatedUser) throw new Error("User update failed");
     return JSON.parse(JSON.stringify(updatedUser));
@@ -171,6 +177,62 @@ export async function getWishlist({
     if (!user) throw new Error("User not found");
 
     return JSON.parse(JSON.stringify(user.wishlist));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function addOrRemoveFollower({
+  userId,
+  followerId,
+}: {
+  userId: string;
+  followerId: string;
+}) {
+  try {
+    await connectToDb();
+
+    const currentUser = await User.findById(userId);
+    if (!currentUser) throw new Error("currentUser not found");
+
+    const userToFollow = await User.findById(followerId);
+    if (!userToFollow) throw new Error("userToFollow not found");
+
+    const isFollowed = currentUser.following.includes(followerId);
+    console.log("isFollowed -- ACTIONS", isFollowed);
+
+    if (isFollowed) {
+      // Retirer l'ID de l'utilisateur courant de la liste des followers de l'utilisateur à suivre
+      currentUser.following = currentUser.following.filter(
+        (idToFollow: string) => idToFollow !== followerId
+      );
+      userToFollow.followers = userToFollow.followers.filter(
+        (IdOfUserFollowing: string) => IdOfUserFollowing !== userId
+      );
+    } else {
+      // Ajouter l'ID de l'utilisateur à suivre à la liste des following de l'utilisateur courant
+      currentUser.following.push(followerId);
+      userToFollow.followers.push(userId);
+    }
+
+    await currentUser.save();
+    await userToFollow.save();
+
+    return JSON.parse(JSON.stringify(currentUser));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function getFollowers({ userId }: { userId: string }) {
+  try {
+    await connectToDb();
+
+    const user = await User.findById(userId);
+
+    if (!user) throw new Error("User not found");
+
+    return JSON.parse(JSON.stringify(user.following));
   } catch (error) {
     handleError(error);
   }

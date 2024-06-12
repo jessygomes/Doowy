@@ -12,6 +12,8 @@ const UserSchema = new Schema({
   instagram: { type: String, default: "" },
   twitter: { type: String, default: "" },
   tiktok: { type: String, default: "" },
+  followers: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+  following: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
 });
 
 const User = models.User || model("User", UserSchema);

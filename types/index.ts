@@ -9,14 +9,16 @@ export type CreateUserParams = {
 };
 
 export type UpdateUserParams = {
-  firstName: string;
-  lastName: string;
-  username: string;
-  photo: string;
-  description: string;
-  instagram: string;
-  twitter: string;
-  tiktok: string;
+  userId: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    description: string;
+    instagram: string;
+    twitter: string;
+    tiktok: string;
+  };
+  path: string;
 };
 
 export type GetUserParams = {
@@ -28,6 +30,8 @@ export type GetUserParams = {
   instagram: string;
   twitter: string;
   tiktok: string;
+  followers: string[];
+  following: string[];
 };
 
 // ====== EVENT PARAMS

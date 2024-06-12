@@ -6,6 +6,9 @@ import { eventFormSchema } from "@/lib/validator"; //! Schema du formulaire
 import { departements, eventDefaultValues } from "@/constants"; //! Valeur initiale du formulaire (vide)
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { createEvent, updateEvent } from "@/lib/actions/event.actions";
+import { IEvent } from "@/lib/mongoDb/database/models/Event";
 
 import {
   Form,
@@ -34,9 +37,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import { useUploadThing } from "../../lib/uploadthing";
-import { useRouter } from "next/navigation";
-import { createEvent, updateEvent } from "@/lib/actions/event.actions";
-import { IEvent } from "@/lib/mongoDb/database/models/Event";
 
 //! On va afficher soit le form pour CREER soit pour UPDATE grâce au TYPE que l'on passe au composant EVENTFORM
 type EventFormProps = {

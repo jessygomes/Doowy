@@ -12,20 +12,21 @@ export default async function Profil() {
 
   const userProfile = await getUserByIdForProfile(
     userId,
-    "firstName lastName photo username"
+    "firstName lastName photo username description instagram twitter tiktok"
   );
 
   const favoriteEvent = await getWishlist({ userId, page: 1 });
   // console.log("WISHLIST ---- ", favoriteEvent);
   const organizedEvents = await getEventsByUser({ userId, page: 1 });
+
   return (
     <>
       <section className="wrapper">
         <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left">Mon Profil</h3>
           <Button asChild size="lg" className="button hidden sm:flex">
-            {/* <Link href="/#events">Modifier</Link> */}
-            <UserForm user={userProfile} />
+            <Link href={`/profil/${userId}/update`}>Modifier</Link>
+            {/* <UserForm user={userProfile} userId={userId} /> */}
           </Button>
         </div>
 
@@ -33,14 +34,21 @@ export default async function Profil() {
           <p>
             {userProfile.firstName} {userProfile.lastName}
           </p>
-          <p className="mt-4">Description : {userProfile.description}</p>
+          <p className="mt-4">
+            Description : {userProfile.description || "Ajouter une description"}
+          </p>
           <div className="flex gap-8 mt-4">
-            <Link href="https://www.instagram.com/">Instagram</Link>
-            <Link href="https://www.instagram.com/">Twitter</Link>
-            <Link href="https://www.instagram.com/">TikTok</Link>
+            {userProfile.instagram && (
+              <Link href={userProfile.instagram}>Instagram</Link>
+            )}
+            {userProfile.twitter && <Link href={userProfile.instagram}>X</Link>}
+            {userProfile.tiktok && (
+              <Link href={userProfile.instagram}>TikTok</Link>
+            )}
           </div>
         </div>
       </section>
+
       {/* MES FAVORIS */}
       <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
         <div className="wrapper flex items-center justify-center sm:justify-between">

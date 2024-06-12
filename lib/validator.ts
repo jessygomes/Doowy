@@ -19,3 +19,15 @@ export const eventFormSchema = z.object({
   isFree: z.boolean(),
   url: z.string().url(),
 });
+
+export const userFormSchema = z.object({
+  firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
+  lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
+  description: z
+    .string()
+    .min(3, "La description doit contenir au moins 3 caractères")
+    .max(400, "La description doit contenir au maximum 400 caractères"),
+  instagram: z.string().url(),
+  twitter: z.string().url(),
+  tiktok: z.string().url(),
+});

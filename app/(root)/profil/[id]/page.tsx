@@ -58,7 +58,7 @@ export default async function ProfilPublic({ params: { id } }: Props) {
           ) : (
             <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
           )}
-          <p>Followers : {userProfile.followers.length}</p>
+          {/* <p>Followers : {userProfile.followers.length}</p> */}
         </div>
 
         <div className="wrapper">

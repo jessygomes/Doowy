@@ -3,10 +3,7 @@ import { IEvent } from "@/lib/mongoDb/database/models/Event";
 import { Button } from "../ui/button";
 import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import {
-  addFavoriteEvent,
-  addOrRemoveFollower,
-} from "@/lib/actions/user.actions";
+import { addOrRemoveFollower } from "@/lib/actions/user.actions";
 import { useState } from "react";
 
 const BtnFollow = ({

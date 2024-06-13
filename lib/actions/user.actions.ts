@@ -203,20 +203,32 @@ export async function addOrRemoveFollower({
 
     if (isFollowed) {
       // Retirer l'ID de l'utilisateur courant de la liste des followers de l'utilisateur à suivre
-      currentUser.following = currentUser.following.filter(
-        (idToFollow: string) => idToFollow !== followerId
-      );
-      userToFollow.followers = userToFollow.followers.filter(
-        (IdOfUserFollowing: string) => IdOfUserFollowing !== userId
-      );
+      // currentUser.following = currentUser.following.filter(
+      //   (idToFollow: string) => idToFollow !== followerId
+      // );
+      // userToFollow.followers = userToFollow.followers.filter(
+      //   (IdOfUserFollowing: string) => IdOfUserFollowing !== userId
+      // );
+      await User.findByIdAndUpdate(userId, {
+        $pull: { following: followerId },
+      });
+      await User.findByIdAndUpdate(followerId, {
+        $pull: { followers: userId },
+      });
     } else {
       // Ajouter l'ID de l'utilisateur à suivre à la liste des following de l'utilisateur courant
-      currentUser.following.push(followerId);
-      userToFollow.followers.push(userId);
+      // currentUser.following.push(followerId);
+      // userToFollow.followers.push(userId);
+      await User.findByIdAndUpdate(userId, {
+        $push: { following: followerId },
+      });
+      await User.findByIdAndUpdate(followerId, {
+        $push: { followers: userId },
+      });
     }
 
-    await currentUser.save();
-    await userToFollow.save();
+    // await currentUser.save();
+    // await userToFollow.save();
 
     return JSON.parse(JSON.stringify(currentUser));
   } catch (error) {

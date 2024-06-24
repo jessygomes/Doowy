@@ -37,7 +37,7 @@ const EventSchema = new Schema({
   url: { type: String },
   category: { type: Schema.Types.ObjectId, ref: "Category" },
   organizer: { type: Schema.Types.ObjectId, ref: "User" },
-  nbFav: { type: Number },
+  nbFav: { type: Number, default: 0 },
 });
 
 const Event = models.Event || model("Event", EventSchema);

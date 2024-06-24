@@ -65,11 +65,19 @@ export default async function ProfilPublic({ params: { id } }: Props) {
           <p>{userProfile.description}</p>
           <div className="flex gap-8 mt-4">
             {userProfile.instagram && (
-              <Link href={userProfile.instagram}>Instagram</Link>
+              <Link href={userProfile.instagram} target="_blank">
+                Instagram
+              </Link>
             )}
-            {userProfile.twitter && <Link href={userProfile.instagram}>X</Link>}
+            {userProfile.twitter && (
+              <Link href={userProfile.instagram} target="_blank">
+                X
+              </Link>
+            )}
             {userProfile.tiktok && (
-              <Link href={userProfile.instagram}>TikTok</Link>
+              <Link href={userProfile.instagram} target="_blank">
+                TikTok
+              </Link>
             )}
           </div>
         </div>

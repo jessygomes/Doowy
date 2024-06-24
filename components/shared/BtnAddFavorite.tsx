@@ -53,7 +53,7 @@ const BtnAddFavorite = ({
           </Button>
         ) : (
           <Button disabled className="rounded-full">
-            {event.nbFav} favoris
+            {event.nbFav ?? "0"} favoris
           </Button>
         )}
       </SignedIn>

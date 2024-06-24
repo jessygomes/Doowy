@@ -65,6 +65,7 @@ export async function updateUser({ userId, user, path }: UpdateUserParams) {
     revalidatePath(path);
 
     if (!updatedUser) throw new Error("User update failed");
+
     return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
     handleError(error);
@@ -131,6 +132,8 @@ export async function addFavoriteEvent({
     const event = await Event.findById(eventId);
     if (!event) throw new Error("Event not found");
 
+    event.nbFav = Number(event.nbFav) || 0;
+
     if (isLiked) {
       user.wishlist = user.wishlist.filter(
         (event: any) => event._id.toString() !== eventId
@@ -146,8 +149,9 @@ export async function addFavoriteEvent({
     await user.save();
 
     return JSON.parse(JSON.stringify(user));
-  } catch (error) {
+  } catch (error: string | any) {
     handleError(error);
+    throw new Error(`Erreur lors de l'ajout aux favoris : ${error.message}`);
   }
 }
 
@@ -182,6 +186,7 @@ export async function getWishlist({
   }
 }
 
+//! ADD & REMOVE FOLLOWER
 export async function addOrRemoveFollower({
   userId,
   followerId,

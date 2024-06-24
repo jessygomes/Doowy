@@ -9,9 +9,9 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "TurnUp!",
+  title: "Vibey!",
   description:
-    "TurnUp! est une platforme de recensement et de gestion d'événements.",
+    "Vibey! est une platforme de recensement et de gestion d'événements.",
   icons: {
     icon: "/favicon.ico",
   },

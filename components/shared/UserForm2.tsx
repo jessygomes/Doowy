@@ -19,7 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { set } from "mongoose";
 
 type UserFormProps = {
   userId: string;
@@ -27,9 +26,9 @@ type UserFormProps = {
     firstName: string;
     lastName: string;
     description: string;
-    instagram: string;
-    twitter: string;
-    tiktok: string;
+    instagram?: string;
+    twitter?: string;
+    tiktok?: string;
   };
 };
 
@@ -59,6 +58,8 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
     tiktok: user.tiktok,
   };
 
+  // console.log(initialValue);
+
   const form = useForm<z.infer<typeof userFormSchema>>({
     resolver: zodResolver(userFormSchema),
     defaultValues: initialValue,
@@ -78,20 +79,25 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
         userId,
         path: `/profil`,
       });
+
       console.log(updatedUserInfos);
       if (updatedUserInfos) {
-        form.reset();
         router.push(`/profil`);
       }
     } catch (error) {
+      console.log("error", error);
       console.error(error);
     }
+  }
+
+  async function onError(errors: any) {
+    console.error("Form errors:", errors);
   }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
         className="flex flex-col gap-5"
       >
         <div className="flex flex-col gap-5 md:flex-row justify-center items-center">

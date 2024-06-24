@@ -27,7 +27,7 @@ export const userFormSchema = z.object({
     .string()
     .min(3, "La description doit contenir au moins 3 caractères")
     .max(400, "La description doit contenir au maximum 400 caractères"),
-  instagram: z.string().url(),
-  twitter: z.string().url(),
-  tiktok: z.string().url(),
+  instagram: z.string().url().or(z.string().length(0)).optional(),
+  twitter: z.string().url().or(z.string().length(0)).optional(),
+  tiktok: z.string().url().or(z.string().length(0)).optional(),
 });

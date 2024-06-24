@@ -14,9 +14,9 @@ export type UpdateUserParams = {
     firstName: string;
     lastName: string;
     description: string;
-    instagram: string;
-    twitter: string;
-    tiktok: string;
+    instagram?: string;
+    twitter?: string;
+    tiktok?: string;
   };
   path: string;
 };

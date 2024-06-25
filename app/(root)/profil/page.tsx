@@ -1,5 +1,4 @@
 import Collection from "@/components/shared/Collection";
-import UserForm from "@/components/shared/UserForm";
 import { Button } from "@/components/ui/button";
 import { getEventsByUser } from "@/lib/actions/event.actions";
 import { getUserByIdForProfile, getWishlist } from "@/lib/actions/user.actions";

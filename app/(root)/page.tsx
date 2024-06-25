@@ -65,7 +65,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
           Phrase <br /> Event of Event
         </h2>
 
-        <div className="flex w-full flex-col gap-5 md-flex-row">
+        <div className="flex w-full flex-col gap-5 md:flex-row">
           <Search />
           <CategoryFilter />
         </div>
@@ -76,8 +76,8 @@ export default async function Home({ searchParams }: SearchParamProps) {
           emptyStateSubtext="Revenir plus tard"
           collectionType="All_Events"
           limit={6}
-          page={1}
-          totalPages={2}
+          page={page}
+          totalPages={events?.totalPages}
         />
       </section>
     </>

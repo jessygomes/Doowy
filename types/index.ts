@@ -13,7 +13,7 @@ export type UpdateUserParams = {
   user: {
     firstName: string;
     lastName: string;
-    description: string;
+    description?: string;
     instagram?: string;
     twitter?: string;
     tiktok?: string;

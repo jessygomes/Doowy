@@ -15,6 +15,7 @@ import User from "../mongoDb/database/models/User";
 import Event from "../mongoDb/database/models/Event";
 import Category from "../mongoDb/database/models/Category";
 import { revalidatePath } from "next/cache";
+import { departements } from "@/constants";
 
 const populateEvent = async (query: any) => {
   return query
@@ -28,6 +29,17 @@ const populateEvent = async (query: any) => {
 
 const getCategoryByName = async (name: string) => {
   return Category.findOne({ name: { $regex: name, $options: "i" } });
+};
+
+interface DepartementCondition {
+  nom?: string;
+  numero?: string;
+}
+
+const getDepartementByName = async (name: string) => {
+  return departements.departements.find(
+    (departement) => departement.nom === name
+  );
 };
 
 //! CREATE EVENT
@@ -96,8 +108,8 @@ export const getAllEvents = async ({
       : null;
 
     // Les conditions de recherche pour les événements : recherche par département
-    const departementCondition = departement
-      ? { departement: departement }
+    const departementCondition: DepartementCondition = departement
+      ? (await getDepartementByName(departement)) || {}
       : {};
 
     // Combinason des conditions de recherches en utilisant l'opérateur $and, tous les events qui correspond à toute les conditions seront affichés
@@ -105,7 +117,9 @@ export const getAllEvents = async ({
       $and: [
         titleCondition,
         categoryCondition ? { category: categoryCondition._id } : {},
-        departementCondition,
+        departementCondition && departementCondition.numero
+          ? { departement: departementCondition.numero }
+          : {},
       ],
     };
 

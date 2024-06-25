@@ -28,8 +28,12 @@ export const eventDefaultValues = {
 };
 
 export const departements = {
-  total_count: 100,
+  total_count: 101,
   departements: [
+    {
+      numero: "100",
+      nom: "En ligne",
+    },
     {
       numero: "01",
       nom: "Ain",

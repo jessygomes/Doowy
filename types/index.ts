@@ -107,6 +107,12 @@ export type GetFavoriteEvent = {
   page: number | string;
 };
 
+export type GetSuscriptionEvent = {
+  userId: string;
+  limit?: number;
+  page: number | string;
+};
+
 export type Event = {
   _id: string;
   title: string;

@@ -1,6 +1,10 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { CreateUserParams, UpdateUserParams } from "@/types";
+import {
+  CreateUserParams,
+  GetSuscriptionEvent,
+  UpdateUserParams,
+} from "@/types";
 import { handleError } from "../utils";
 import { connectToDb } from "../mongoDb/database";
 import User from "../mongoDb/database/models/User";
@@ -250,6 +254,42 @@ export async function getFollowers({ userId }: { userId: string }) {
     if (!user) throw new Error("User not found");
 
     return JSON.parse(JSON.stringify(user.following));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function getEventSubscriptions({
+  userId,
+  limit = 6,
+  page,
+}: GetSuscriptionEvent) {
+  try {
+    await connectToDb();
+
+    // Étape 1: Trouver l'utilisateur et obtenir la liste des abonnements
+    const user = await User.findById(userId);
+    if (!user) throw new Error("User not found");
+
+    // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
+    const skipAmount = (Number(page) - 1) * limit;
+
+    // Étape 2: Trouver les événements organisés par les abonnements
+    const events = await Event.find({
+      organizer: { $in: user.following },
+    })
+      .populate("organizer", "name")
+      .sort({ createdAt: -1 })
+      .skip(skipAmount)
+      .limit(limit); // Ajoutez d'autres champs si nécessaire
+
+    const eventsCount = await Event.countDocuments();
+
+    // Étape 3: Retourner les événements formatés
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    };
   } catch (error) {
     handleError(error);
   }

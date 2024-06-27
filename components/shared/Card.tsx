@@ -78,9 +78,14 @@ const Card = async ({
           </div>
         )}
 
-        <p className="p-medium-16 p-medium-18 text-grey-500">
-          {formatDateTime(event.startDateTime).dateTime}
-        </p>
+        <div className="flex justify-between gap-4">
+          <p className="p-medium-14 p-medium-18 text-grey-500">
+            {formatDateTime(event.startDateTime).dateTime}
+          </p>
+          <p className="p-medium-14 p-medium-18 text-grey-500">
+            {event.location}
+          </p>
+        </div>
 
         <Link href={`/events/${event._id}`}>
           <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black">

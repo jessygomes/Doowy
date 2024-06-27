@@ -8,7 +8,7 @@ export const eventFormSchema = z.object({
     .max(400, "La description doit contenir au maximum 400 caractères"),
   location: z
     .string()
-    .min(3, "Le lieu doit contenir au moins 3 caractères")
+    .min(8, "Le lieu doit contenir au moins 8 caractères")
     .max(400, "La description doit contenir au maximum 400 caractères"),
   departement: z.string(),
   imageUrl: z.string(),

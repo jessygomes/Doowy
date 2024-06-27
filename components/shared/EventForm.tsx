@@ -211,7 +211,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                       alt="location icon"
                     />
                     <Input
-                      placeholder="Lieux et adresse de l'événement ou Online"
+                      placeholder="Adresse, Ville ou Evénement en ligne"
                       {...field}
                       className="input-field"
                     />

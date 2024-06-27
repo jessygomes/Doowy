@@ -7,7 +7,7 @@ import {
   getUserById,
   getUserByIdForProfile,
 } from "@/lib/actions/user.actions";
-import { GetUserParams } from "@/types";
+import { GetUserParams, SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
@@ -15,17 +15,24 @@ interface Props {
   params: {
     id: string;
   };
+  searchParams: SearchParamProps;
 }
 
-export default async function ProfilPublic({ params: { id } }: Props) {
+export default async function ProfilPublic({
+  params: { id },
+  searchParams,
+}: Props) {
   const userProfile = await getUserByIdForProfile(
     id,
     "firstName lastName username description instagram twitter tiktok followers"
   );
 
+  //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
+  const page = Number(searchParams?.page) || 1;
+
   const eventsByUser = await getEventsByUser({
     userId: id,
-    page: 1,
+    page,
     limit: 6,
   });
 
@@ -90,9 +97,9 @@ export default async function ProfilPublic({ params: { id } }: Props) {
           emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
           collectionType="All_Events"
           limit={6}
-          page={1}
-          urlParamName="ordersPage"
-          totalPages={2}
+          page={page}
+          // urlParamName="ordersPage"
+          totalPages={eventsByUser?.totalPages}
         />
       </section>
     </>

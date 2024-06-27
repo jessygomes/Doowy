@@ -5,7 +5,9 @@ import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import { departements } from "@/constants";
 import { getAllEvents } from "@/lib/actions/event.actions";
+import { getEventSubscriptions } from "@/lib/actions/user.actions";
 import { SearchParamProps } from "@/types";
+import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -24,6 +26,22 @@ export default async function Home({ searchParams }: SearchParamProps) {
     limit: 6,
     nbFav: 0,
   });
+
+  //! récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
+  const { sessionClaims } = auth();
+  const userId = sessionClaims?.userId as string;
+
+  console.log("userId", userId);
+
+  let eventsAbonnements;
+
+  if (userId) {
+    eventsAbonnements = await getEventSubscriptions({
+      userId,
+      page,
+      limit: 6,
+    });
+  }
 
   return (
     <>
@@ -54,6 +72,25 @@ export default async function Home({ searchParams }: SearchParamProps) {
           /> */}
         </div>
       </section>
+
+      {userId && (
+        <section
+          id="events"
+          className="wrapper my-8 flex flex-col gap-8 md:gap-12"
+        >
+          <h2 className="h2-bold">A VENIR | Mes abonnements</h2>
+
+          <Collection
+            data={eventsAbonnements?.data}
+            emptyTitle="Aucun Event Trouvé"
+            emptyStateSubtext="Revenir plus tard"
+            collectionType="All_Events"
+            limit={6}
+            page={page}
+            totalPages={eventsAbonnements?.totalPages}
+          />
+        </section>
+      )}
 
       <section
         id="events"

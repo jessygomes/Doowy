@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { departements } from "@/constants";
 import { getAllEvents } from "@/lib/actions/event.actions";
 import { getEventSubscriptions } from "@/lib/actions/user.actions";
-import { SearchParamProps } from "@/types";
+import { GetAllEventsParams, SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";
@@ -18,6 +18,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
   const category = (searchParams?.category as string) || "";
   const departement = (searchParams?.departement as string) || "";
 
+  //! Récupérer tous les Events (trier ceux qu sont déja passé)
   const events = await getAllEvents({
     query: searchText,
     category,
@@ -27,11 +28,18 @@ export default async function Home({ searchParams }: SearchParamProps) {
     nbFav: 0,
   });
 
-  //! récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
+  const currentDateTime = new Date();
+
+  const upcomingEvents = events?.data.filter((event: any) => {
+    const endDateTime = new Date(event.endDateTime);
+    return currentDateTime <= endDateTime;
+  });
+
+  console.log("futureEvents", upcomingEvents);
+
+  //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
-
-  console.log("userId", userId);
 
   let eventsAbonnements;
 
@@ -62,14 +70,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
               <Link href="#events">Explorer</Link>
             </Button>
           </div>
-
-          {/* <Image
-            src="/assets/images/hero.png"
-            alt="Hero"
-            width={1000}
-            height={1000}
-            className="max-h-[70vh] object-contain object-center 2xl:max-h-[50vh]"
-          /> */}
         </div>
       </section>
 
@@ -78,7 +78,9 @@ export default async function Home({ searchParams }: SearchParamProps) {
           id="events"
           className="wrapper my-8 flex flex-col gap-8 md:gap-12"
         >
-          <h2 className="h2-bold">A VENIR | Mes abonnements</h2>
+          <h2 className="h2-bold">
+            <span className="text-grey-400">A VENIR | </span> Mes abonnements
+          </h2>
 
           <Collection
             data={eventsAbonnements?.data}
@@ -99,9 +101,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
         {/* <h2 className="h2-bold">
           Trust by <br /> Thousands of Events
         </h2> */}
-        <h2 className="h2-bold">
-          Phrase <br /> Event of Event
-        </h2>
+        <h2 className="h2-bold">Découvrez les événements à venir</h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
           <Search />
@@ -110,13 +110,13 @@ export default async function Home({ searchParams }: SearchParamProps) {
         </div>
 
         <Collection
-          data={events?.data}
+          data={upcomingEvents}
           emptyTitle="Aucun Event Trouvé"
           emptyStateSubtext="Revenir plus tard"
           collectionType="All_Events"
           limit={6}
           page={page}
-          totalPages={events?.totalPages}
+          totalPages={upcomingEvents?.totalPages}
         />
       </section>
     </>

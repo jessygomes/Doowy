@@ -278,7 +278,7 @@ export async function getEventSubscriptions({
     const events = await Event.find({
       organizer: { $in: user.following },
     })
-      .populate("organizer", "name")
+      .populate("organizer", "firstName lastName")
       .sort({ createdAt: -1 })
       .skip(skipAmount)
       .limit(limit); // Ajoutez d'autres champs si nécessaire

@@ -44,6 +44,11 @@ const Card = async ({
       : false;
   // console.log("USER ID ---- ", userId);
 
+  //! Vérifier si l'event est passé ou pas :
+  const currentDateTime = new Date();
+  const endDateTime = new Date(event.endDateTime);
+  const isPastEvent = currentDateTime > endDateTime;
+
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
       <Link
@@ -79,12 +84,22 @@ const Card = async ({
         )}
 
         <div className="flex justify-between gap-4">
-          <p className="p-medium-14 p-medium-18 text-grey-500">
-            {formatDateTime(event.startDateTime).dateTime}
-          </p>
-          <p className="p-medium-14 p-medium-18 text-grey-500">
-            {event.location}
-          </p>
+          {isPastEvent ? (
+            <p className="p-medium-14 p-medium-18 text-red-400">
+              Cette événement s&apos;est terminé le{" "}
+              {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
+            </p>
+          ) : (
+            <div className="w-full flex justify-between">
+              <p className="p-medium-14 p-medium-18 text-grey-500">
+                {formatDateTime(event.startDateTime).dateTime}
+              </p>
+
+              <p className="p-medium-14 p-medium-18 text-grey-500">
+                {event.location}
+              </p>
+            </div>
+          )}
         </div>
 
         <Link href={`/events/${event._id}`}>

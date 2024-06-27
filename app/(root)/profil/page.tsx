@@ -2,21 +2,24 @@ import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
 import { getEventsByUser } from "@/lib/actions/event.actions";
 import { getUserByIdForProfile, getWishlist } from "@/lib/actions/user.actions";
+import { SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
-export default async function Profil() {
+export default async function Profil({ searchParams }: SearchParamProps) {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
-  const userProfile = await getUserByIdForProfile(
+  const currentUserProfile = await getUserByIdForProfile(
     userId,
     "firstName lastName photo username description instagram twitter tiktok"
   );
 
-  const favoriteEvent = await getWishlist({ userId, page: 1 });
-  // console.log("WISHLIST ---- ", favoriteEvent);
-  const organizedEvents = await getEventsByUser({ userId, page: 1 });
+  //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
+  const page = Number(searchParams?.page) || 1;
+
+  const favoriteEvent = await getWishlist({ userId, page });
+  const organizedEvents = await getEventsByUser({ userId, page });
 
   return (
     <>
@@ -31,18 +34,21 @@ export default async function Profil() {
 
         <div className="wrapper">
           <p>
-            {userProfile.firstName} {userProfile.lastName}
+            {currentUserProfile.firstName} {currentUserProfile.lastName}
           </p>
           <p className="mt-4">
-            Description : {userProfile.description || "Ajouter une description"}
+            Description :{" "}
+            {currentUserProfile.description || "Ajouter une description"}
           </p>
           <div className="flex gap-8 mt-4">
-            {userProfile.instagram && (
-              <Link href={userProfile.instagram}>Instagram</Link>
+            {currentUserProfile.instagram && (
+              <Link href={currentUserProfile.instagram}>Instagram</Link>
             )}
-            {userProfile.twitter && <Link href={userProfile.instagram}>X</Link>}
-            {userProfile.tiktok && (
-              <Link href={userProfile.instagram}>TikTok</Link>
+            {currentUserProfile.twitter && (
+              <Link href={currentUserProfile.instagram}>X</Link>
+            )}
+            {currentUserProfile.tiktok && (
+              <Link href={currentUserProfile.instagram}>TikTok</Link>
             )}
           </div>
         </div>
@@ -65,9 +71,9 @@ export default async function Profil() {
           emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
           collectionType="All_Events_Favorite"
           limit={6}
-          page={1}
+          page={page}
           urlParamName="ordersPage"
-          totalPages={2}
+          totalPages={favoriteEvent?.totalPages}
         />
       </section>
 
@@ -88,9 +94,9 @@ export default async function Profil() {
           emptyStateSubtext="Créez votre premier événement dès maintenant"
           collectionType="Events_Organized"
           limit={6}
-          page={1}
+          page={page}
           urlParamName="eventsPage"
-          totalPages={2}
+          totalPages={organizedEvents?.totalPages}
         />
       </section>
     </>

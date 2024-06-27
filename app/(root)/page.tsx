@@ -1,6 +1,7 @@
 import { CategoryFilter } from "@/components/shared/CategoryFilter";
 import Collection from "@/components/shared/Collection";
 import { DepartementFilter } from "@/components/shared/DepartementFilter";
+import { EventSuscription } from "@/components/shared/EventSuscription";
 import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import { departements } from "@/constants";
@@ -8,7 +9,6 @@ import { getAllEvents } from "@/lib/actions/event.actions";
 import { getEventSubscriptions } from "@/lib/actions/user.actions";
 import { GetAllEventsParams, SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
-import Image from "next/image";
 import Link from "next/link";
 
 export default async function Home({ searchParams }: SearchParamProps) {
@@ -35,21 +35,9 @@ export default async function Home({ searchParams }: SearchParamProps) {
     return currentDateTime <= endDateTime;
   });
 
-  console.log("futureEvents", upcomingEvents);
-
   //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
-
-  let eventsAbonnements;
-
-  if (userId) {
-    eventsAbonnements = await getEventSubscriptions({
-      userId,
-      page,
-      limit: 6,
-    });
-  }
 
   return (
     <>
@@ -73,26 +61,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
         </div>
       </section>
 
-      {userId && (
-        <section
-          id="events"
-          className="wrapper my-8 flex flex-col gap-8 md:gap-12"
-        >
-          <h2 className="h2-bold">
-            <span className="text-grey-400">A VENIR | </span> Mes abonnements
-          </h2>
-
-          <Collection
-            data={eventsAbonnements?.data}
-            emptyTitle="Aucun Event Trouvé"
-            emptyStateSubtext="Revenir plus tard"
-            collectionType="All_Events"
-            limit={6}
-            page={page}
-            totalPages={eventsAbonnements?.totalPages}
-          />
-        </section>
-      )}
+      {userId && <EventSuscription userId={userId} />}
 
       <section
         id="events"

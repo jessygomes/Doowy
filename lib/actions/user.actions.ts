@@ -283,7 +283,10 @@ export async function getEventSubscriptions({
       .skip(skipAmount)
       .limit(limit); // Ajoutez d'autres champs si nécessaire
 
-    const eventsCount = await Event.countDocuments();
+    // Compter uniquement les événements qui correspondent au critère
+    const eventsCount = await Event.countDocuments({
+      organizer: { $in: user.following },
+    });
 
     // Étape 3: Retourner les événements formatés
     return {

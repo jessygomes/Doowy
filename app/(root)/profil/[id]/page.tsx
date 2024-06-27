@@ -22,6 +22,7 @@ export default async function ProfilPublic({
   params: { id },
   searchParams,
 }: Props) {
+  //! Récupération des infos du profil
   const userProfile = await getUserByIdForProfile(
     id,
     "firstName lastName username description instagram twitter tiktok followers"

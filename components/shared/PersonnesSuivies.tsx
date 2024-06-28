@@ -1,5 +1,6 @@
 "use client";
 import { getMyFollowingUsers } from "@/lib/actions/user.actions";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -56,7 +57,16 @@ export const PersonnesSuivies = ({ userId }: { userId: string }) => {
                   className="p-medium-14 hover:text-primary transition-all ease-in-out"
                 >
                   <Link href={`/profil/${user._id}`}>
-                    {user.firstName} {user.lastName}
+                    <div className="flex gap-4 items-center">
+                      <Image
+                        src={user.photo}
+                        alt="avatar"
+                        width={30}
+                        height={30}
+                        className="rounded-full"
+                      />
+                      {user.firstName} {user.lastName}
+                    </div>
                   </Link>
                 </li>
               ))}

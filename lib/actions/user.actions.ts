@@ -251,7 +251,7 @@ export async function getFollowers({ userId }: { userId: string }) {
 
     const user = await User.findById(userId).populate({
       path: "followers",
-      select: "firstName lastName",
+      select: "firstName lastName photo",
     });
 
     if (!user) throw new Error("User not found");

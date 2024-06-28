@@ -2,11 +2,7 @@ import BtnFollow from "@/components/shared/BtnFollow";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
 import { getEventsByUser } from "@/lib/actions/event.actions";
-import {
-  getFollowers,
-  getUserById,
-  getUserByIdForProfile,
-} from "@/lib/actions/user.actions";
+import { getUserById, getUserByIdForProfile } from "@/lib/actions/user.actions";
 import { GetUserParams, SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
@@ -28,6 +24,8 @@ export default async function ProfilPublic({
     "firstName lastName username description instagram twitter tiktok followers"
   );
 
+  console.log("userProfile", userProfile); // Vérifiez la structure et les données
+
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
   const page = Number(searchParams?.page) || 1;
 
@@ -40,14 +38,16 @@ export default async function ProfilPublic({
   const { sessionClaims } = auth();
   const currentUserId = sessionClaims?.userId as string;
 
+  //! Vérifier si l'utilisateur connecté suit le profil
   let isFollowing = false;
 
   if (currentUserId) {
     const currentUser = await getUserById(currentUserId);
 
-    isFollowing = currentUser.following
-      ? currentUser.following.some(
-          (follower: any) => follower.id === userProfile.id
+    // Ici, je vérifie si l'utilisateur connecté est déjà un follower du profil : si oui, isFollowing = true sinon isFollowing = false
+    isFollowing = userProfile.followers
+      ? userProfile.followers.some(
+          (follower: any) => follower === currentUser._id
         )
       : false;
   }

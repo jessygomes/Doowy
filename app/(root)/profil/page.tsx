@@ -1,12 +1,21 @@
 import Collection from "@/components/shared/Collection";
+import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
+import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
 import { Button } from "@/components/ui/button";
 import { getEventsByUser } from "@/lib/actions/event.actions";
-import { getUserByIdForProfile, getWishlist } from "@/lib/actions/user.actions";
+import {
+  getFollowers,
+  getMyFollowingUsers,
+  getUserByIdForProfile,
+  getWishlist,
+} from "@/lib/actions/user.actions";
 import { SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
-export default async function Profil({ searchParams }: SearchParamProps) {
+export default async function ProfilPrivate({
+  searchParams,
+}: SearchParamProps) {
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
@@ -24,21 +33,27 @@ export default async function Profil({ searchParams }: SearchParamProps) {
   return (
     <>
       <section className="wrapper">
-        <div className="wrapper flex items-center justify-center sm:justify-between">
+        <div className="wrapper flex flex-col gap-4 items-center justify-center sm:flex-row sm:gap-8 sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left">Mon Profil</h3>
-          <Button asChild size="lg" className="button hidden sm:flex">
-            <Link href={`/profil/${userId}/update`}>Modifier</Link>
-            {/* <UserForm user={userProfile} userId={userId} /> */}
-          </Button>
+          <div className="flex gap-4 items-center sm:gap-8">
+            <div className="flex gap-4 sm:gap-8">
+              <PersonnesFollowers userId={userId} />
+            </div>
+            <PersonnesSuivies userId={userId} />
+            <Button asChild size="lg" className="button hidden sm:flex">
+              <Link href={`/profil/${userId}/update`}>Modifier</Link>
+              {/* <UserForm user={userProfile} userId={userId} /> */}
+            </Button>
+          </div>
         </div>
 
-        <div className="wrapper">
-          <p>
+        <div className="wrapper flex flex-col justify-center">
+          <p className="font-bold">
             {currentUserProfile.firstName} {currentUserProfile.lastName}
           </p>
           <p className="mt-4">
-            Description :{" "}
-            {currentUserProfile.description || "Ajouter une description"}
+            {currentUserProfile.description ||
+              "Cliquer sur Modifier pour ajouter une description"}
           </p>
           <div className="flex gap-8 mt-4">
             {currentUserProfile.instagram && (
@@ -51,6 +66,10 @@ export default async function Profil({ searchParams }: SearchParamProps) {
               <Link href={currentUserProfile.instagram}>TikTok</Link>
             )}
           </div>
+          <Button asChild size="lg" className="button sm:hidden">
+            <Link href={`/profil/${userId}/update`}>Modifier</Link>
+            {/* <UserForm user={userProfile} userId={userId} /> */}
+          </Button>
         </div>
       </section>
 

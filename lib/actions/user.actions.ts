@@ -249,7 +249,27 @@ export async function getFollowers({ userId }: { userId: string }) {
   try {
     await connectToDb();
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).populate({
+      path: "followers",
+      select: "firstName lastName",
+    });
+
+    if (!user) throw new Error("User not found");
+
+    return JSON.parse(JSON.stringify(user.followers));
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+export async function getMyFollowingUsers({ userId }: { userId: string }) {
+  try {
+    await connectToDb();
+
+    const user = await User.findById(userId).populate({
+      path: "following",
+      select: "firstName lastName photo",
+    });
 
     if (!user) throw new Error("User not found");
 

@@ -127,7 +127,72 @@ export const getAllEvents = async ({
     const skipAmount = (Number(page) - 1) * limit;
 
     const eventsQuery = Event.find(conditions)
-      .sort({ createdAt: -1 })
+      .sort({ nbFav: -1 })
+      .skip(skipAmount)
+      .limit(limit);
+
+    const events = await populateEvent(eventsQuery);
+
+    // Calcul du nombre total d'événements, nécessaire pour calculer le nombre de pages
+    const eventsCount = await Event.countDocuments(conditions);
+
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+};
+
+//! ALL UPCOMING EVENTS
+export const getAllUpcomingEvents = async ({
+  query,
+  limit = 6,
+  page,
+  category,
+  departement,
+}: GetAllEventsParams) => {
+  try {
+    await connectToDb();
+
+    // Condition de recherche qui filtre les events dont l titre correspond à la query (insensible à la casse : $regex et $options: "i")
+    const titleCondition = query
+      ? { title: { $regex: query, $options: "i" } }
+      : {};
+
+    // Les conditions de recherche pour les événements : recherche par catégorie
+    const categoryCondition = category
+      ? await getCategoryByName(category)
+      : null;
+
+    // Les conditions de recherche pour les événements : recherche par département
+    const departementCondition: DepartementCondition = departement
+      ? (await getDepartementByName(departement)) || {}
+      : {};
+
+    // Ajout de la condition pour récupérer les événements à venir ou en cours
+    const upcomingEventCondition = {
+      endDateTime: { $gte: new Date() },
+    };
+
+    // Combinason des conditions de recherches en utilisant l'opérateur $and, tous les events qui correspond à toute les conditions seront affichés
+    const conditions = {
+      $and: [
+        titleCondition,
+        categoryCondition ? { category: categoryCondition._id } : {},
+        departementCondition && departementCondition.numero
+          ? { departement: departementCondition.numero }
+          : {},
+        upcomingEventCondition,
+      ],
+    };
+
+    // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
+    const skipAmount = (Number(page) - 1) * limit;
+
+    const eventsQuery = Event.find(conditions)
+      .sort({ nbFav: -1 })
       .skip(skipAmount)
       .limit(limit);
 

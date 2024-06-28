@@ -11,7 +11,7 @@ const BtnFollow = ({
   isFollowing,
 }: {
   userToFollowId: string;
-  isFollowing: any;
+  isFollowing: boolean;
 }) => {
   const { user } = useUser();
   const currentUserId = user?.publicMetadata.userId as string;
@@ -43,7 +43,7 @@ const BtnFollow = ({
       <SignedIn>
         {!isCurrentUser ? (
           <Button onClick={handleFollow} className="rounded-full">
-            {isFollow ? "Abonné" : "Suivre"}
+            {isFollow === true ? "Abonné" : "Suivre"}
           </Button>
         ) : (
           <Button disabled className="rounded-full">

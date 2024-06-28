@@ -5,9 +5,8 @@ import { EventSuscription } from "@/components/shared/EventSuscription";
 import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import { departements } from "@/constants";
-import { getAllEvents } from "@/lib/actions/event.actions";
-import { getEventSubscriptions } from "@/lib/actions/user.actions";
-import { GetAllEventsParams, SearchParamProps } from "@/types";
+import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
+import { SearchParamProps } from "@/types";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 
@@ -19,20 +18,13 @@ export default async function Home({ searchParams }: SearchParamProps) {
   const departement = (searchParams?.departement as string) || "";
 
   //! Récupérer tous les Events (trier ceux qu sont déja passé)
-  const events = await getAllEvents({
+  const events = await getAllUpcomingEvents({
     query: searchText,
     category,
     departement,
     page,
     limit: 6,
     nbFav: 0,
-  });
-
-  const currentDateTime = new Date();
-
-  const upcomingEvents = events?.data.filter((event: any) => {
-    const endDateTime = new Date(event.endDateTime);
-    return currentDateTime <= endDateTime;
   });
 
   //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
@@ -61,7 +53,20 @@ export default async function Home({ searchParams }: SearchParamProps) {
         </div>
       </section>
 
-      {userId && <EventSuscription userId={userId} />}
+      {userId && (
+        <EventSuscription
+          userId={userId}
+          searchParams={{
+            page: function (page: any): unknown {
+              throw new Error("Function not implemented.");
+            },
+            params: {
+              id: "",
+            },
+            searchParams: {},
+          }}
+        />
+      )}
 
       <section
         id="events"
@@ -70,7 +75,9 @@ export default async function Home({ searchParams }: SearchParamProps) {
         {/* <h2 className="h2-bold">
           Trust by <br /> Thousands of Events
         </h2> */}
-        <h2 className="h2-bold">Découvrez les événements à venir</h2>
+        <h2 className="h2-bold">
+          Découvrez les événements proche de chez vous !
+        </h2>
 
         <div className="flex w-full flex-col gap-5 md:flex-row">
           <Search />
@@ -79,15 +86,21 @@ export default async function Home({ searchParams }: SearchParamProps) {
         </div>
 
         <Collection
-          data={upcomingEvents}
+          data={events?.data}
           emptyTitle="Aucun Event Trouvé"
           emptyStateSubtext="Revenir plus tard"
           collectionType="All_Events"
           limit={6}
           page={page}
-          totalPages={upcomingEvents?.totalPages}
+          totalPages={events?.totalPages}
         />
       </section>
+
+      <Link href="/events" className="bg-black">
+        <Button asChild className="button w-full">
+          Voir tous les événements
+        </Button>
+      </Link>
     </>
   );
 }

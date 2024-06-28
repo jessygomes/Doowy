@@ -85,7 +85,7 @@ const Card = async ({
 
         <div className="flex justify-between gap-4">
           {isPastEvent ? (
-            <p className="p-medium-14 p-medium-18 text-red-400">
+            <p className="p-medium-14 text-red-400">
               Cette événement s&apos;est terminé le{" "}
               {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
             </p>

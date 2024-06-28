@@ -19,12 +19,14 @@ export default async function EventDetail({
 }: SearchParamProps) {
   const event = await getEventById(id);
 
+  //! Récupérer les events liés à la catégorie de l'event actuel
   const relaledEvents = await getRelatedEventsByCategory({
     categoryId: event.category._id,
     eventId: event._id,
     page: searchParams.page as string,
   });
 
+  //! Récupérer l'ID de la personnne connecté pour afficher si l'event est dans ses favoris et les afficher
   const { sessionClaims } = auth();
   const userId = sessionClaims?.userId as string;
 
@@ -35,6 +37,11 @@ export default async function EventDetail({
       (favorite: any) => favorite._id === event._id
     );
   }
+
+  //! Vérifier si l'event est passé ou pas :
+  const currentDateTime = new Date();
+  const endDateTime = new Date(event.endDateTime);
+  const isPastEvent = currentDateTime > endDateTime;
 
   return (
     <>
@@ -75,23 +82,30 @@ export default async function EventDetail({
             </div>
             {/* Checkout Button */}
             <div className="flex flex-col gap-5">
-              <div className="flex gap-2 md:gap-3">
+              <div className="flex items-center gap-2 md:gap-3">
                 <Image
                   src="/assets/icons/calendar.svg"
                   alt="Calendar Icon"
                   width={32}
                   height={32}
                 />
-                <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
-                  <p>
-                    {formatDateTime(event.startDateTime).dateOnly} -{" "}
-                    {formatDateTime(event.startDateTime).timeOnly} |{" "}
+                {isPastEvent ? (
+                  <p className="p-medium-16 lg:p-medium-20 text-red-400 flex flex-wrap items-center">
+                    Cette événement s&apos;est terminé le{" "}
+                    {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
                   </p>
-                  <p>
-                    {formatDateTime(event.endDateTime).dateOnly} -{" "}
-                    {formatDateTime(event.endDateTime).timeOnly}
-                  </p>
-                </div>
+                ) : (
+                  <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
+                    <p>
+                      {formatDateTime(event.startDateTime).dateOnly} -{" "}
+                      {formatDateTime(event.startDateTime).timeOnly} |{" "}
+                    </p>
+                    <p>
+                      {formatDateTime(event.endDateTime).dateOnly} -{" "}
+                      {formatDateTime(event.endDateTime).timeOnly}
+                    </p>
+                  </div>
+                )}
               </div>
 
               <div className="p-regular-20 flex items-center gap-3">
@@ -103,7 +117,7 @@ export default async function EventDetail({
                 />
                 <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
               </div>
-              <div className="flex justify-center gap-8">
+              <div className="flex justify-center items-center gap-8">
                 <Link href={event.url} className="w-full">
                   <Button className="rounded-full w-full">
                     Prendre mon billet

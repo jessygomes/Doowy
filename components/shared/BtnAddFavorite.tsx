@@ -48,9 +48,14 @@ const BtnAddFavorite = ({
 
       <SignedIn>
         {!isEventCreator ? (
-          <Button onClick={handleAddFavorite} className="rounded-full">
-            {isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button onClick={handleAddFavorite} className="rounded-full">
+              {isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+            </Button>
+            <p className="bg-grey-400 p-2 rounded-full text-white text-[0.8rem]">
+              {event.nbFav ?? "0"}
+            </p>
+          </div>
         ) : (
           <Button disabled className="rounded-full">
             {event.nbFav ?? "0"} favoris

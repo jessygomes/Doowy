@@ -1,8 +1,4 @@
-import {
-  GetAllEventsParams,
-  GetSuscriptionEvent,
-  SearchParamProps,
-} from "@/types";
+import { SearchParamProps } from "@/types";
 import React from "react";
 import Collection from "./Collection";
 import { getEventSubscriptions } from "@/lib/actions/user.actions";

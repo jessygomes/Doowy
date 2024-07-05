@@ -1,0 +1,154 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+enum Role {
+  admin
+  user
+  organizer
+}
+
+model User {
+  id            String          @id @default(cuid())
+  email         String?         @unique
+  emailVerified DateTime?
+  name          String?
+  firstName     String?
+  lastName      String?
+  password      String?
+  role          Role            @default(user)
+  departement   String?
+  photo         String?
+  description   String?
+  instagram     String?
+  twitter       String?
+  tiktok        String?
+  followers     Int             @default(0)
+  following     Int             @default(0)
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @default(now())
+  events        Event[]
+  wishlist      UserWishlist[]
+  followersList UserFollowers[] @relation("userFollowers")
+  followingList UserFollowing[] @relation("userFollowing")
+  UserFollowers UserFollowers[]
+  UserFollowing UserFollowing[]
+  accounts      Account[]
+
+  @@map("user")
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model VerificationToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
+  @@unique([email, token])
+}
+
+model Event {
+  id            String         @id @default(cuid())
+  title         String
+  description   String?
+  location      String
+  departement   String
+  startDateTime DateTime       @default(now())
+  endDateTime   DateTime       @default(now())
+  imageUrl      String
+  price         String?
+  isFree        Boolean
+  url           String?
+  category      String?
+  organizer     String
+  nbFav         Int            @default(0)
+  stock         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  Category      Category?      @relation(fields: [category], references: [id])
+  Organizer     User           @relation(fields: [organizer], references: [id], onDelete: Cascade)
+  wishlist      UserWishlist[]
+
+  @@map("event")
+}
+
+model Category {
+  id    String  @id @default(cuid())
+  name  String
+  Event Event[]
+
+  @@map("category")
+}
+
+model UserWishlist {
+  userId  String
+  eventId String
+  User    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@id([userId, eventId])
+  @@map("user_wishlist")
+}
+
+model UserFollowers {
+  userId     String
+  followerId String
+  User       User   @relation("userFollowers", fields: [userId], references: [id], onDelete: Cascade)
+  Follower   User   @relation(fields: [followerId], references: [id], onDelete: Cascade)
+
+  @@id([userId, followerId])
+  @@map("user_followers")
+}
+
+model UserFollowing {
+  userId      String
+  followingId String
+  User        User   @relation("userFollowing", fields: [userId], references: [id], onDelete: Cascade)
+  Following   User   @relation(fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@id([userId, followingId])
+  @@map("user_following")
+}

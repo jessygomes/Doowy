@@ -1,11 +1,11 @@
-import { IEvent } from "@/lib/mongoDb/database/models/Event";
+// import { IEvent } from "@/lib/mongoDb/database/models/Event";
 import { formatDateTime } from "@/lib/utils";
-import { auth } from "@clerk/nextjs/server";
+
 import Image from "next/image";
 import Link from "next/link";
 import { DeleteConfirmation } from "./DeleteConfirmation";
 import BtnAddFavorite from "./BtnAddFavorite";
-import { getWishlist } from "@/lib/actions/user.actions";
+// import { getWishlist } from "@/lib/actions/user.actions";
 
 type CardProps = {
   event: IEvent;
@@ -21,27 +21,26 @@ const Card = async ({
   removeFavorite,
 }: CardProps) => {
   //! Vérifier si l'ID du User actuelle correspond au userId d'un event --> pour afficher l'event différemment
-  const { sessionClaims } = auth();
-  const userId = sessionClaims?.userId as string;
+  // const { sessionClaims } = auth();
+  // const userId = sessionClaims?.userId as string;
 
   let isFavorite = false;
 
   if (userId) {
     //! Réupération du tableau des favoris de l'utilisateur
-    const favoriteEvent = await getWishlist({ userId, page: 1 });
+    // const favoriteEvent = await getWishlist({ userId, page: 1 });
     // console.log("WISHLIST ---- ", favoriteEvent);
-
     //! Véririe si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
-    isFavorite = favoriteEvent.some(
-      (favorite: any) => favorite._id === event._id
-    );
+    // isFavorite = favoriteEvent.some(
+    //   (favorite: any) => favorite._id === event._id
+    // );
   }
 
   //! Vérifier si le User est le créateur de l'event
-  const isEventCreator =
-    event.organizer && event.organizer._id
-      ? userId === event.organizer._id.toString()
-      : false;
+  // const isEventCreator =
+  //   event.organizer && event.organizer._id
+  //     ? userId === event.organizer._id.toString()
+  //     : false;
   // console.log("USER ID ---- ", userId);
 
   //! Vérifier si l'event est passé ou pas :

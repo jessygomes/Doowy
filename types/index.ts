@@ -6,6 +6,8 @@ export type CreateUserParams = {
   username: string;
   email: string;
   photo: string;
+  departement: string;
+  role: string;
 };
 
 export type UpdateUserParams = {
@@ -14,6 +16,7 @@ export type UpdateUserParams = {
     firstName: string;
     lastName: string;
     description?: string;
+    // photo: string;
     instagram?: string;
     twitter?: string;
     tiktok?: string;
@@ -32,6 +35,7 @@ export type GetUserParams = {
   tiktok: string;
   followers: string[];
   following: string[];
+  role: string;
 };
 
 // ====== EVENT PARAMS

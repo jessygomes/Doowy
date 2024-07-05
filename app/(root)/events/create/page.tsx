@@ -3,9 +3,12 @@ import { auth } from "@clerk/nextjs/server";
 import React from "react";
 
 export default function CreateEvent() {
-  const { sessionClaims } = auth();
+  // const { sessionClaims } = auth();
 
-  const userId = sessionClaims?.userId as string; // Pour récupérer l'id de l'utilisateur connecté, on modifie la session Clerk (depuis le site : customize session token) et ajouter { "userId": "{{user.public_metadata.userId}}"}
+  // const userId = sessionClaims?.userId as string; // Pour récupérer l'id de l'utilisateur connecté, on modifie la session Clerk (depuis le site : customize session token) et ajouter { "userId": "{{user.public_metadata.userId}}"}
+
+  // const userRole = sessionClaims?.role as string;
+  // console.log("userID", userId);
 
   return (
     <>
@@ -15,7 +18,7 @@ export default function CreateEvent() {
         </h3>
       </section>
       <div className="wrapper my-8">
-        <EventForm userId={userId} type="Créer" />
+        {/* <EventForm userId={userId} type="Créer" /> */}
       </div>
     </>
   );

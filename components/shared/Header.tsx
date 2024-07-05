@@ -1,9 +1,9 @@
-import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import React from "react";
 import { Button } from "../ui/button";
 import NavItems from "./NavItems";
 import NavMobile from "./NavMobile";
+import { signOut } from "@/auth";
 
 const Header = () => {
   return (
@@ -13,23 +13,39 @@ const Header = () => {
           vibey!
         </Link>
 
-        <SignedIn>
-          <nav className="md:flex-between hidden w-full max-w-xs">
-            <NavItems />
-          </nav>
-        </SignedIn>
+        {/* <SignedIn> */}
+        <nav className="md:flex-between hidden w-full max-w-xs">
+          <NavItems />
+        </nav>
+        {/* </SignedIn> */}
 
         <div className="flex w-32 justify-end gap-3">
-          <SignedIn>
-            <UserButton afterSignOutUrl="/" />
-            <NavMobile />
-          </SignedIn>
+          {/* <SignedIn> */}
+          {/* <UserButton afterSignOutUrl="/" /> */}
+          <NavMobile />
+          {/* </SignedIn> */}
 
-          <SignedOut>
-            <Button asChild className="rounded-full" size="lg">
-              <Link href="/sign-in">Connexion</Link>
-            </Button>
-          </SignedOut>
+          {/* <SignedOut> */}
+          <Link
+            href="/devenir-organisateur"
+            className="text-primary hover:text-grey-500 transition-all ease-in-out duration-200"
+          >
+            <p className="text-sm text-center">Devenir Organisateur</p>
+          </Link>
+          <Button asChild className="rounded-full" size="lg">
+            <Link href="/auth/connexion">Connexion</Link>
+          </Button>
+
+          <form
+            action={async () => {
+              "use server";
+              await signOut();
+            }}
+          >
+            <button type="submit" className="rounded-full">
+              <p>Déconnexion</p>
+            </button>
+          </form>
         </div>
       </div>
     </header>

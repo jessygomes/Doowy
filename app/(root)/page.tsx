@@ -5,9 +5,9 @@ import { EventSuscription } from "@/components/shared/EventSuscription";
 import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 import { departements } from "@/constants";
-import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
+// import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
 import { SearchParamProps } from "@/types";
-import { auth } from "@clerk/nextjs/server";
+import { auth } from "@/auth";
 import Link from "next/link";
 
 export default async function Home({ searchParams }: SearchParamProps) {
@@ -18,24 +18,25 @@ export default async function Home({ searchParams }: SearchParamProps) {
   const departement = (searchParams?.departement as string) || "";
 
   //! Récupérer tous les Events (trier ceux qu sont déja passé)
-  const events = await getAllUpcomingEvents({
-    query: searchText,
-    category,
-    departement,
-    page,
-    limit: 6,
-    nbFav: 0,
-  });
+  // const events = await getAllUpcomingEvents({
+  //   query: searchText,
+  //   category,
+  //   departement,
+  //   page,
+  //   limit: 6,
+  //   nbFav: 0,
+  // });
 
   //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
-  const { sessionClaims } = auth();
-  const userId = sessionClaims?.userId as string;
+  const session = await auth();
+  // const userId = sessionClaims?.userId as string;
 
   return (
     <>
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
         <div className="wrapper grid grid-cols-1 gap-5 md:grid-cols-2 2xl:gap-0">
           <div className="flex flex-col justify-center gap-8">
+            <p>{JSON.stringify(session?.user.role)}</p>
             <h1 className="h1-bold">
               Vos Evénements, Notre plateforme{" "}
               <span className=" text-gray-600">
@@ -53,7 +54,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
         </div>
       </section>
 
-      {userId && (
+      {/* {userId && (
         <EventSuscription
           userId={userId}
           searchParams={{
@@ -66,7 +67,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
             searchParams: {},
           }}
         />
-      )}
+      )} */}
 
       <section
         id="events"
@@ -85,7 +86,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
           <DepartementFilter departements={departements.departements} />
         </div>
 
-        <Collection
+        {/* <Collection
           data={events?.data}
           emptyTitle="Aucun Event Trouvé"
           emptyStateSubtext="Revenir plus tard"
@@ -93,14 +94,16 @@ export default async function Home({ searchParams }: SearchParamProps) {
           limit={6}
           page={page}
           totalPages={events?.totalPages}
-        />
-      </section>
+        /> */}
 
-      <Link href="/events" className="bg-black">
-        <Button asChild className="button w-full">
-          Voir tous les événements
-        </Button>
-      </Link>
+        <div className="flex justify-center">
+          <Button asChild className="button w-full sm:w-fit">
+            <Link href="/events" className="">
+              Voir tous les événements
+            </Link>
+          </Button>
+        </div>
+      </section>
     </>
   );
 }

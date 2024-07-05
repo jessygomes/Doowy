@@ -5,6 +5,7 @@ import { Search } from "@/components/shared/Search";
 import { SearchParamProps } from "@/types";
 import { departements } from "@/constants";
 import { getAllEvents } from "@/lib/actions/event.actions";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function Events({ searchParams }: SearchParamProps) {
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous

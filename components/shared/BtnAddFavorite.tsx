@@ -1,9 +1,9 @@
 "use client";
-import { IEvent } from "@/lib/mongoDb/database/models/Event";
+// import { IEvent } from "@/lib/mongoDb/database/models/Event";
 import { Button } from "../ui/button";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+// import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { addFavoriteEvent } from "@/lib/actions/user.actions";
+// import { addFavoriteEvent } from "@/lib/actions/user.actions";
 import { useState } from "react";
 
 const BtnAddFavorite = ({
@@ -40,7 +40,7 @@ const BtnAddFavorite = ({
 
   return (
     <>
-      <SignedOut>
+      {/* <SignedOut>
         <Button asChild className=" rounded-full">
           <Link href="/sign-in">Ajouter aux favoris</Link>
         </Button>
@@ -61,7 +61,7 @@ const BtnAddFavorite = ({
             {event.nbFav ?? "0"} favoris
           </Button>
         )}
-      </SignedIn>
+      </SignedIn> */}
     </>
   );
 };

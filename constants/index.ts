@@ -1,7 +1,11 @@
-export const headerLinks = [
+export const headerLinksOrganizer = [
   {
     label: "Accueil",
     route: "/",
+  },
+  {
+    label: "Events",
+    route: "/events",
   },
   {
     label: "Créer un Event",
@@ -10,6 +14,32 @@ export const headerLinks = [
   {
     label: "Profils",
     route: "/profil",
+  },
+];
+
+export const headerLinksUser = [
+  {
+    label: "Accueil",
+    route: "/",
+  },
+  {
+    label: "Events",
+    route: "/events",
+  },
+  {
+    label: "Profils",
+    route: "/profil",
+  },
+];
+
+export const headerLinkNoUser = [
+  {
+    label: "Accueil",
+    route: "/",
+  },
+  {
+    label: "Events",
+    route: "/events",
   },
 ];
 

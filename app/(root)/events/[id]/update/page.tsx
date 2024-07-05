@@ -12,11 +12,11 @@ type UpdateEventProps = {
 export default async function UpdateEvent({
   params: { id },
 }: UpdateEventProps) {
-  const { sessionClaims } = auth();
+  // const { sessionClaims } = auth();
 
-  const userId = sessionClaims?.userId as string;
+  // const userId = sessionClaims?.userId as string;
 
-  const event = await getEventById(id);
+  // const event = await getEventById(id);
 
   return (
     <>
@@ -26,12 +26,12 @@ export default async function UpdateEvent({
         </h3>
       </section>
       <div className="wrapper my-8">
-        <EventForm
+        {/* <EventForm
           type="Modifier"
           event={event}
           eventId={event._id}
           userId={userId}
-        />
+        /> */}
       </div>
     </>
   );

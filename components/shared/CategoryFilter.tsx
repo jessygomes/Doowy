@@ -10,24 +10,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { getAllCategory } from "@/lib/actions/category.actions";
-import { ICategory } from "@/lib/mongoDb/database/models/Category";
+// import { getAllCategory } from "@/lib/actions/category.actions";
+// import { ICategory } from "@/lib/mongoDb/database/models/Category";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 
 export const CategoryFilter = () => {
   const router = useRouter();
-  const [categories, setCategories] = useState<ICategory[]>([]);
+  // const [categories, setCategories] = useState<ICategory[]>([]);
 
   //! Utliser le hook useSearchParams pour récupérer les paramètres de l'url pour la recherche
   const searchParams = useSearchParams();
 
-  useEffect(() => {
-    const getCategories = async () => {
-      const categoryList = await getAllCategory();
-      categoryList && setCategories(categoryList as ICategory[]); // On vérifie si la liste des catégories est définie avant de la mettre à jour dans le state
-    };
-    getCategories();
-  }, [setCategories]);
+  // useEffect(() => {
+  //   const getCategories = async () => {
+  //     const categoryList = await getAllCategory();
+  //     categoryList && setCategories(categoryList as ICategory[]); // On vérifie si la liste des catégories est définie avant de la mettre à jour dans le state
+  //   };
+  //   getCategories();
+  // }, [setCategories]);
 
   // useEffect(() => {
   //   const delayDebounceFn = setTimeout(() => {
@@ -61,7 +61,7 @@ export const CategoryFilter = () => {
         <SelectValue placeholder="Catégorie" />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="All" className="select-item p-regular-14">
+        {/* <SelectItem value="All" className="select-item p-regular-14">
           Toutes les catégories
         </SelectItem>
         {categories.map((category) => (
@@ -72,7 +72,7 @@ export const CategoryFilter = () => {
           >
             {category.name}
           </SelectItem>
-        ))}
+        ))} */}
       </SelectContent>
     </Select>
   );

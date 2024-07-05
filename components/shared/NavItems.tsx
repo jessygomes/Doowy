@@ -1,14 +1,15 @@
 "use client";
-import { headerLinks } from "@/constants";
+import { headerLinksOrganizer } from "@/constants";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 const NavItems = () => {
   const pathname = usePathname();
+
   return (
     <ul className="md-flex-between flex flex-col items-start gap-5 md:flex-row">
-      {headerLinks.map((link, index) => {
+      {headerLinksOrganizer.map((link, index) => {
         const isActive = pathname === link.route;
         return (
           <li

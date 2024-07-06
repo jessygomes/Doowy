@@ -36,7 +36,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
       <section className="bg-primary-50 bg-dotted-pattern bg-contain py-5 md:py-10">
         <div className="wrapper grid grid-cols-1 gap-5 md:grid-cols-2 2xl:gap-0">
           <div className="flex flex-col justify-center gap-8">
-            <p>{JSON.stringify(session?.user.role)}</p>
+            <p>{JSON.stringify(session?.user.id)}</p>
             <h1 className="h1-bold">
               Vos Evénements, Notre plateforme{" "}
               <span className=" text-gray-600">

@@ -34,6 +34,9 @@ export const LoginForm = () => {
   //! TVa permettre d'inititer un état de chargement lors de la soumission du formulaire et permettra de désactiver les boutons au submit du formulaire
   const [isPending, startTransition] = useTransition();
 
+  // Afficher ou non le form de l'auth à deux facteurs
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
 
@@ -54,10 +57,25 @@ export const LoginForm = () => {
 
     // Server Action (je peux aussi utiliser fetch ici)
     startTransition(() => {
-      login(values).then((data) => {
-        setError(data?.error);
-        setSuccess(data?.success);
-      });
+      login(values)
+        .then((data) => {
+          if (data?.error) {
+            form.reset();
+            setError(data.error);
+          }
+
+          if (data?.success) {
+            form.reset();
+            setSuccess(data.success);
+          }
+
+          if (data?.twoFactor) {
+            setShowTwoFactor(true);
+          }
+        })
+        .catch(() =>
+          setError("Une erreur s'est produite. Veuillez réessayer.")
+        );
     });
   };
 
@@ -71,60 +89,86 @@ export const LoginForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="email">Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      id="email"
-                      placeholder="vibey@email.fr"
-                      {...field}
-                      disabled={isPending}
-                      className="input rounded-full"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {showTwoFactor && (
+              <FormField
+                control={form.control}
+                name="code"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel htmlFor="twoFactor">
+                      2FA Authentification
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="123456"
+                        {...field}
+                        disabled={isPending}
+                        className="input rounded-full"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+            {!showTwoFactor && (
+              <>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="email">Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          id="email"
+                          placeholder="vibey@email.fr"
+                          {...field}
+                          disabled={isPending}
+                          className="input rounded-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel htmlFor="email">Mot de passe</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      id="password"
-                      placeholder="********"
-                      {...field}
-                      disabled={isPending}
-                      className="input rounded-full"
-                    />
-                  </FormControl>
-                  <button className="">
-                    <Link
-                      href="/auth/reset"
-                      className="text-[0.8rem] hover:text-grey-500"
-                    >
-                      Mot de passe oublié ?
-                    </Link>
-                  </button>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="email">Mot de passe</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="password"
+                          id="password"
+                          placeholder="********"
+                          {...field}
+                          disabled={isPending}
+                          className="input rounded-full"
+                        />
+                      </FormControl>
+                      <button className="">
+                        <Link
+                          href="/auth/reset"
+                          className="text-[0.8rem] hover:text-grey-500"
+                        >
+                          Mot de passe oublié ?
+                        </Link>
+                      </button>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
           </div>
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
           <Button type="submit" disabled={isPending} className="button w-full">
-            Se connecter
+            {showTwoFactor ? "Confirmer" : "Connexion"}
           </Button>
         </form>
       </Form>

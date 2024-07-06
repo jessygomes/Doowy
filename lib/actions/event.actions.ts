@@ -16,6 +16,9 @@ import { connectToDb } from "../mongoDb/database";
 // import Category from "../mongoDb/database/models/Category";
 import { revalidatePath } from "next/cache";
 import { departements } from "@/constants";
+import { currentRole } from "../auth";
+import { Role } from "@prisma/client";
+import { NextResponse } from "next/server";
 
 // const populateEvent = async (query: any) => {
 //   return query
@@ -49,7 +52,11 @@ import { departements } from "@/constants";
 //   path,
 // }: CreateEventParams) => {
 //   try {
-//     await connectToDb();
+//     const role = await currentRole();
+
+//     if (role !== Role.organizer) {
+//       return new NextResponse(null, { status: 403 });
+//     }
 
 //     const organizer = await User.findById(userId);
 

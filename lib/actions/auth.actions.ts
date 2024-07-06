@@ -10,16 +10,23 @@ import {
 } from "../validator";
 import { getUserByEmail } from "./user.actions";
 
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/route";
 import { AuthError } from "next-auth";
 import {
   generatePasswordResetToken,
+  generateTwoFactorToken,
   generateVerificationToken,
 } from "../tokens";
-import { sendPasswordResetEmail, sendVerificationEmail } from "../mail";
+import {
+  sendPasswordResetEmail,
+  sendTwoFactorTokenEmail,
+  sendVerificationEmail,
+} from "../mail";
 import { getVerificationTokenByToken } from "./verification-token";
 import { getPasswordResetTokenByToken } from "./password-reset";
+import { getTwoFactorTokenbyEmail } from "./two-factors-token";
+import { getTwoFactorConfirmationByUserId } from "./two-factor-confirmation";
 
 //! LOGIN ACTION
 export const login = async (values: z.infer<typeof userLoginSchema>) => {
@@ -32,7 +39,7 @@ export const login = async (values: z.infer<typeof userLoginSchema>) => {
     return { error: "Formulaire Invalide" };
   }
 
-  const { email, password } = validateFields.data;
+  const { email, password, code } = validateFields.data;
 
   /**
    * Ici, si un user non vérifié veut se connecter, on lui bloque l'accès et on veut lui renvoyer un email de vérification :
@@ -59,6 +66,58 @@ export const login = async (values: z.infer<typeof userLoginSchema>) => {
       success:
         "Votre compte n'est pas vérifié : un email de vérification a été envoyé à votre adresse email.",
     };
+  }
+
+  // Vérifier si l'utilisateur a activé l'authentification à deux facteurs
+  if (existingUser.isTwofactorEnabled && existingUser.email) {
+    if (code) {
+      // Vérifier le code
+      const twoFactorToken = await getTwoFactorTokenbyEmail(existingUser.email);
+
+      if (!twoFactorToken) {
+        return { error: "Code invalide." };
+      }
+
+      if (twoFactorToken.token !== code) {
+        return { error: "Code invalide." };
+      }
+
+      const hasExpired = new Date(twoFactorToken.expires) < new Date();
+
+      if (hasExpired) {
+        return { error: "Code expiré." };
+      }
+
+      // Supprimer le code si tout va bien + Confirmer l'authentification à deux facteurs
+      await db.twoFactorToken.delete({
+        where: { id: twoFactorToken.id },
+      });
+
+      const existingConfirmation = await getTwoFactorConfirmationByUserId(
+        existingUser.id
+      );
+
+      // S'il y a déja une confirmation, on la supprime
+      if (existingConfirmation) {
+        await db.twoFactorConfirmation.delete({
+          where: { id: existingConfirmation.id },
+        });
+      }
+
+      // Confirmation de l'authentification à deux facteurs
+      await db.twoFactorConfirmation.create({
+        data: {
+          userId: existingUser.id,
+        },
+      });
+    } else {
+      const twoFactorToken = await generateTwoFactorToken(existingUser.email);
+
+      await sendTwoFactorTokenEmail(existingUser.email, twoFactorToken.token);
+
+      // Pour indiquer au front-end qu'on va changer l'affichage pour mettre l'input du code à 6 chiffres
+      return { twoFactor: true };
+    }
   }
 
   // La fonction signIn vient de NextAuth importé depuis "auth.ts"
@@ -133,6 +192,12 @@ export const register = async (values: z.infer<typeof userRegisterSchema>) => {
     success:
       "Votre compte a bien été créé. Un mail de confirmation a été envoyé.",
   };
+};
+
+//! LOGOUT ACTION
+export const logout = async () => {
+  // On peut dans cette fonction supprimer des cookies ou des tokens de session du User par exemple
+  await signOut();
 };
 
 //! VERIFICATION EMAIL ACTION

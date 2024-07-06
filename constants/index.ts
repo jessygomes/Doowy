@@ -11,10 +11,6 @@ export const headerLinksOrganizer = [
     label: "Créer un Event",
     route: "/events/create",
   },
-  {
-    label: "Profils",
-    route: "/profil",
-  },
 ];
 
 export const headerLinksUser = [
@@ -26,10 +22,6 @@ export const headerLinksUser = [
     label: "Events",
     route: "/events",
   },
-  {
-    label: "Profils",
-    route: "/profil",
-  },
 ];
 
 export const headerLinkNoUser = [
@@ -40,6 +32,10 @@ export const headerLinkNoUser = [
   {
     label: "Events",
     route: "/events",
+  },
+  {
+    label: "Devenir Organisateur",
+    route: "/devenir-organisateur",
   },
 ];
 

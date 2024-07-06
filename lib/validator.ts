@@ -25,6 +25,7 @@ export const userLoginSchema = z.object({
     message: "L'email est requis.",
   }),
   password: z.string().min(1, "Le mot de passe est requis."),
+  code: z.optional(z.string()), // Pour Auhtentification à deux facteurs
 });
 
 export const userRegisterSchema = z

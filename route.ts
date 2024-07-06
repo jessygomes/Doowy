@@ -26,7 +26,9 @@ export const authRoutes = [
   "/auth/new-password",
 ];
 
-export const organizerRoutes = ["/events/create"];
+export const organizerRoutes = ["/events/create", "/events/[id]/update"];
+
+export const adminRoutes = ["/admin"];
 
 /**
  * Le préfix pour les routes API utilisées pour l'authentification.

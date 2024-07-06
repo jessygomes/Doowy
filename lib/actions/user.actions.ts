@@ -41,20 +41,6 @@ import { db } from "../db";
 //   }
 // }
 
-//! GET USER BY ID
-// export async function getUserByIdForProfile(userId: string, fields: string) {
-//   try {
-//     await connectToDb();
-
-//     const user = await User.findById(userId, fields);
-
-//     if (!user) throw new Error("User not found");
-//     return JSON.parse(JSON.stringify(user));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
 //! GET USER BY ID ----- PRISMA MODE
 export async function getUserById(id: string) {
   try {
@@ -78,6 +64,29 @@ export const getUserByEmail = async (email: string) => {
     return null;
   }
 };
+
+//! GET USER BY ID POUR LE PROFIL
+export async function getUserByIdForProfile(userId: string) {
+  try {
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      select: {
+        name: true,
+        email: true,
+        photo: true,
+        description: true,
+        instagram: true,
+        twitter: true,
+        tiktok: true,
+        departement: true,
+        role: true,
+      },
+    });
+    return user;
+  } catch {
+    return null;
+  }
+}
 
 //! UPDATE USER
 // export async function updateUser({ userId, user, path }: UpdateUserParams) {

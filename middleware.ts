@@ -12,6 +12,8 @@ import {
   apiAuthPrefix,
   publicRoutes,
   authRoutes,
+  organizerRoutes,
+  adminRoutes,
 } from "./route";
 
 const { auth } = NextAuth(authConfig);
@@ -28,6 +30,10 @@ export default auth((req) => {
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname); // Vérifier si la route est une route d'authentification
 
+  const isAdminRoute = adminRoutes.includes(nextUrl.pathname); // Vérifier si la route est une route d'administrateur
+
+  const isOrganizerRoute = organizerRoutes.includes(nextUrl.pathname); // Vérifier si la route est une route d'organisateur
+
   /**
    * L'ordre des conditions est important ici.
    * On check d'abord si c'est une API Route, ensuite si c'est une route d'authentification, et enfin si c'est une route publique et s'il le user est connecté ou non
@@ -42,12 +48,29 @@ export default auth((req) => {
     if (isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl)); // le second paramètre est fait pour créer l'URL absolue (/profil ne suffit pas pour la redirection)
     }
-
     return;
   }
 
   if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/auth/connexion", nextUrl));
+  }
+
+  if (isAdminRoute) {
+    if (!isLoggedIn) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+    if (isLoggedIn && req.auth?.user.role !== "admin") {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+  }
+
+  if (isOrganizerRoute) {
+    if (!isLoggedIn) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+    if (isLoggedIn && req.auth?.user.role !== "organizer") {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
   }
 
   return;

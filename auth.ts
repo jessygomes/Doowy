@@ -5,11 +5,13 @@ import { db } from "./lib/db";
 import authConfig from "./auth.config";
 import { getUserById } from "./lib/actions/user.actions";
 import { Role } from "@prisma/client";
+import { getTwoFactorConfirmationByUserId } from "./lib/actions/two-factor-confirmation";
 
 // Pour éviter les erreurs de type (erreur de type pour session.user.role : il ne reconnait pas "role")
 type ExtentedUser = DefaultSession["user"] & {
   role: Role;
   // ou bien : role : "user" | "admin" | "organizer";
+  isTwofactorEnabled: boolean;
 };
 
 declare module "next-auth" {
@@ -41,6 +43,20 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const existingUser = user.id ? await getUserById(user.id) : null;
       if (!existingUser || !existingUser?.emailVerified) return false;
 
+      // Ici, si le user a activé l'auth à deux facteurs, on vérifie si il a bien confirmé le code
+      if (existingUser.isTwofactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id
+        );
+
+        if (!twoFactorConfirmation) return false;
+
+        // Supprimer la confirmation de l'auth à deux facteurs pour la prochaine connexion (il devra reconfirmer avec le nouveau code recu par email)
+        await db.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
+      }
+
       return true;
     },
 
@@ -52,6 +68,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       if (token.role && session.user) {
         session.user.role = token.role as ExtentedUser["role"];
+      }
+      if (session.user) {
+        session.user.isTwofactorEnabled =
+          token.isTwofactorEnabled as ExtentedUser["isTwofactorEnabled"];
       }
 
       return session;
@@ -65,6 +85,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
       token.role = existingUser.role;
+      token.isTwofactorEnabled = existingUser.isTwofactorEnabled;
       return token;
     },
   },

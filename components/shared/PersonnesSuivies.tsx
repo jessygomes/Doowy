@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-export const PersonnesSuivies = ({ userId }: { userId: string }) => {
+export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
   //! Gestion de la modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen(!isModalOpen);

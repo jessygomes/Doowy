@@ -1,9 +1,9 @@
-import { IEvent } from "@/lib/mongoDb/database/models/Event";
+import { Event } from "@/types";
 import Card from "./Card";
 import { Pagination } from "./Pagination";
 
 type CollectionProps = {
-  data: IEvent[];
+  data: Event[];
   emptyTitle: string;
   emptyStateSubtext: string;
   collectionType?:
@@ -38,7 +38,7 @@ const Collection = ({
               const removeFavorite = collectionType === "All_Events_Favorite";
 
               return (
-                <li key={event._id} className="flex justify-center">
+                <li key={event.id} className="flex justify-center">
                   <Card
                     event={event}
                     hasOrderLink={hasOrderLink}

@@ -19,297 +19,396 @@ import { departements } from "@/constants";
 import { currentRole } from "../auth";
 import { Role } from "@prisma/client";
 import { NextResponse } from "next/server";
+import { getUserById } from "./user.actions";
+import { db } from "../db";
+import { Cat } from "lucide-react";
 
-// const populateEvent = async (query: any) => {
-//   return query
-//     .populate({
-//       path: "organizer",
-//       model: User,
-//       select: "_id firstName lastName",
-//     })
-//     .populate({ path: "category", model: Category, select: "_id name" });
+//! GET CATEGORY BY NAME
+// const getCategoryByName = async (name: string) => {
+//   return db.category.findMany({ name: { $regex: name, $options: "i" } });
 // };
 
 // const getCategoryByName = async (name: string) => {
-//   return Category.findOne({ name: { $regex: name, $options: "i" } });
+//   return db.category.findMany({
+//     where: {
+//       name: {
+//         contains: name,
+//         mode: "insensitive", // Pour une recherche insensible à la casse
+//       },
+//     },
+//     select: {
+//       name: true, // Sélectionne uniquement le champ `name`
+//     },
+//   });
 // };
 
-// interface DepartementCondition {
-//   nom?: string;
-//   numero?: string;
-// }
+interface DepartementCondition {
+  nom?: string;
+  numero?: string;
+}
 
-// const getDepartementByName = async (name: string) => {
-//   return departements.departements.find(
-//     (departement) => departement.nom === name
-//   );
-// };
+const getDepartementByName = async (name: string) => {
+  return departements.departements.find(
+    (departement) => departement.nom === name
+  );
+};
 
 // //! CREATE EVENT
-// export const createEvent = async ({
-//   event,
-//   userId,
-//   path,
-// }: CreateEventParams) => {
-//   try {
-//     const role = await currentRole();
+export const createEvent = async ({
+  event,
+  userId,
+  path,
+}: CreateEventParams) => {
+  try {
+    const role = await currentRole();
 
-//     if (role !== Role.organizer) {
-//       return new NextResponse(null, { status: 403 });
-//     }
+    if (role !== Role.organizer) {
+      return new NextResponse(null, { status: 403 });
+    }
 
-//     const organizer = await User.findById(userId);
+    if (!userId) {
+      return new NextResponse(null, { status: 401 });
+    }
 
-//     if (!organizer) {
-//       throw new Error("Organizer not found");
-//     }
+    const organizer = await getUserById(userId);
 
-//     const newEvent = await Event.create({
-//       ...event,
-//       category: event.categoryId,
-//       organizer: userId,
-//     });
+    if (!organizer) {
+      throw new Error("Organizer not found");
+    }
 
-//     return JSON.parse(JSON.stringify(newEvent));
-//   } catch (error) {
-//     handleError(error);
-//   }
-// };
+    const newEvent = await db.event.create({
+      data: {
+        ...event,
+        category: event.category,
+        organizer: userId,
+      },
+    });
+
+    return newEvent;
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 // //! GET EVENT BY ID
-// export const getEventById = async (eventId: string) => {
-//   try {
-//     await connectToDb();
+export const getEventById = async (eventId: string) => {
+  try {
+    const event = await db.event.findUnique({
+      where: { id: eventId },
+      include: {
+        Category: {
+          select: {
+            name: true, // Sélectionne uniquement le nom de la catégorie
+          },
+        },
+        Organizer: {
+          select: {
+            name: true, // Sélectionne uniquement le nom de l'organisateur
+          },
+        },
+      },
+    });
 
-//     const event = await populateEvent(Event.findById(eventId));
+    if (!event) {
+      throw new Error("Event not found");
+    }
 
-//     if (!event) {
-//       throw new Error("Event not found");
-//     }
+    return {
+      ...event,
+    };
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-//     return JSON.parse(JSON.stringify(event));
-//   } catch (error) {
-//     handleError(error);
-//   }
-// };
+// //! ALL EVENTS + CONDITION DE RECHERCHE
+export const getAllEvents = async ({
+  query,
+  limit = 6,
+  page,
+  category,
+  departement,
+}: GetAllEventsParams) => {
+  try {
+    // Les conditions de recherche pour les événements : recherche par catégorie
+    const categoryCondition = category
+      ? await db.category.findFirst({
+          where: { name: category },
+          select: { id: true },
+        })
+      : null;
 
-// //! ALL EVENTS
-// export const getAllEvents = async ({
-//   query,
-//   limit = 6,
-//   page,
-//   category,
-//   departement,
-// }: GetAllEventsParams) => {
-//   try {
-//     await connectToDb();
+    // Les conditions de recherche pour les événements : recherche par département
+    const departementCondition: DepartementCondition = departement
+      ? (await getDepartementByName(departement)) || {}
+      : {};
 
-//     // Condition de recherche qui filtre les events dont l titre correspond à la query (insensible à la casse : $regex et $options: "i")
-//     const titleCondition = query
-//       ? { title: { $regex: query, $options: "i" } }
-//       : {};
+    // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
+    const skipAmount = (Number(page) - 1) * limit;
 
-//     // Les conditions de recherche pour les événements : recherche par catégorie
-//     const categoryCondition = category
-//       ? await getCategoryByName(category)
-//       : null;
+    const events = await db.event.findMany({
+      where: {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+        category: categoryCondition ? categoryCondition.id : undefined,
+        departement: departementCondition.numero,
+      },
+      include: {
+        Category: {
+          select: {
+            name: true,
+          },
+        },
+        Organizer: {
+          select: {
+            name: true,
+          },
+        },
+      },
+      orderBy: { nbFav: "desc" },
+      skip: skipAmount,
+      take: limit,
+    });
 
-//     // Les conditions de recherche pour les événements : recherche par département
-//     const departementCondition: DepartementCondition = departement
-//       ? (await getDepartementByName(departement)) || {}
-//       : {};
+    // Calcul du nombre total d'événements, nécessaire pour calculer le nombre de pages
+    const eventsCount = await db.event.count({
+      where: {
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+        category: categoryCondition ? categoryCondition.id : undefined,
+        departement: departementCondition.numero,
+      },
+    });
 
-//     // Combinason des conditions de recherches en utilisant l'opérateur $and, tous les events qui correspond à toute les conditions seront affichés
-//     const conditions = {
-//       $and: [
-//         titleCondition,
-//         categoryCondition ? { category: categoryCondition._id } : {},
-//         departementCondition && departementCondition.numero
-//           ? { departement: departementCondition.numero }
-//           : {},
-//       ],
-//     };
-
-//     // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
-//     const skipAmount = (Number(page) - 1) * limit;
-
-//     const eventsQuery = Event.find(conditions)
-//       .sort({ nbFav: -1 })
-//       .skip(skipAmount)
-//       .limit(limit);
-
-//     const events = await populateEvent(eventsQuery);
-
-//     // Calcul du nombre total d'événements, nécessaire pour calculer le nombre de pages
-//     const eventsCount = await Event.countDocuments(conditions);
-
-//     return {
-//       data: JSON.parse(JSON.stringify(events)),
-//       totalPages: Math.ceil(eventsCount / limit),
-//     };
-//   } catch (error) {
-//     handleError(error);
-//   }
-// };
+    return {
+      data: events,
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+};
 
 // //! ALL UPCOMING EVENTS
-// export const getAllUpcomingEvents = async ({
-//   query,
-//   limit = 6,
-//   page,
-//   category,
-//   departement,
-// }: GetAllEventsParams) => {
-//   try {
-//     await connectToDb();
+export const getAllUpcomingEvents = async ({
+  query,
+  limit = 6,
+  page,
+  category,
+  departement,
+}: GetAllEventsParams) => {
+  try {
+    // Les conditions de recherche pour les événements : recherche par catégorie
+    const categoryCondition = category
+      ? await db.category.findFirst({
+          where: { name: category },
+          select: { id: true },
+        })
+      : null;
 
-//     // Condition de recherche qui filtre les events dont l titre correspond à la query (insensible à la casse : $regex et $options: "i")
-//     const titleCondition = query
-//       ? { title: { $regex: query, $options: "i" } }
-//       : {};
+    // Les conditions de recherche pour les événements : recherche par département
+    const departementCondition: DepartementCondition = departement
+      ? (await getDepartementByName(departement)) || {}
+      : {};
 
-//     // Les conditions de recherche pour les événements : recherche par catégorie
-//     const categoryCondition = category
-//       ? await getCategoryByName(category)
-//       : null;
+    // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
+    const skipAmount = (Number(page) - 1) * limit;
 
-//     // Les conditions de recherche pour les événements : recherche par département
-//     const departementCondition: DepartementCondition = departement
-//       ? (await getDepartementByName(departement)) || {}
-//       : {};
+    const events = await db.event.findMany({
+      where: {
+        endDateTime: { gte: new Date() },
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+        category: categoryCondition ? categoryCondition.id : undefined,
+        departement: departementCondition.numero,
+      },
+      include: {
+        Category: {
+          select: {
+            name: true, // Sélectionne uniquement le nom de la catégorie
+          },
+        },
+        Organizer: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+      },
+      orderBy: { nbFav: "desc" },
+      skip: skipAmount,
+      take: limit,
+    });
 
-//     // Ajout de la condition pour récupérer les événements à venir ou en cours
-//     const upcomingEventCondition = {
-//       endDateTime: { $gte: new Date() },
-//     };
+    const transformedEvents = events.map((event) => ({
+      ...event,
+      Category: event.Category?.name,
+      Organizer: event.Organizer,
+    }));
 
-//     // Combinason des conditions de recherches en utilisant l'opérateur $and, tous les events qui correspond à toute les conditions seront affichés
-//     const conditions = {
-//       $and: [
-//         titleCondition,
-//         categoryCondition ? { category: categoryCondition._id } : {},
-//         departementCondition && departementCondition.numero
-//           ? { departement: departementCondition.numero }
-//           : {},
-//         upcomingEventCondition,
-//       ],
-//     };
+    const eventsCount = await db.event.count({
+      where: {
+        endDateTime: { gte: new Date() },
+        title: {
+          contains: query,
+          mode: "insensitive",
+        },
+        category: categoryCondition ? categoryCondition.id : undefined,
+        departement: departementCondition.numero,
+      },
+    });
 
-//     // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
-//     const skipAmount = (Number(page) - 1) * limit;
-
-//     const eventsQuery = Event.find(conditions)
-//       .sort({ nbFav: -1 })
-//       .skip(skipAmount)
-//       .limit(limit);
-
-//     const events = await populateEvent(eventsQuery);
-
-//     // Calcul du nombre total d'événements, nécessaire pour calculer le nombre de pages
-//     const eventsCount = await Event.countDocuments(conditions);
-
-//     return {
-//       data: JSON.parse(JSON.stringify(events)),
-//       totalPages: Math.ceil(eventsCount / limit),
-//     };
-//   } catch (error) {
-//     handleError(error);
-//   }
-// };
+    return {
+      data: transformedEvents,
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+};
 
 // //! UPDATE
-// export async function updateEvent({ userId, event, path }: UpdateEventParams) {
-//   try {
-//     await connectToDb();
+export async function updateEvent({ userId, event, path }: UpdateEventParams) {
+  try {
+    const eventToUpdate = await db.event.findUnique({
+      where: { id: event.id },
+    });
 
-//     const eventToUpdate = await Event.findById(event._id);
-//     if (!eventToUpdate || eventToUpdate.organizer.toHexString() !== userId) {
-//       throw new Error("Unauthorized or event not found");
-//     }
+    if (!eventToUpdate || eventToUpdate.organizer.toString() !== userId) {
+      throw new Error("Unauthorized or event not found");
+    }
 
-//     const updatedEvent = await Event.findByIdAndUpdate(
-//       event._id,
-//       { ...event, category: event.categoryId },
-//       { new: true }
-//     );
-//     revalidatePath(path);
+    const updatedEvent = await db.event.update({
+      where: { id: event.id },
+      data: { ...event, category: event.category },
+    });
 
-//     return JSON.parse(JSON.stringify(updatedEvent));
-//   } catch (error) {
-//     handleError(error);
-//   }
-// }
+    revalidatePath(path);
+
+    return updatedEvent;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // //! DELETE EVENT
-// export const deleteEvent = async ({ eventId, path }: DeleteEventParams) => {
-//   try {
-//     await connectToDb();
+export const deleteEvent = async ({ eventId, path }: DeleteEventParams) => {
+  try {
+    const deletedEvent = await db.event.delete({ where: { id: eventId } });
 
-//     const deletedEvent = await Event.findByIdAndDelete(eventId);
-
-//     if (deletedEvent) revalidatePath(path);
-//   } catch (error) {
-//     handleError(error);
-//   }
-// };
+    if (deletedEvent) revalidatePath(path);
+  } catch (error) {
+    handleError(error);
+  }
+};
 
 // //! GET EVENTS BY ORGANIZER
-// export async function getEventsByUser({
-//   userId,
-//   limit = 6,
-//   page,
-// }: GetEventsByUserParams) {
-//   try {
-//     await connectToDb();
+export async function getEventsByUser({
+  userId,
+  limit = 6,
+  page,
+}: GetEventsByUserParams) {
+  try {
+    const skipAmount = (page - 1) * limit;
 
-//     const conditions = { organizer: userId };
-//     const skipAmount = (page - 1) * limit;
+    const eventsQuery = await db.event.findMany({
+      where: { organizer: userId },
+      include: {
+        Category: {
+          select: {
+            name: true, // Sélectionne uniquement le nom de la catégorie
+          },
+        },
+        Organizer: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+      },
+      skip: skipAmount,
+      take: limit,
+    });
 
-//     const eventsQuery = Event.find(conditions)
-//       .sort({ createdAt: "desc" })
-//       .skip(skipAmount)
-//       .limit(limit);
+    const events = eventsQuery.map((event) => ({
+      ...event,
+      Category: event.Category?.name,
+      Organizer: {
+        id: event.Organizer.id,
+        name: event.Organizer.name,
+      },
+    }));
 
-//     const events = await populateEvent(eventsQuery);
-//     const eventsCount = await Event.countDocuments(conditions);
+    // const events = await populateEvent(eventsQuery);
+    const eventsCount = await db.event.count({ where: { organizer: userId } });
 
-//     return {
-//       data: JSON.parse(JSON.stringify(events)),
-//       totalPages: Math.ceil(eventsCount / limit),
-//     };
-//   } catch (error) {
-//     handleError(error);
-//   }
-// }
+    return {
+      data: events,
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}
 
 // //! GET RELATED EVENTS: EVENTS WITH SAME CATEGORY
-// export async function getRelatedEventsByCategory({
-//   categoryId,
-//   eventId,
-//   limit = 3,
-//   page = 1,
-// }: GetRelatedEventsByCategoryParams) {
-//   try {
-//     await connectToDb();
+export async function getRelatedEventsByCategory({
+  departementId,
+  eventId,
+  limit = 3,
+  page = 1,
+}: GetRelatedEventsByCategoryParams) {
+  try {
+    // Étape 1: Récupérer le département de l'événement courant
+    const currentEvent = await db.event.findUnique({
+      where: { id: eventId },
+    });
 
-//     const skipAmount = (Number(page) - 1) * limit;
-//     const conditions = {
-//       $and: [{ category: categoryId }, { _id: { $ne: eventId } }],
-//     };
+    if (!currentEvent) {
+      throw new Error("Event not found");
+    }
 
-//     const eventsQuery = Event.find(conditions)
-//       .sort({ createdAt: "desc" })
-//       .skip(skipAmount)
-//       .limit(limit);
+    const currentEventDepartmentId = currentEvent.departement;
 
-//     const events = await populateEvent(eventsQuery);
-//     const eventsCount = await Event.countDocuments(conditions);
+    const skipAmount = (Number(page) - 1) * limit;
 
-//     return {
-//       data: JSON.parse(JSON.stringify(events)),
-//       totalPages: Math.ceil(eventsCount / limit),
-//     };
-//   } catch (error) {
-//     handleError(error);
-//   }
-// }
+    // const conditions = {
+    //   $and: [{ category: categoryId }, { _id: { $ne: eventId } }],
+    // };
+
+    const events = await db.event.findMany({
+      where: {
+        AND: [
+          { departement: currentEventDepartmentId },
+          { id: { not: eventId } },
+        ],
+      },
+      skip: skipAmount,
+      take: limit,
+    });
+
+    // Étape 3: Modifier la requête pour compter les événements avec les mêmes conditions
+    const eventsCount = await db.event.count({
+      where: {
+        endDateTime: { gte: new Date() },
+        AND: [
+          { departement: currentEventDepartmentId },
+          { id: { not: eventId } },
+        ],
+      },
+    });
+
+    return {
+      data: events,
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}

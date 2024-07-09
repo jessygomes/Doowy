@@ -8,8 +8,6 @@ export default async function CreateEvent() {
   const user = await currentUser();
   const role = currentRole();
 
-  // console.log("userID", userId);
-
   return (
     <>
       <RoleGate allowedRole={Role.organizer}>
@@ -19,7 +17,7 @@ export default async function CreateEvent() {
           </h3>
         </section>
         <div className="wrapper my-8">
-          {/* <EventForm userId={user.id} type="Créer" /> */}
+          <EventForm userId={user?.id} type="Créer" />
         </div>
       </RoleGate>
     </>

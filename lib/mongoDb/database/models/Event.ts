@@ -1,27 +1,24 @@
 // import { Document, Schema, model, models } from "mongoose";
 
-// export interface IEvent extends Document {
-//   _id: string;
-//   title: string;
-//   description?: string;
-//   location?: string;
-//   departement: string;
-//   createdAt: Date;
-//   imageUrl: string;
-//   startDateTime: Date;
-//   endDateTime: Date;
-//   price?: string;
-//   isFree: boolean;
-//   url?: string;
-//   category: { _id: string; name: string };
-//   organizer: {
-//     _id: string;
-//     username: string;
-//     firstName: string;
-//     lastName: string;
-//   };
-//   nbFav?: number;
-// }
+export interface IEvent {
+  id: string;
+  title: string;
+  description?: string;
+  location?: string;
+  departement: string;
+  createdAt: Date;
+  imageUrl: string;
+  startDateTime: Date;
+  endDateTime: Date;
+  price?: string;
+  isFree: boolean;
+  url?: string;
+  category: { _id: string; name: string };
+  organizer: string;
+  nbFav?: number;
+  Category?: string;
+  Organizer?: { id: string; name: string };
+}
 
 // const EventSchema = new Schema({
 //   title: { type: String, required: true },

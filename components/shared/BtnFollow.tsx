@@ -1,10 +1,11 @@
 "use client";
-import { IEvent } from "@/lib/mongoDb/database/models/Event";
-import { Button } from "../ui/button";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import { addOrRemoveFollower } from "@/lib/actions/user.actions";
 import { useState } from "react";
+
+import { addOrRemoveFollower } from "@/lib/actions/user.actions";
+import { useCurrentUser } from "@/hooks/use-current-user";
+
+import { Button } from "../ui/button";
 
 const BtnFollow = ({
   userToFollowId,
@@ -13,46 +14,46 @@ const BtnFollow = ({
   userToFollowId: string;
   isFollowing: boolean;
 }) => {
-  const { user } = useUser();
-  const currentUserId = user?.publicMetadata.userId as string;
-
   const [isFollow, setIsFollow] = useState(isFollowing);
 
+  const user = useCurrentUser();
+  const currentUserId = user?.id;
+
   const handleFollow = async () => {
-    try {
-      await addOrRemoveFollower({
-        userId: currentUserId,
-        followerId: userToFollowId,
-      });
-      setIsFollow(!isFollow);
-    } catch (error) {
-      console.error("Erreur lors de l'ajout aux favoris", error);
+    if (typeof currentUserId === "string") {
+      try {
+        await addOrRemoveFollower({
+          userId: currentUserId,
+          targetUserId: userToFollowId,
+        });
+        setIsFollow(!isFollow);
+      } catch (error) {
+        console.error("Erreur lors de l'ajout aux favoris", error);
+      }
     }
   };
 
   const isCurrentUser = currentUserId === userToFollowId;
 
-  return (
-    <>
-      <SignedOut>
-        <Button asChild className=" rounded-full">
-          <Link href="/sign-in">Suivre</Link>
-        </Button>
-      </SignedOut>
-
-      <SignedIn>
-        {!isCurrentUser ? (
+  if (currentUserId === null || currentUserId === undefined) {
+    // Si aucun utilisateur n'est connecté, afficher le bouton avec un lien vers la page de connexion
+    return (
+      <Button asChild className="rounded-full">
+        <Link href="/auth/connexion">Suivre</Link>
+      </Button>
+    );
+  } else {
+    // Si un utilisateur est connecté, afficher le bouton pour suivre ou indiquer déjà suivi
+    return (
+      <>
+        {!isCurrentUser && (
           <Button onClick={handleFollow} className="rounded-full">
-            {isFollow === true ? "Abonné" : "Suivre"}
-          </Button>
-        ) : (
-          <Button disabled className="rounded-full">
-            {/* {user?.following} favoris */}
+            {isFollow ? "Abonné(e)" : "Suivre"}
           </Button>
         )}
-      </SignedIn>
-    </>
-  );
+      </>
+    );
+  }
 };
 
 export default BtnFollow;

@@ -1,7 +1,7 @@
 import { auth } from "@/auth";
 import { RoleGate } from "@/components/auth/RoleGate";
 import EventForm from "@/components/shared/EventForm";
-// import { getEventById } from "@/lib/actions/event.actions";
+import { getEventById } from "@/lib/actions/event.actions";
 import { currentRole, currentUser } from "@/lib/auth";
 import { UpdateEventParams } from "@/types";
 import { Role } from "@prisma/client";
@@ -16,9 +16,10 @@ export default async function UpdateEvent({
   params: { id },
 }: UpdateEventProps) {
   const user = await currentUser();
+  const userId = user?.id;
   const role = currentRole();
 
-  // const event = await getEventById(id);
+  const event = await getEventById(id);
 
   return (
     <>
@@ -29,12 +30,14 @@ export default async function UpdateEvent({
           </h3>
         </section>
         <div className="wrapper my-8">
-          {/* <EventForm
-          type="Modifier"
-          event={event}
-          eventId={event._id}
-          userId={user.id}
-        /> */}
+          {event && (
+            <EventForm
+              type="Modifier"
+              event={event}
+              eventId={event.id}
+              userId={userId}
+            />
+          )}
         </div>
       </RoleGate>
     </>

@@ -7,6 +7,7 @@ export const publicRoutes = [
   "/",
   "/events",
   "/events/[id]",
+  "/profil/[id]",
   "/devenir-organisateur",
   "/auth/new-verification",
 ];
@@ -36,6 +37,8 @@ export const adminRoutes = ["/admin"];
  * @type {string}
  */
 export const apiAuthPrefix = "/api/auth";
+
+export const apiUploadPrefix = "/api/uploadthing";
 
 /**
  * Le chemin par défaut pour rediriger l'utilisateur après la connexion.

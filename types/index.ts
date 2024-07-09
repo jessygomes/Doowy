@@ -39,8 +39,9 @@ export type GetUserParams = {
 };
 
 // ====== EVENT PARAMS
+
 export type CreateEventParams = {
-  userId: string;
+  userId?: string;
   event: {
     title: string;
     description: string;
@@ -49,7 +50,7 @@ export type CreateEventParams = {
     imageUrl: string;
     startDateTime: Date;
     endDateTime: Date;
-    categoryId: string;
+    category: string;
     price: string;
     isFree: boolean;
     url: string;
@@ -58,9 +59,9 @@ export type CreateEventParams = {
 };
 
 export type UpdateEventParams = {
-  userId: string;
+  userId?: string;
   event: {
-    _id: string;
+    id: string;
     title: string;
     imageUrl: string;
     description: string;
@@ -68,7 +69,7 @@ export type UpdateEventParams = {
     departement: string;
     startDateTime: Date;
     endDateTime: Date;
-    categoryId: string;
+    category: string;
     price: string;
     isFree: boolean;
     url: string;
@@ -91,13 +92,14 @@ export type GetAllEventsParams = {
 };
 
 export type GetEventsByUserParams = {
-  userId: string;
+  userId?: string;
   limit?: number;
   page: number;
 };
 
 export type GetRelatedEventsByCategoryParams = {
-  categoryId: string;
+  categoryId?: string;
+  departementId: string;
   eventId: string;
   limit?: number;
   page: number | string;
@@ -118,9 +120,9 @@ export type GetSuscriptionEvent = {
 };
 
 export type Event = {
-  _id: string;
+  id: string;
   title: string;
-  description: string;
+  description?: string;
   price: string;
   isFree: boolean;
   imageUrl: string;
@@ -129,16 +131,14 @@ export type Event = {
   startDateTime: Date;
   endDateTime: Date;
   url: string;
-  organizer: {
-    _id: string;
-    firstName: string;
-    lastName: string;
-  };
-  category: {
-    _id: string;
-    name: string;
-  };
+  organizer: string;
+  category: string;
   nbFav: number;
+  Category: string;
+  Organizer: {
+    id?: string;
+    name?: string;
+  };
 };
 
 // ====== CATEGORY PARAMS

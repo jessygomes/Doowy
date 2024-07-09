@@ -4,25 +4,35 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FaUser } from "react-icons/fa";
+
+type Following = {
+  id: string;
+  name: string | null;
+  photo: string | null;
+};
+
 export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
   //! Gestion de la modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   //! State pour les utilisateurs suivis
-  const [followingUsers, setFollowingUsers] = useState([]);
+  const [followingUsers, setFollowingUsers] = useState<Following[]>([]);
 
   useEffect(() => {
     if (userId) {
       const loadFollowingUsers = async () => {
         try {
-          const response = await getMyFollowingUsers({ userId });
-          setFollowingUsers(response);
+          const responseFollowing = await getMyFollowingUsers({ userId });
+          setFollowingUsers(responseFollowing || []);
         } catch (error) {
           console.error(
             "Erreur lors du chargement des utilisateurs suivis:",
             error
           );
+          setFollowingUsers([]);
         }
       };
       loadFollowingUsers();
@@ -53,19 +63,28 @@ export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
             <ul className="flex flex-col gap-4">
               {followingUsers.map((user: any) => (
                 <li
-                  key={user._id}
+                  key={user.id}
                   className="p-medium-14 hover:text-primary transition-all ease-in-out"
                 >
-                  <Link href={`/profil/${user._id}`}>
+                  <Link href={`/profil/${user.id}`}>
                     <div className="flex gap-4 items-center">
-                      <Image
-                        src={user.photo}
-                        alt="avatar"
-                        width={30}
-                        height={30}
-                        className="rounded-full"
-                      />
-                      {user.firstName} {user.lastName}
+                      {user.photo ? (
+                        <Image
+                          src={user.photo ? user.photo : ""}
+                          alt="avatar"
+                          width={30}
+                          height={30}
+                          className="rounded-full"
+                        />
+                      ) : (
+                        <Avatar>
+                          <AvatarImage src={user?.image || ""} />
+                          <AvatarFallback className="bg-primary">
+                            <FaUser className="text-white" />
+                          </AvatarFallback>
+                        </Avatar>
+                      )}
+                      {user.name}
                     </div>
                   </Link>
                 </li>

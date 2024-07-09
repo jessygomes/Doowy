@@ -75,11 +75,23 @@ export async function getUserByIdForProfile(userId: string) {
         email: true,
         photo: true,
         description: true,
+        followers: true,
+        following: true,
         instagram: true,
         twitter: true,
         tiktok: true,
         departement: true,
         role: true,
+        followersList: {
+          select: {
+            followerId: true,
+          },
+        },
+        followingList: {
+          select: {
+            followingId: true,
+          },
+        },
       },
     });
     return user;
@@ -226,93 +238,121 @@ export async function getUserByIdForProfile(userId: string) {
 // }
 
 //! ADD & REMOVE FOLLOWER
-// export async function addOrRemoveFollower({
-//   userId,
-//   followerId,
-// }: {
-//   userId: string;
-//   followerId: string;
-// }) {
-//   try {
-//     await connectToDb();
+export async function addOrRemoveFollower({
+  userId,
+  targetUserId,
+}: {
+  userId: string;
+  targetUserId: string;
+}) {
+  try {
+    const currentUser = await db.user.findUnique({
+      where: { id: userId },
+    });
+    if (!currentUser) throw new Error("User not found");
 
-//     const currentUser = await User.findById(userId);
-//     if (!currentUser) throw new Error("currentUser not found");
+    const userToFollow = await db.user.findUnique({
+      where: { id: targetUserId },
+    });
+    if (!userToFollow) throw new Error("User not found");
 
-//     const userToFollow = await User.findById(followerId);
-//     if (!userToFollow) throw new Error("userToFollow not found");
+    // Vérifier si l'utilisateur courant suit déjà l'utilisateur à suivre
+    const existingFollow = await db.userFollowing.findFirst({
+      where: {
+        userId: userId,
+        followingId: targetUserId,
+      },
+    });
 
-//     const isFollowed = currentUser.following.includes(followerId);
-//     console.log("isFollowed -- ACTIONS", isFollowed);
+    console.log("existingFollow", existingFollow);
 
-//     if (isFollowed) {
-//       // Retirer l'ID de l'utilisateur courant de la liste des followers de l'utilisateur à suivre
-//       // currentUser.following = currentUser.following.filter(
-//       //   (idToFollow: string) => idToFollow !== followerId
-//       // );
-//       // userToFollow.followers = userToFollow.followers.filter(
-//       //   (IdOfUserFollowing: string) => IdOfUserFollowing !== userId
-//       // );
-//       await User.findByIdAndUpdate(userId, {
-//         $pull: { following: followerId },
-//       });
-//       await User.findByIdAndUpdate(followerId, {
-//         $pull: { followers: userId },
-//       });
-//     } else {
-//       // Ajouter l'ID de l'utilisateur à suivre à la liste des following de l'utilisateur courant
-//       // currentUser.following.push(followerId);
-//       // userToFollow.followers.push(userId);
-//       await User.findByIdAndUpdate(userId, {
-//         $push: { following: followerId },
-//       });
-//       await User.findByIdAndUpdate(followerId, {
-//         $push: { followers: userId },
-//       });
-//     }
+    if (existingFollow) {
+      // Si suivi, retirer le follower et le following
+      await db.userFollowing.delete({
+        where: {
+          userId_followingId: {
+            userId: userId, // L'ID de l'utilisateur qui suit
+            followingId: userToFollow.id, // L'ID de l'utilisateur à ne plus suivre
+          },
+        },
+      });
 
-//     // await currentUser.save();
-//     // await userToFollow.save();
+      await db.userFollowers.delete({
+        where: {
+          userId_followerId: {
+            userId: targetUserId, // L'ID de l'utilisateur qui est suivi
+            followerId: userId, // L'ID de l'utilisateur qui suit
+          },
+        },
+      });
+    } else {
+      // Si non suivi, ajouter le follower et le following
+      await db.userFollowing.create({
+        data: {
+          userId: userId,
+          followingId: targetUserId,
+        },
+      });
 
-//     return JSON.parse(JSON.stringify(currentUser));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+      await db.userFollowers.create({
+        data: {
+          userId: targetUserId,
+          followerId: userId,
+        },
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-// export async function getFollowers({ userId }: { userId: string }) {
-//   try {
-//     await connectToDb();
+//! GET FOLLOWERS
+export async function getFollowers({ userId }: { userId: string }) {
+  try {
+    const userFollowers = await db.userFollowers.findMany({
+      where: { userId: userId },
+      select: {
+        Follower: {
+          select: {
+            id: true,
+            name: true, // Assurez-vous d'ajuster ceci pour correspondre à votre modèle si vous utilisez firstName + lastName
+            photo: true,
+          },
+        },
+      },
+    });
 
-//     const user = await User.findById(userId).populate({
-//       path: "followers",
-//       select: "firstName lastName photo",
-//     });
+    if (!userFollowers) throw new Error("User not found");
 
-//     if (!user) throw new Error("User not found");
+    return userFollowers.map((follower) => follower.Follower);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-//     return JSON.parse(JSON.stringify(user.followers));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+//! GET FOLLOWING USERS
+export async function getMyFollowingUsers({ userId }: { userId: string }) {
+  try {
+    const userFollowing = await db.userFollowing.findMany({
+      where: { userId: userId },
+      select: {
+        Following: {
+          select: {
+            id: true,
+            name: true, // Assurez-vous d'ajuster ceci pour correspondre à votre modèle si vous utilisez firstName + lastName
+            photo: true,
+          },
+        },
+      },
+    });
 
-// export async function getMyFollowingUsers({ userId }: { userId: string }) {
-//   try {
-//     await connectToDb();
+    if (!userFollowing) throw new Error("User not found");
 
-//     const user = await User.findById(userId).populate({
-//       path: "following",
-//       select: "firstName lastName photo",
-//     });
-
-//     if (!user) throw new Error("User not found");
-
-//     return JSON.parse(JSON.stringify(user.following));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    return userFollowing.map((follower) => follower.Following);
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // export async function getEventSubscriptions({
 //   userId,

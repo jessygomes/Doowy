@@ -30,8 +30,6 @@ import { getTwoFactorConfirmationByUserId } from "./two-factor-confirmation";
 
 //! LOGIN ACTION
 export const login = async (values: z.infer<typeof userLoginSchema>) => {
-  console.log("LOGIN ACTION", values);
-
   // Revalidation des champs dans le back-end (où personne peut les manipuler)
   const validateFields = userLoginSchema.safeParse(values);
 

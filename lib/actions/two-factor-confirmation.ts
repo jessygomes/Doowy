@@ -1,4 +1,3 @@
-import { use } from "react";
 import { db } from "../db";
 
 export const getTwoFactorConfirmationByUserId = async (userId: string) => {

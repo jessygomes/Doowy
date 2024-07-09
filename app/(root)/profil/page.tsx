@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { auth, signOut } from "@/auth";
+import { signOut } from "@/auth";
+import { currentUser } from "@/lib/auth";
 import { SearchParamProps } from "@/types";
 
 import { getUserByIdForProfile } from "@/lib/actions/user.actions";
-// import { getEventsByUser } from "@/lib/actions/event.actions";
+import { getEventsByUser } from "@/lib/actions/event.actions";
 // import {
 //   getFollowers,
 //   getMyFollowingUsers,
@@ -15,13 +16,12 @@ import { Button } from "@/components/ui/button";
 import Collection from "@/components/shared/Collection";
 import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
 import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
-import { LogoutBtn } from "@/components/auth/LogoutBtn";
-import { currentUser } from "@/lib/auth";
 
 export default async function ProfilPrivate({
   searchParams,
 }: SearchParamProps) {
   const user = await currentUser();
+  const userId = user?.id;
 
   if (!user) {
     return null;
@@ -33,13 +33,17 @@ export default async function ProfilPrivate({
   const page = Number(searchParams?.page) || 1;
 
   // const favoriteEvent = await getWishlist({ userId, page });
-  // const organizedEvents = await getEventsByUser({ userId, page });
+  const organizedEvents = await getEventsByUser({ userId, page });
+  console.log("ORGANIZED EVENTS ---- ", organizedEvents);
 
   return (
     <>
       <section className="wrapper">
         <div className="wrapper flex flex-col gap-4 items-center justify-center sm:flex-row sm:gap-8 sm:justify-between">
-          <h3 className="h3-bold text-center sm:text-left">Mon Profil</h3>
+          <h3 className="h3-bold text-center sm:text-left">
+            {user.role === "organizer" ? "Mon profil" : "Mon compte"}
+          </h3>
+
           <div className="flex gap-4 items-center sm:gap-8">
             {/* Les followers sont uniquement disponible pour les organisateurs */}
             {currentUserProfile?.role === "organizer" && (
@@ -114,7 +118,7 @@ export default async function ProfilPrivate({
       </section> */}
 
       {/* EVENTS ORGANIZED */}
-      {/* <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
+      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
         <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left">Mes Events</h3>
           <Button asChild size="lg" className="button hidden sm:flex">
@@ -134,7 +138,7 @@ export default async function ProfilPrivate({
           urlParamName="eventsPage"
           totalPages={organizedEvents?.totalPages}
         />
-      </section> */}
+      </section>
     </>
   );
 }

@@ -14,9 +14,18 @@ import {
   authRoutes,
   organizerRoutes,
   adminRoutes,
+  apiUploadPrefix,
 } from "./route";
 
 const { auth } = NextAuth(authConfig);
+
+// Fonction pour vérifier si une route est publique
+function isPublicRouteFonction(path: any) {
+  return publicRoutes.some((route) => {
+    const regex = new RegExp(`^${route.replace("[id]", "[^/]+")}$`);
+    return regex.test(path);
+  });
+}
 
 //! Middleware pour protéger les routes : Combiner le pathname et le statut de connexion pour décider ce que je vais faire sur la route ou se situe le user
 export default auth((req) => {
@@ -26,7 +35,9 @@ export default auth((req) => {
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix); // Vérifier si la route est une route d'authentification
 
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname); // Vérifier si la route est publique
+  const isApiUploadRoute = nextUrl.pathname.startsWith(apiUploadPrefix); // Vérifier si la route est une route d'upload
+
+  const isPublicRoute = isPublicRouteFonction(nextUrl.pathname); // Vérifier si la route est publique
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname); // Vérifier si la route est une route d'authentification
 
@@ -43,6 +54,10 @@ export default auth((req) => {
     return; // Correction Erreur : Retourne void au lieu de null pour éviter les erreurs de type
   }
 
+  if (isApiUploadRoute) {
+    return;
+  }
+
   if (isAuthRoute) {
     // Si l'utilisateur est connecté et qu'il essaie d'accéder à une route d'authentification, le rediriger vers la page par défaut
     if (isLoggedIn) {
@@ -52,6 +67,9 @@ export default auth((req) => {
   }
 
   if (!isLoggedIn && !isPublicRoute) {
+    console.log(
+      "Redirection vers la page de connexion car la route n'est pas publique et l'utilisateur n'est pas connecté."
+    );
     return Response.redirect(new URL("/auth/connexion", nextUrl));
   }
 
@@ -64,14 +82,14 @@ export default auth((req) => {
     }
   }
 
-  if (isOrganizerRoute) {
-    if (!isLoggedIn) {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    }
-    if (isLoggedIn && req.auth?.user.role !== "organizer") {
-      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    }
-  }
+  // if (isOrganizerRoute) {
+  //   if (!isLoggedIn) {
+  //     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  //   }
+  //   if (isLoggedIn && req.auth?.user.role !== "organizer") {
+  //     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  //   }
+  // }
 
   return;
 });

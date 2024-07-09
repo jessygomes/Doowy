@@ -1,14 +1,20 @@
 "use client";
+import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { eventFormSchema } from "@/lib/validator"; //! Schema du formulaire
-import { departements, eventDefaultValues } from "@/constants"; //! Valeur initiale du formulaire (vide)
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+
+import { eventFormSchema } from "@/lib/validator"; //! Schema du formulaire
 import { createEvent, updateEvent } from "@/lib/actions/event.actions";
-import { IEvent } from "@/lib/mongoDb/database/models/Event";
+import { departements, eventDefaultValues } from "@/constants"; //! Valeur initiale du formulaire (vide)
+
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import { fr } from "date-fns/locale/fr";
+import { useUploadThing } from "../../lib/uploadthing";
+import DatePicker from "react-datepicker";
 
 import {
   Form,
@@ -32,18 +38,27 @@ import Dropdown from "./Dropdown";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import { FileUploader } from "./FileUploader";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
-import { fr } from "date-fns/locale/fr";
-import { useUploadThing } from "../../lib/uploadthing";
 
 //! On va afficher soit le form pour CREER soit pour UPDATE grâce au TYPE que l'on passe au composant EVENTFORM
 type EventFormProps = {
-  userId: string;
+  userId: string | undefined;
   type: "Créer" | "Modifier";
-  event?: IEvent;
-  eventId?: string;
+  event: {
+    title: string;
+    description?: string;
+    location?: string;
+    departement: string;
+    imageUrl: string;
+    startDateTime: Date;
+    endDateTime: Date;
+    price?: string;
+    isFree: boolean;
+    url?: string;
+    category: string;
+    organizer: string;
+    nbFav?: number;
+  };
+  eventId: string;
 };
 
 const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
@@ -88,9 +103,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           userId,
           path: "/profil",
         });
-        if (newEvent) {
+        if (newEvent && "id" in newEvent) {
           form.reset();
-          router.push(`/events/${newEvent._id}`);
+          router.push(`/events/${newEvent.id}`);
         }
       } catch (error) {
         console.error(error);
@@ -105,13 +120,13 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
       try {
         const updatedEvent = await updateEvent({
-          event: { ...values, imageUrl: uploadedImgUrl, _id: eventId },
+          event: { ...values, imageUrl: uploadedImgUrl, id: eventId },
           userId,
           path: `/events/${eventId}`,
         });
         if (updatedEvent) {
           form.reset();
-          router.push(`/events/${updatedEvent._id}`);
+          router.push(`/events/${updatedEvent.id}`);
         }
       } catch (error) {
         console.error(error);
@@ -145,7 +160,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
           <FormField
             control={form.control}
-            name="categoryId"
+            name="category"
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>

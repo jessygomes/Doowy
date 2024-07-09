@@ -1,11 +1,11 @@
+import { SearchParamProps } from "@/types";
+import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
+import { departements } from "@/constants";
+
 import { CategoryFilter } from "@/components/shared/CategoryFilter";
 import Collection from "@/components/shared/Collection";
 import { DepartementFilter } from "@/components/shared/DepartementFilter";
 import { Search } from "@/components/shared/Search";
-import { SearchParamProps } from "@/types";
-import { departements } from "@/constants";
-import { getAllEvents } from "@/lib/actions/event.actions";
-import { auth } from "@clerk/nextjs/server";
 
 export default async function Events({ searchParams }: SearchParamProps) {
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
@@ -15,20 +15,13 @@ export default async function Events({ searchParams }: SearchParamProps) {
   const departement = (searchParams?.departement as string) || "";
 
   //! Récupérer tous les Events (trier ceux qu sont déja passé)
-  const events = await getAllEvents({
+  const events = await getAllUpcomingEvents({
     query: searchText,
     category,
     departement,
     page,
     limit: 10,
     nbFav: 0,
-  });
-
-  const currentDateTime = new Date();
-
-  const upcomingEvents = events?.data.filter((event: any) => {
-    const endDateTime = new Date(event.endDateTime);
-    return currentDateTime <= endDateTime;
   });
 
   return (
@@ -45,13 +38,13 @@ export default async function Events({ searchParams }: SearchParamProps) {
       </div>
 
       <Collection
-        data={upcomingEvents}
+        data={events.data}
         emptyTitle="Aucun Event Trouvé"
         emptyStateSubtext="Revenir plus tard"
         collectionType="All_Events"
         limit={6}
         page={page}
-        totalPages={upcomingEvents?.totalPages}
+        totalPages={events?.totalPages}
       />
     </section>
   );

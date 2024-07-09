@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 // import { addFavoriteEvent } from "@/lib/actions/user.actions";
 import { useState } from "react";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 const BtnAddFavorite = ({
   event,
@@ -13,8 +14,8 @@ const BtnAddFavorite = ({
   event: IEvent;
   isFavorite: any;
 }) => {
-  const { user } = useUser();
-  const userId = user?.publicMetadata.userId as string;
+  const user = useCurrentUser();
+  const userId = user?.id;
   // const hasEventFinished = new Date(event.endDateTime) < new Date();
 
   const [isFav, setIsFav] = useState(isFavorite);

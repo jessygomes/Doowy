@@ -1,6 +1,6 @@
 "use client";
-import { ICategory } from "@/lib/mongoDb/database/models/Category";
 import { startTransition, useEffect, useState } from "react";
+import { createCategory, getAllCategory } from "@/lib/actions/category.actions";
 
 import {
   Select,
@@ -21,7 +21,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "../ui/input";
-import { createCategory, getAllCategory } from "@/lib/actions/category.actions";
+
+interface ICategory extends Document {
+  id: string;
+  name: string;
+}
 
 type DropDownProps = {
   value?: string;
@@ -59,8 +63,8 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
         {categories.length > 0 &&
           categories.map((category) => (
             <SelectItem
-              key={category._id}
-              value={category._id}
+              key={category.id}
+              value={category.id}
               className="select-item p-regular-14 "
             >
               {category.name}
@@ -80,6 +84,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
               <AlertDialogDescription>
                 <Input
                   type="text"
+                  name="name"
                   placeholder="Nom de la catégorie"
                   className="input-field mt-3"
                   onChange={(e) => setNewCategory(e.target.value)}

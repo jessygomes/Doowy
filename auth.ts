@@ -1,17 +1,21 @@
-import NextAuth, { type DefaultSession } from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import NextAuth, { type DefaultSession } from "next-auth";
 
-import { db } from "./lib/db";
 import authConfig from "./auth.config";
-import { getUserById } from "./lib/actions/user.actions";
-import { Role } from "@prisma/client";
-import { getTwoFactorConfirmationByUserId } from "./lib/actions/two-factor-confirmation";
+import { db } from "./lib/db";
 
-// Pour éviter les erreurs de type (erreur de type pour session.user.role : il ne reconnait pas "role")
+import { Role } from "@prisma/client";
+
+import { getTwoFactorConfirmationByUserId } from "./lib/actions/two-factor-confirmation";
+import { getUserById } from "./lib/actions/user.actions";
+import { getAccountByUserId } from "./lib/actions/account";
+
+//! Pour éviter les erreurs de type (erreur de type pour session.user.role : il ne reconnait pas "role")
 type ExtentedUser = DefaultSession["user"] & {
-  role: Role;
-  // ou bien : role : "user" | "admin" | "organizer";
+  role: Role; // ou bien : role : "user" | "admin" | "organizer";
   isTwofactorEnabled: boolean;
+  isOAuth: boolean;
+  departement: string;
 };
 
 declare module "next-auth" {
@@ -73,6 +77,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.isTwofactorEnabled =
           token.isTwofactorEnabled as ExtentedUser["isTwofactorEnabled"];
       }
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.departement = token.departement as string;
+        session.user.email = token.email as string;
+        session.user.isOAuth = token.isOAuth as boolean;
+      }
 
       return session;
     },
@@ -84,6 +94,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       const existingUser = await getUserById(token.sub);
       if (!existingUser) return token;
+
+      // Récupérer le compte d'un user connecté avec Google
+      const existingAccount = await getAccountByUserId(existingUser.id);
+
+      token.isOAuth = !!existingAccount;
+
+      token.name = existingUser.name;
+      token.email = existingUser.email;
+      token.departement = existingUser.departement;
+
       token.role = existingUser.role;
       token.isTwofactorEnabled = existingUser.isTwofactorEnabled;
       return token;

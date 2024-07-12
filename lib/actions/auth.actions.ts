@@ -13,6 +13,8 @@ import { getUserByEmail } from "./user.actions";
 import { signIn, signOut } from "@/auth";
 import { DEFAULT_LOGIN_REDIRECT } from "@/route";
 import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
+
 import {
   generatePasswordResetToken,
   generateTwoFactorToken,
@@ -196,6 +198,7 @@ export const register = async (values: z.infer<typeof userRegisterSchema>) => {
 export const logout = async () => {
   // On peut dans cette fonction supprimer des cookies ou des tokens de session du User par exemple
   await signOut();
+  revalidatePath("/");
 };
 
 //! VERIFICATION EMAIL ACTION

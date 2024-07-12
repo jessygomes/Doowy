@@ -18,9 +18,13 @@ type Departement = {
 
 interface DepartementFilterProps {
   departements: Departement[];
+  userDepartement?: string;
 }
 
-export const DepartementFilter = ({ departements }: DepartementFilterProps) => {
+export const DepartementFilter = ({
+  departements,
+  userDepartement,
+}: DepartementFilterProps) => {
   const router = useRouter();
   const searchParams = useSearchParams();
 

@@ -8,6 +8,7 @@ import { Button } from "../ui/button";
 
 const Header = async () => {
   const session = await auth();
+  const userName = session?.user?.name;
 
   return (
     <header className="w-full border-b">
@@ -24,7 +25,12 @@ const Header = async () => {
           <NavMobile />
 
           {session ? (
-            <UserBtn />
+            <div className="flex justify-center items-center gap-4">
+              <p className="h4-bold font-bold text-center">
+                {userName?.split(" ")[0]}
+              </p>
+              <UserBtn />
+            </div>
           ) : (
             <>
               <Link

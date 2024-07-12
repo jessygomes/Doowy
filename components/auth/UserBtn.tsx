@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FaUser, FaTimesCircle } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaRegSun } from "react-icons/fa";
 import Link from "next/link";
 
 export const UserBtn = () => {
@@ -34,9 +34,16 @@ export const UserBtn = () => {
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
+        <Link href={`/profil/${user?.id}/parametres`}>
+          <DropdownMenuItem className="cursor-pointer">
+            <FaRegSun className="h-4 w-4 mr-2" />
+            Paramètres
+          </DropdownMenuItem>
+        </Link>
+        <DropdownMenuSeparator />
         <LogoutBtn>
           <DropdownMenuItem className="cursor-pointer">
-            <FaTimesCircle className="h-4 w-4 mr-2" />
+            <FaSignOutAlt className="h-4 w-4 mr-2" />
             Se déconnecter
           </DropdownMenuItem>
         </LogoutBtn>

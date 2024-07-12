@@ -5,6 +5,7 @@ import {
   getEventById,
   getRelatedEventsByCategory,
 } from "@/lib/actions/event.actions";
+import { getWishlist } from "@/lib/actions/user.actions";
 // import { getWishlist } from "@/lib/actions/user.actions";
 import { currentUser } from "@/lib/auth";
 import { formatDateTime } from "@/lib/utils";
@@ -24,23 +25,30 @@ export default async function EventDetail({
   console.log(event);
 
   //! Récupérer les events liés à la catégorie de l'event actuel
+
   const relaledEvents = await getRelatedEventsByCategory({
-    departementId: event.departement,
-    eventId: event.id,
+    departementId: event?.departement || "",
+    eventId: event?.id || "",
     page: searchParams.page as string,
   });
 
   //! Récupérer l'ID de la personnne connecté pour afficher si l'event est dans ses favoris et les afficher
-  // const user = await currentUser();
-  // const userId = user?.id;
+  const user = await currentUser();
+  const userId = user?.id;
 
-  // let isFavorite = false;
-  // if (userId) {
-  //   const favoriteEvent = await getWishlist({ userId, page: 1 });
-  //   isFavorite = favoriteEvent.some(
-  //     (favorite: any) => favorite._id === event._id
-  //   );
-  // }
+  let isFavorite = false;
+
+  //! Réupération du tableau des favoris de l'utilisateur
+  if (userId !== null || userId !== undefined) {
+    const favoriteEvent = await getWishlist({ userId: userId || "", page: 1 });
+
+    //! Vérifie si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
+    if (favoriteEvent && favoriteEvent.length > 0) {
+      isFavorite = favoriteEvent.some(
+        (favorite: any) => favorite.eventId === event?.id
+      );
+    }
+  }
 
   //! Vérifier si l'event est passé ou pas :
   const currentDateTime = new Date();
@@ -52,8 +60,8 @@ export default async function EventDetail({
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
           <Image
-            src={event?.imageUrl} // Configurer le fichier next.config.js pour les images venant du serveur UploadThing
-            alt={event?.title}
+            src={event?.imageUrl ? event.imageUrl : ""} // Configurer le fichier next.config.js pour les images venant du serveur UploadThing
+            alt={event?.title ? event.title : "Event Image"}
             width={1000}
             height={1000}
             className="h-full min-g-[300px] object-cover object-center"
@@ -93,7 +101,7 @@ export default async function EventDetail({
                   width={32}
                   height={32}
                 />
-                {isPastEvent ? (
+                {isPastEvent && event ? (
                   <p className="p-medium-16 lg:p-medium-20 text-red-400 flex flex-wrap items-center">
                     Cette événement s&apos;est terminé le{" "}
                     {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
@@ -101,7 +109,7 @@ export default async function EventDetail({
                 ) : (
                   <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
                     <p>
-                      {formatDateTime(event.startDateTime).dateOnly} -{" "}
+                      {formatDateTime(event.startDateTime).dateOnly ?? ""} -{" "}
                       {formatDateTime(event.startDateTime).timeOnly} |{" "}
                     </p>
                     <p>
@@ -119,15 +127,15 @@ export default async function EventDetail({
                   width={32}
                   height={32}
                 />
-                <p className="p-medium-16 lg:p-regular-20">{event.location}</p>
+                <p className="p-medium-16 lg:p-regular-20">{event?.location}</p>
               </div>
               <div className="flex justify-center items-center gap-8">
-                <Link href={event.url} className="w-full">
+                <Link href={event?.url ? event.url : ""} className="w-full">
                   <Button className="rounded-full w-full">
                     Prendre mon billet
                   </Button>
                 </Link>
-                {/* <BtnAddFavorite isFavorite={isFavorite} event={event} /> */}
+                <BtnAddFavorite isFavorite={isFavorite} event={event} />
               </div>
             </div>
 
@@ -135,7 +143,9 @@ export default async function EventDetail({
               <p className="p-bold-20 text-grey-600">
                 Ce qu&apos;il faut savoir :{" "}
               </p>
-              <p className="p-medium-16 lg:p-regular-18">{event.description}</p>
+              <p className="p-medium-16 lg:p-regular-18">
+                {event?.description}
+              </p>
 
               {/* <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
                 {event.url}

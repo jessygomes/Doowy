@@ -1,17 +1,19 @@
 "use client";
-// import { IEvent } from "@/lib/mongoDb/database/models/Event";
-import { Button } from "../ui/button";
-// import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 import Link from "next/link";
-// import { addFavoriteEvent } from "@/lib/actions/user.actions";
-import { useState } from "react";
+import { startTransition, useState } from "react";
+
+import { addFavoriteEvent } from "@/lib/actions/user.actions";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { Event } from "@/types";
+
+import { Button } from "../ui/button";
+import { FaRegBookmark } from "react-icons/fa";
 
 const BtnAddFavorite = ({
   event,
   isFavorite,
 }: {
-  event: IEvent;
+  event: Event;
   isFavorite: any;
 }) => {
   const user = useCurrentUser();
@@ -21,50 +23,64 @@ const BtnAddFavorite = ({
   const [isFav, setIsFav] = useState(isFavorite);
 
   //! Vérifier si l'ID du User actuelle correspond au userId d'un event --> pour afficher l'event différemment
-  // const isEventCreator = userId === event.organizer._id.toString();
   const isEventCreator =
-    event.organizer && event.organizer._id
-      ? userId === event.organizer._id.toString()
+    event.Organizer && event.Organizer.id
+      ? userId === event.Organizer.id.toString()
       : false;
 
-  const [isLiked, setIsLiked] = useState(false);
+  const [nbFav, setNbFav] = useState(event.nbFav);
 
   const handleAddFavorite = async () => {
     try {
-      await addFavoriteEvent({ userId, eventId: event._id });
+      if (userId === null || userId === undefined) {
+        return;
+      }
 
-      setIsFav(!isFav);
+      startTransition(async () => {
+        const nbFavResponse = await addFavoriteEvent({
+          userId,
+          eventId: event.id,
+        });
+        setIsFav(!isFav);
+        if (nbFavResponse.nbFav !== undefined) {
+          setNbFav(nbFavResponse.nbFav);
+        }
+      });
     } catch (error) {
       console.error("Erreur lors de l'ajout aux favoris", error);
     }
   };
 
-  return (
-    <>
-      {/* <SignedOut>
-        <Button asChild className=" rounded-full">
-          <Link href="/sign-in">Ajouter aux favoris</Link>
-        </Button>
-      </SignedOut>
-
-      <SignedIn>
+  if (userId === null || userId === undefined) {
+    return (
+      <Button asChild className=" rounded-full">
+        <Link href="/auth/connexion">
+          <FaRegBookmark />
+        </Link>
+      </Button>
+    );
+  } else {
+    return (
+      <>
         {!isEventCreator ? (
           <div className="flex items-center gap-2">
             <Button onClick={handleAddFavorite} className="rounded-full">
-              {isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+              {/* {isFav ? "Retirer des favoris" : "Ajouter aux favoris"} */}
+              <FaRegBookmark className={isFav ? "text-black bg-white" : ""} />
             </Button>
             <p className="bg-grey-400 p-2 rounded-full text-white text-[0.8rem]">
-              {event.nbFav ?? "0"}
+              {nbFav ?? "0"}
             </p>
           </div>
         ) : (
-          <Button disabled className="rounded-full">
-            {event.nbFav ?? "0"} favoris
-          </Button>
+          <div className="flex gap-2 items-center">
+            <p>{nbFav}</p>
+            <FaRegBookmark />
+          </div>
         )}
-      </SignedIn> */}
-    </>
-  );
+      </>
+    );
+  }
 };
 
 export default BtnAddFavorite;

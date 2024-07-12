@@ -1,10 +1,14 @@
 "use client";
-import { useForm } from "react-hook-form";
-import { userFormSchema } from "@/lib/validator";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateUser } from "@/lib/actions/user.actions";
+
 import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { useForm } from "react-hook-form";
+import { useSession } from "next-auth/react";
+
+import { userProfileSchema } from "@/lib/validator";
+import { updateProfileUser } from "@/lib/actions/user.actions";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -21,73 +25,53 @@ import {
 } from "@/components/ui/form";
 
 type UserFormProps = {
-  userId: string;
-  user: {
-    firstName: string;
-    lastName: string;
-    description: string;
+  organizer?: {
+    description?: string;
+    photo?: string;
     instagram?: string;
     twitter?: string;
     tiktok?: string;
   };
 };
 
-const UserForm2 = ({ userId, user }: UserFormProps) => {
-  const router = useRouter();
+const UserForm2 = ({ organizer }: UserFormProps) => {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
 
-  // const initialValue = user
-  //   ? {
-  //       description: user.description,
-  //       instagram: user.instagram,
-  //       twitter: user.twitter,
-  //       tiktok: user.tiktok,
-  //     }
-  //   : {
-  //       description: "",
-  //       instagram: "",
-  //       twitter: "",
-  //       tiktok: "",
-  //     };
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+  const { update } = useSession();
 
   const initialValue = {
-    firstName: user.firstName,
-    lastName: user.lastName,
-    description: user.description,
-    instagram: user.instagram,
-    twitter: user.twitter,
-    tiktok: user.tiktok,
+    description: organizer?.description ?? "",
+    // photo: organizer?.photo,
+    instagram: organizer?.instagram ?? "",
+    twitter: organizer?.twitter ?? "",
+    tiktok: organizer?.tiktok ?? "",
   };
 
-  // console.log(initialValue);
-
-  const form = useForm<z.infer<typeof userFormSchema>>({
-    resolver: zodResolver(userFormSchema),
+  const form = useForm<z.infer<typeof userProfileSchema>>({
+    resolver: zodResolver(userProfileSchema),
     defaultValues: initialValue,
   });
 
-  async function onSubmit(values: z.infer<typeof userFormSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof userProfileSchema>) {
+    startTransition(() => {
+      updateProfileUser(values)
+        .then((data) => {
+          if (data.error) {
+            console.error(data.error);
+          }
 
-    if (!userId) {
-      router.back();
-      return;
-    }
-
-    try {
-      const updatedUserInfos = await updateUser({
-        user: { ...values },
-        userId,
-        path: `/profil`,
-      });
-
-      console.log(updatedUserInfos);
-      if (updatedUserInfos) {
-        router.push(`/profil`);
-      }
-    } catch (error) {
-      console.log("error", error);
-      console.error(error);
-    }
+          if (data.success) {
+            // Provient de "useSession" : Mettre à jour la session avec les infos du User modifié
+            update();
+            setSuccess(data.success);
+          }
+          router.push("/profil");
+        })
+        .catch(() => setError("Une erreur est survenue"));
+    });
   }
 
   async function onError(errors: any) {
@@ -100,38 +84,6 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
         onSubmit={form.handleSubmit(onSubmit, onError)}
         className="flex flex-col gap-5"
       >
-        <div className="flex flex-col gap-5 md:flex-row justify-center items-center">
-          <Label htmlFor="firstName" className="text-right">
-            Prénom
-          </Label>
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Input id="firstName" {...field} className="input-field" />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <Label htmlFor="lastName" className="text-right">
-            Nom
-          </Label>
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Input id="lastName" {...field} className="input-field" />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
-
         <div className="flex flex-col gap-5 md:flex-row">
           <Label htmlFor="instagram" className="text-right">
             Description
@@ -146,6 +98,7 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
                     id="description"
                     {...field}
                     className="textarea rounded-2xl"
+                    disabled={isPending}
                   />
                 </FormControl>
               </FormItem>
@@ -168,6 +121,7 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
                     {...field}
                     className="input-field"
                     placeholder="Instagram"
+                    disabled={isPending}
                   />
                 </FormControl>
               </FormItem>
@@ -185,7 +139,12 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Input id="twitter" {...field} className="input-field" />
+                  <Input
+                    id="twitter"
+                    {...field}
+                    className="input-field"
+                    disabled={isPending}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -202,7 +161,12 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <Input id="tiktok" {...field} className="input-field" />
+                  <Input
+                    id="tiktok"
+                    {...field}
+                    className="input-field"
+                    disabled={isPending}
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -215,7 +179,7 @@ const UserForm2 = ({ userId, user }: UserFormProps) => {
           // disabled={form.formState.isSubmitted}
           className="button col-span-2 w-full"
         >
-          {form.formState.isSubmitted ? "En cours..." : "Modifier"}
+          {isPending ? "En cours..." : "Modifier"}
         </Button>
       </form>
     </Form>

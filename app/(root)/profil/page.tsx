@@ -1,40 +1,46 @@
 import Link from "next/link";
 import { signOut } from "@/auth";
-import { currentUser } from "@/lib/auth";
 import { SearchParamProps } from "@/types";
 
-import { getUserByIdForProfile } from "@/lib/actions/user.actions";
-import { getEventsByUser } from "@/lib/actions/event.actions";
-// import {
-//   getFollowers,
-//   getMyFollowingUsers,
-//   getUserByIdForProfile,
-//   getWishlist,
-// } from "@/lib/actions/user.actions";
+import {
+  getUserByIdForProfile,
+  getWishlist,
+  getWishlistProfil,
+} from "@/lib/actions/user.actions";
+import {
+  getEventsByUser,
+  getEventsByUserForPrivateProfl,
+} from "@/lib/actions/event.actions";
+import { currentUser } from "@/lib/auth";
 
 import { Button } from "@/components/ui/button";
 import Collection from "@/components/shared/Collection";
 import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
 import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
+import { FaUser, FaCertificate, FaPen } from "react-icons/fa";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function ProfilPrivate({
   searchParams,
 }: SearchParamProps) {
   const user = await currentUser();
-  const userId = user?.id;
-
   if (!user) {
     return null;
   }
 
-  const currentUserProfile = await getUserByIdForProfile(user.id || "");
+  const userId = user.id;
+
+  const currentUserProfile = await getUserByIdForProfile(userId || "");
 
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
   const page = Number(searchParams?.page) || 1;
 
-  // const favoriteEvent = await getWishlist({ userId, page });
-  const organizedEvents = await getEventsByUser({ userId, page });
-  console.log("ORGANIZED EVENTS ---- ", organizedEvents);
+  const organizedEvents = await getEventsByUserForPrivateProfl({
+    userId,
+    page,
+  });
+
+  const favoriteEvent = await getWishlistProfil({ userId, limit: 6, page });
 
   return (
     <>
@@ -53,7 +59,12 @@ export default async function ProfilPrivate({
             )}
             <PersonnesSuivies userId={user.id} />
             <Button asChild size="lg" className="button hidden sm:flex">
-              <Link href={`/profil/${user.id}/update`}>Modifier</Link>
+              {user.role === "organizer" ? (
+                <Link href={`/profil/${user.id}/update`} aria-label="Modifier">
+                  <FaPen />
+                </Link>
+              ) : null}
+
               {/* <UserForm user={userProfile} userId={userId} /> */}
             </Button>
             <form
@@ -66,7 +77,16 @@ export default async function ProfilPrivate({
         </div>
 
         <div className="wrapper flex flex-col justify-center">
-          <p className="font-bold">{currentUserProfile?.name}</p>
+          <div className="flex gap-4 items-center">
+            <Avatar className="h-10 w-10">
+              <AvatarImage src={currentUserProfile?.photo || ""} />
+              <AvatarFallback className="bg-primary ">
+                <FaUser className="text-white" />
+              </AvatarFallback>
+            </Avatar>
+            <p className="font-bold">{currentUserProfile?.name}</p>
+            <FaCertificate className="text-primary-500" />
+          </div>
           {/* La description et les réseaux sociaux sont disponible seulement pour les organisateurs */}
           {currentUserProfile?.role === "organizer" && (
             <>
@@ -94,8 +114,35 @@ export default async function ProfilPrivate({
         </div>
       </section>
 
+      {/* EVENTS ORGANIZED */}
+      {currentUserProfile?.role === "organizer" && (
+        <>
+          <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
+            <div className="wrapper flex items-center justify-center sm:justify-between">
+              <h3 className="h3-bold text-center sm:text-left">Mes Events</h3>
+              <Button asChild size="lg" className="button hidden sm:flex">
+                <Link href="/events/create">Créer un nouvel événement</Link>
+              </Button>
+            </div>
+          </section>
+
+          <section className="wrapper my-8">
+            <Collection
+              data={organizedEvents?.data}
+              emptyTitle="Aucun Event créé"
+              emptyStateSubtext="Créez votre premier événement dès maintenant"
+              collectionType="Events_Organized"
+              limit={6}
+              page={page}
+              urlParamName="eventsPage"
+              totalPages={organizedEvents?.totalPages}
+            />
+          </section>
+        </>
+      )}
+
       {/* MES FAVORIS */}
-      {/* <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
+      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
         <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left">Mes Favoris</h3>
           <Button asChild size="lg" className="button hidden sm:flex">
@@ -106,7 +153,7 @@ export default async function ProfilPrivate({
 
       <section className="wrapper my-8">
         <Collection
-          data={favoriteEvent}
+          data={favoriteEvent?.data}
           emptyTitle="Aucun Event dans mes favoris"
           emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
           collectionType="All_Events_Favorite"
@@ -114,29 +161,6 @@ export default async function ProfilPrivate({
           page={page}
           urlParamName="ordersPage"
           totalPages={favoriteEvent?.totalPages}
-        />
-      </section> */}
-
-      {/* EVENTS ORGANIZED */}
-      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
-        <div className="wrapper flex items-center justify-center sm:justify-between">
-          <h3 className="h3-bold text-center sm:text-left">Mes Events</h3>
-          <Button asChild size="lg" className="button hidden sm:flex">
-            <Link href="/events/create">Créer un nouvel événement</Link>
-          </Button>
-        </div>
-      </section>
-
-      <section className="wrapper my-8">
-        <Collection
-          data={organizedEvents?.data}
-          emptyTitle="Aucun Event créé"
-          emptyStateSubtext="Créez votre premier événement dès maintenant"
-          collectionType="Events_Organized"
-          limit={6}
-          page={page}
-          urlParamName="eventsPage"
-          totalPages={organizedEvents?.totalPages}
         />
       </section>
     </>

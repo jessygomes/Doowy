@@ -308,8 +308,66 @@ export const deleteEvent = async ({ eventId, path }: DeleteEventParams) => {
   }
 };
 
-// //! GET EVENTS BY ORGANIZER
+// //! GET EVENTS BY ORGANIZER (FOR PUBLIC PROFILE)
 export async function getEventsByUser({
+  userId,
+  limit = 6,
+  page,
+}: GetEventsByUserParams) {
+  try {
+    const skipAmount = (page - 1) * limit;
+
+    const currentDate = new Date();
+
+    const eventsQuery = await db.event.findMany({
+      where: { organizer: userId },
+      include: {
+        Category: {
+          select: {
+            name: true, // Sélectionne uniquement le nom de la catégorie
+          },
+        },
+        Organizer: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+      },
+      skip: skipAmount,
+      take: limit,
+    });
+
+    const events = eventsQuery.map((event) => ({
+      ...event,
+      Category: event.Category?.name,
+      Organizer: {
+        id: event.Organizer.id,
+        name: event.Organizer.name,
+      },
+      isUpcoming: new Date(event.startDateTime) >= currentDate,
+    }));
+
+    const upcomingEvents = events.filter((event) => event.isUpcoming);
+    const pastEvents = events.filter((event) => !event.isUpcoming);
+
+    // const events = await populateEvent(eventsQuery);
+    const eventsCount = await db.event.count({ where: { organizer: userId } });
+
+    return {
+      data: {
+        upcomingEvents,
+        pastEvents,
+      },
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    handleError(error);
+  }
+}
+
+// //! GET EVENTS BY ORGANIZER (FOR PRIVATE PROFILE)
+export async function getEventsByUserForPrivateProfl({
   userId,
   limit = 6,
   page,

@@ -17,7 +17,6 @@ export default async function UpdateEvent({
 }: UpdateEventProps) {
   const user = await currentUser();
   const userId = user?.id;
-  const role = currentRole();
 
   const event = await getEventById(id);
 

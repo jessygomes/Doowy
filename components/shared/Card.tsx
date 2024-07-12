@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { DeleteConfirmation } from "./DeleteConfirmation";
 import BtnAddFavorite from "./BtnAddFavorite";
-import { currentUser } from "@/lib/auth";
 import { Event } from "@/types";
-// import { getWishlist } from "@/lib/actions/user.actions";
+import { getWishlist } from "@/lib/actions/user.actions";
+
+import { currentUser } from "@/lib/auth";
 
 type CardProps = {
   event: Event;
@@ -27,20 +28,22 @@ const Card = async ({
 
   let isFavorite = false;
 
-  if (userId) {
-    //! Réupération du tableau des favoris de l'utilisateur
-    // const favoriteEvent = await getWishlist({ userId, page: 1 });
-    // console.log("WISHLIST ---- ", favoriteEvent);
-    //! Véririe si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
-    // isFavorite = favoriteEvent.some(
-    //   (favorite: any) => favorite._id === event._id
-    // );
+  //! Réupération du tableau des favoris de l'utilisateur
+  if (userId !== null || userId !== undefined) {
+    const favoriteEvent = await getWishlist({ userId: userId || "", page: 1 });
+
+    //! Vérifie si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
+    if (favoriteEvent && favoriteEvent.length > 0) {
+      isFavorite = favoriteEvent.some(
+        (favorite: any) => favorite.eventId === event.id
+      );
+    }
   }
 
+  console.log("EVENT ORGA --- ", event.organizer);
+
   //! Vérifier si le User est le créateur de l'event
-  const isEventCreator = event.Organizer.id
-    ? userId === event.Organizer.id
-    : false;
+  const isEventCreator = event.organizer ? userId === event.organizer : false;
 
   //! Vérifier si l'event est passé ou pas :
   const currentDateTime = new Date();

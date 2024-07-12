@@ -1,3 +1,4 @@
+import { departements } from "@/constants";
 import * as z from "zod";
 
 export const eventFormSchema = z.object({
@@ -86,4 +87,32 @@ export const userFormSchema = z.object({
   instagram: z.string().url().or(z.string().length(0)).optional(),
   twitter: z.string().url().or(z.string().length(0)).optional(),
   tiktok: z.string().url().or(z.string().length(0)).optional(),
+});
+
+export const userProfileSchema = z.object({
+  description: z.optional(
+    z
+      .string()
+      .max(400, "La description doit contenir au maximum 400 caractères")
+  ),
+  instagram: z.string().url().or(z.string().length(0)).optional(),
+  twitter: z.string().url().or(z.string().length(0)).optional(),
+  tiktok: z.string().url().or(z.string().length(0)).optional(),
+  // photo: z.string(),
+});
+
+export const userSettingSchema = z.object({
+  firstName: z.optional(
+    z.string().min(2, "Le prénom doit contenir au moins 2 caractères")
+  ),
+  lastName: z.optional(
+    z.string().min(2, "Le nom doit contenir au moins 2 caractères")
+  ),
+  name: z.optional(z.string()),
+  email: z.optional(z.string().email()),
+  departement: z.optional(z.string()),
+  isTwofactorEnabled: z.optional(z.boolean()),
+  organisationName: z.optional(z.string()),
+  organisationType: z.optional(z.string()),
+  isHidenWishlist: z.optional(z.boolean()),
 });

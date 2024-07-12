@@ -45,7 +45,7 @@ export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
         onClick={toggleModal}
         className="p-medium-14 flex flex-col-reverse items-center justify-center hover:text-primary transition-all ease-in-out"
       >
-        Suivi(e)s <span>{followingUsers.length}</span>
+        Abonnements <span>{followingUsers.length}</span>
       </button>
 
       {isModalOpen && (
@@ -58,7 +58,7 @@ export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
               >
                 &times;
               </span>
-              <h2 className="h2-bold text-center">SUIVI(E)S</h2>
+              <h2 className="h2-bold text-center">ABONNEMENTS</h2>
             </div>
             <ul className="flex flex-col gap-4">
               {followingUsers.map((user: any) => (

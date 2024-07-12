@@ -27,8 +27,6 @@ export default async function Home({ searchParams }: SearchParamProps) {
     nbFav: 0,
   });
 
-  console.log("events", events);
-
   //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
   const user = await currentUser();
   const userId = user?.id;
@@ -55,7 +53,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
         </div>
       </section>
 
-      {/* {userId && (
+      {userId && (
         <EventSuscription
           userId={userId}
           searchParams={{
@@ -68,7 +66,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
             searchParams: {},
           }}
         />
-      )} */}
+      )}
 
       <section
         id="events"
@@ -84,7 +82,10 @@ export default async function Home({ searchParams }: SearchParamProps) {
         <div className="flex w-full flex-col gap-5 md:flex-row">
           <Search />
           <CategoryFilter />
-          <DepartementFilter departements={departements.departements} />
+          <DepartementFilter
+            departements={departements.departements}
+            userDepartement={user?.departement}
+          />
         </div>
 
         <Collection

@@ -1,18 +1,17 @@
 "use server";
 import * as z from "zod";
+
+import { db } from "../db";
+import { userProfileSchema, userSettingSchema } from "../validator";
+import { generateVerificationToken } from "../tokens";
+import { sendVerificationEmail } from "../mail";
+
 import { revalidatePath } from "next/cache";
 import {
   CreateUserParams,
   GetSuscriptionEvent,
   UpdateUserParams,
 } from "@/types";
-import { handleError } from "../utils";
-import { connectToDb } from "../mongoDb/database";
-// import User from "../mongoDb/database/models/User";
-// import Event from "../mongoDb/database/models/Event";
-// import Order from "../mongoDb/database/models/Order";
-// import Category from "../mongoDb/database/models/Category";
-import { db } from "../db";
 
 //! CREER UN USER
 // export const createUser = async (user: CreateUserParams) => {
@@ -26,20 +25,6 @@ import { db } from "../db";
 //     console.log(error);
 //   }
 // };
-
-//! GET USER BY ID
-// export async function getUserById(userId: string) {
-//   try {
-//     await connectToDb();
-
-//     const user = await User.findById(userId);
-
-//     if (!user) throw new Error("User not found");
-//     return JSON.parse(JSON.stringify(user));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 //! GET USER BY ID ----- PRISMA MODE
 export async function getUserById(id: string) {
@@ -71,7 +56,10 @@ export async function getUserByIdForProfile(userId: string) {
     const user = await db.user.findUnique({
       where: { id: userId },
       select: {
+        id: true,
         name: true,
+        firstName: true,
+        lastName: true,
         email: true,
         photo: true,
         description: true,
@@ -82,6 +70,7 @@ export async function getUserByIdForProfile(userId: string) {
         tiktok: true,
         departement: true,
         role: true,
+        isTwofactorEnabled: true,
         followersList: {
           select: {
             followerId: true,
@@ -100,12 +89,86 @@ export async function getUserByIdForProfile(userId: string) {
   }
 }
 
-//! UPDATE USER
+//! UPDATE USER FOR PROFILE
+export async function updateProfileUser(
+  values: z.infer<typeof userProfileSchema>
+) {
+  // Importation de currentUser ici : éviter les conflits d'importation qui génere une erreur
+  const { currentUser } = await import("../auth");
+  const user = await currentUser();
+
+  if (!user || !user.id) {
+    return { error: "User not found" };
+  }
+  const dbUser = await getUserById(user.id);
+  if (!dbUser) {
+    return { error: "User not found" };
+  }
+
+  await db.user.update({
+    where: { id: dbUser.id },
+    data: {
+      ...values,
+    },
+  });
+
+  return { success: "Profil mis à jour !" };
+}
+
+//! UPDATE USER FOR SETTINGS
+export async function updateSettingUser(
+  values: z.infer<typeof userSettingSchema>
+) {
+  const { currentUser } = await import("../auth");
+  const user = await currentUser();
+
+  if (!user || !user.id) {
+    return { error: "User not found" };
+  }
+  const dbUser = await getUserById(user.id);
+  if (!dbUser) {
+    return { error: "User not found" };
+  }
+
+  // Le user est connecté avec Google ou pas ? On ne peut pas changer son adresse mail ni avoir une authentification à deux facteurs : on les met à undefined pour que leur valeur ne change pas quoi qu'il arrive.
+  if (user.isOAuth) {
+    values.email = undefined;
+    values.isTwofactorEnabled = undefined;
+  }
+
+  if (values.email && values.email !== user.email) {
+    const existingUser = await getUserByEmail(values.email);
+
+    if (existingUser) {
+      return { error: "Email déjà utilisé" };
+    }
+
+    // Envoyer un email de vérification
+    const verificationToken = await generateVerificationToken(values.email);
+    await sendVerificationEmail(
+      verificationToken.email,
+      verificationToken.token
+    );
+
+    return {
+      success:
+        "Un email de vérification a été envoyé à votre adresse mail. Veuillez vérifier votre boîte de réception.",
+    };
+  }
+
+  await db.user.update({
+    where: { id: dbUser.id },
+    data: {
+      ...values,
+    },
+  });
+
+  return { success: "Paramètres mis à jour !" };
+}
+
 // export async function updateUser({ userId, user, path }: UpdateUserParams) {
 //   console.log("UPDATE USER", userId, user, path);
 //   try {
-//     await connectToDb();
-
 //     const updatedUser = await User.findOneAndUpdate(
 //       { _id: userId },
 //       { ...user },
@@ -161,81 +224,186 @@ export async function getUserByIdForProfile(userId: string) {
 // }
 
 //! AJOUTER AUX FAVORIS
-// export async function addFavoriteEvent({
-//   userId,
-//   eventId,
-// }: {
-//   userId: string;
-//   eventId: string;
-// }) {
-//   try {
-//     await connectToDb();
+export async function addFavoriteEvent({
+  userId,
+  eventId,
+}: {
+  userId: string;
+  eventId: string;
+}) {
+  try {
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      include: { wishlist: true },
+    });
+    if (!user) throw new Error("User not found");
 
-//     const user = await User.findById(userId);
+    // Véririfier si l'événement est déjà dans la wishlist de l'utilisateur
+    const isLiked = await db.userWishlist.findFirst({
+      where: {
+        userId: userId,
+        eventId: eventId,
+      },
+    });
 
-//     if (!user) throw new Error("User not found");
+    console.log("isLiked", isLiked);
 
-//     const isLiked = user.wishlist
-//       .map((event: any) => event._id.toString())
-//       .includes(eventId);
+    const event = await db.event.findUnique({
+      where: { id: eventId },
+      select: { nbFav: true },
+    });
 
-//     // Trouver l'événement et incrémenter nbFav
-//     const event = await Event.findById(eventId);
-//     if (!event) throw new Error("Event not found");
+    // event.nbFav = Number(event.nbFav) || 0;
 
-//     event.nbFav = Number(event.nbFav) || 0;
+    if (isLiked) {
+      // Si l'event est déja dans les FAV, on le retire et on décrémente le nbFav
+      await db.userWishlist.delete({
+        where: {
+          userId_eventId: {
+            userId: userId,
+            eventId: eventId,
+          },
+        },
+      });
 
-//     if (isLiked) {
-//       user.wishlist = user.wishlist.filter(
-//         (event: any) => event._id.toString() !== eventId
-//       );
-//       event.nbFav = Math.max(event.nbFav - 1, 0);
-//       await event.save();
-//     } else {
-//       user.wishlist.push(eventId);
+      if (event && event.nbFav > 0) {
+        await db.event.update({
+          where: { id: eventId },
+          data: {
+            nbFav: {
+              decrement: 1,
+            },
+          },
+        });
+      }
+    } else {
+      // Si l'event n'est pas dans les FAV, on l'ajoute dans la wishlist et on incrémente le nbFav
+      await db.userWishlist.create({
+        data: {
+          userId: userId,
+          eventId: eventId,
+        },
+      });
+      await db.event.update({
+        where: { id: eventId },
+        data: {
+          nbFav: {
+            increment: 1,
+          },
+        },
+      });
+    }
 
-//       event.nbFav = event.nbFav + 1;
-//       await event.save();
-//     }
-//     await user.save();
+    // Récupérer l'événement mis à jour pour obtenir le nbFav mis à jour
+    const updatedEvent = await db.event.findUnique({
+      where: { id: eventId },
+      select: { nbFav: true }, // Sélectionner uniquement le nbFav si c'est tout ce dont vous avez besoin
+    });
 
-//     return JSON.parse(JSON.stringify(user));
-//   } catch (error: string | any) {
-//     console.log(error);
-//     throw new Error(`Erreur lors de l'ajout aux favoris : ${error.message}`);
-//   }
-// }
+    // Return the updated user and the updated nbFav of the event
+    return {
+      nbFav: updatedEvent?.nbFav, // Ajouter le nbFav mis à jour à l'objet retourné
+    };
+  } catch (error: string | any) {
+    console.log(error);
+    throw new Error(`Erreur lors de l'ajout aux favoris : ${error.message}`);
+  }
+}
 
 //! GET LA WISHLIST
-// export async function getWishlist({
-//   userId,
-//   page = 1,
-// }: {
-//   userId: string;
-//   page: number;
-// }) {
-//   try {
-//     await connectToDb();
+export async function getWishlist({
+  userId,
+  page = 1,
+}: {
+  userId: string;
+  page: number;
+}) {
+  try {
+    const skipAmount = (Number(page) - 1) * 6;
 
-//     const skipAmount = (Number(page) - 1) * 6;
+    const userWithWishlist = await db.user.findUnique({
+      where: { id: userId },
+      select: {
+        wishlist: {
+          take: 6,
+          skip: skipAmount,
+        },
+      },
+    });
 
-//     const user = await User.findById(userId).populate({
-//       path: "wishlist",
-//       populate: [
-//         { path: "organizer" },
-//         { path: "category", model: Category, select: "_id name" },
-//       ],
+    if (!userWithWishlist) throw new Error("User not found");
 
-//       options: { sort: { createdAt: "desc" }, skip: skipAmount, limit: 6 },
-//     });
+    return userWithWishlist.wishlist;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-//     if (!user) throw new Error("User not found");
+//! RECUP DE LA WISHLIST AVEC LES INFOS COMPLETE
+export async function getWishlistProfil({
+  userId,
+  limit = 6,
+  page,
+}: {
+  userId: string;
+  limit?: number;
+  page: number;
+}) {
+  try {
+    const skipAmount = (page - 1) * limit;
 
-//     return JSON.parse(JSON.stringify(user.wishlist));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    const wishlistUser = await db.user.findUnique({
+      where: { id: userId },
+      select: {
+        wishlist: true,
+      },
+    });
+
+    if (!wishlistUser) throw new Error("User not found");
+
+    const eventIds = wishlistUser.wishlist.map((item) => item.eventId);
+
+    // Récupérer les détails complets des événements en utilisant les identifiants extraits.
+    const eventsDetails = await db.event.findMany({
+      where: {
+        id: {
+          in: eventIds, // Utiliser l'opérateur `in` pour filtrer les événements par leurs identifiants.
+        },
+      },
+      include: {
+        Category: {
+          select: {
+            name: true,
+          },
+        },
+        Organizer: {
+          select: {
+            name: true,
+            id: true,
+          },
+        },
+      },
+      skip: skipAmount,
+      take: limit,
+    });
+
+    const events = eventsDetails.map((event) => ({
+      ...event,
+      Category: event.Category?.name,
+      Organizer: {
+        id: event.Organizer.id,
+        name: event.Organizer.name,
+      },
+    }));
+
+    return {
+      data: events,
+      totalPages: Math.ceil(events.length / limit),
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 //! ADD & REMOVE FOLLOWER
 export async function addOrRemoveFollower({

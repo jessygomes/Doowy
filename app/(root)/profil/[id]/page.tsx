@@ -95,22 +95,27 @@ export default async function ProfilPublic({
           </div>
         </section>
 
-        <div className="wrapper flex items-center justify-center sm:justify-between">
-          <h3 className="h3-bold text-center sm:text-left">Favoris</h3>
-        </div>
-
-        <section className="wrapper my-8">
-          <Collection
-            data={eventsUserFav?.data}
-            emptyTitle="Aucun Event créé"
-            emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
-            collectionType="All_Events"
-            limit={6}
-            page={page}
-            // urlParamName="ordersPage"
-            totalPages={eventsUserFav?.totalPages}
-          />
-        </section>
+        {userProfile?.isHidenWishlist ? (
+          <div></div>
+        ) : (
+          <>
+            <div className="wrapper flex items-center justify-center sm:justify-between">
+              <h3 className="h3-bold text-center sm:text-left">Favoris</h3>
+            </div>
+            <section className="wrapper my-8">
+              <Collection
+                data={eventsUserFav?.data}
+                emptyTitle="Aucun Event créé"
+                emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
+                collectionType="All_Events"
+                limit={6}
+                page={page}
+                // urlParamName="ordersPage"
+                totalPages={eventsUserFav?.totalPages}
+              />
+            </section>
+          </>
+        )}
       </>
     );
   }

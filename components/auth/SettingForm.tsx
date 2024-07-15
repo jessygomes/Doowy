@@ -44,8 +44,8 @@ type SettingFormProps = {
     email: string;
     departement: string;
     isTwofactorEnabled: boolean;
-    organisationName?: string;
-    organisationType?: string;
+    organizationName?: string;
+    organizationType?: string;
     isHidenWishlist?: boolean;
   };
 };
@@ -67,8 +67,8 @@ export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
       email: userProfile?.email || undefined,
       departement: userProfile?.departement || undefined,
       isTwofactorEnabled: userProfile?.isTwofactorEnabled || undefined,
-      organisationName: userProfile?.organisationName || undefined,
-      organisationType: userProfile?.organisationType || undefined,
+      organizationName: userProfile?.organizationName || undefined,
+      organizationType: userProfile?.organizationType || undefined,
       isHidenWishlist: userProfile?.isHidenWishlist || undefined,
     },
   });
@@ -159,12 +159,12 @@ export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
             </Label>
             <FormField
               control={form.control}
-              name="organisationName"
+              name="organizationName"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl>
                     <Input
-                      id="organisationName"
+                      id="organizationName"
                       {...field}
                       className="input-field"
                       disabled={isPending}
@@ -179,12 +179,12 @@ export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
             </Label>
             <FormField
               control={form.control}
-              name="organisationType"
+              name="organizationType"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl>
                     <Input
-                      id="organisationType"
+                      id="organizationType"
                       {...field}
                       className="input-field"
                       disabled={isPending}
@@ -296,7 +296,7 @@ export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
               <Label htmlFor="email" className="text-right"></Label>
               <FormField
                 control={form.control}
-                name="isTwofactorEnabled"
+                name="isHidenWishlist"
                 render={({ field }) => (
                   <FormItem className="w-full flex items-center rounded-full justify-between p-2 px-4 shadow-sm">
                     <div className="space-y-0.5 ">
@@ -304,12 +304,12 @@ export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
                       <FormDescription>
                         Ne pas montrer ma liste de favoris aux autres
                         utilisateurs :{" "}
-                        {user.isTwofactorEnabled ? "Activé" : "Désactivé"}
+                        {userProfile?.isHidenWishlist ? "Activé" : "Désactivé"}
                       </FormDescription>
                     </div>
                     <FormControl>
                       <Switch
-                        id="isTwofactorEnabled"
+                        id="isHidenWishlist"
                         disabled={isPending}
                         checked={field.value}
                         onCheckedChange={field.onChange}

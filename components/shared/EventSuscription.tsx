@@ -1,18 +1,21 @@
 import { SearchParamProps } from "@/types";
-import React from "react";
 import Collection from "./Collection";
 import { getEventSubscriptions } from "@/lib/actions/user.actions";
+import { currentUser } from "@/lib/auth";
 
 interface EventSuscriptionsProps {
-  userId: string;
+  // userId: string;
   searchParams: SearchParamProps;
 }
 
 export const EventSuscription = async ({
-  userId,
+  // userId,
   searchParams,
 }: EventSuscriptionsProps) => {
   const page = Number(searchParams?.page) || 1;
+
+  const user = await currentUser();
+  const userId = user?.id;
 
   let eventsAbonnements;
 

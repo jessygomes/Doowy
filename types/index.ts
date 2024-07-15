@@ -137,6 +137,7 @@ export type Event = {
   Category: string;
   Organizer: {
     id?: string;
+    organizationName?: string;
     name?: string;
   };
 };

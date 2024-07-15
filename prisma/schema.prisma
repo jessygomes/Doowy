@@ -31,11 +31,14 @@ model User {
   password               String?
   role                   Role                   @default(user)
   departement            String?
+  organizationName       String?
+  organizationType       String?
   photo                  String?
   description            String?
   instagram              String?
   twitter                String?
   tiktok                 String?
+  isHidenWishlist       Boolean                @default(false)
   followers              Int                    @default(0)
   following              Int                    @default(0)
   createdAt              DateTime               @default(now())

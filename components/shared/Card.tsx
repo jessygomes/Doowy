@@ -40,7 +40,7 @@ const Card = async ({
     }
   }
 
-  console.log("EVENT ORGA --- ", event.organizer);
+  console.log("EVENT ORGA --- ", event);
 
   //! Vérifier si le User est le créateur de l'event
   const isEventCreator = event.organizer ? userId === event.organizer : false;
@@ -114,7 +114,7 @@ const Card = async ({
             href={`/profil/${event.Organizer?.id}`}
             className="p-medium-14 md:p-medium-16 text-grey-600"
           >
-            {event.Organizer?.name}
+            {event.Organizer?.organizationName}
           </Link>
 
           {/* {hasOrderLink && (

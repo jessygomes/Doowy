@@ -70,7 +70,10 @@ export async function getUserByIdForProfile(userId: string) {
         tiktok: true,
         departement: true,
         role: true,
+        organizationName: true,
+        organizationType: true,
         isTwofactorEnabled: true,
+        isHidenWishlist: true,
         followersList: {
           select: {
             followerId: true,
@@ -165,26 +168,6 @@ export async function updateSettingUser(
 
   return { success: "Paramètres mis à jour !" };
 }
-
-// export async function updateUser({ userId, user, path }: UpdateUserParams) {
-//   console.log("UPDATE USER", userId, user, path);
-//   try {
-//     const updatedUser = await User.findOneAndUpdate(
-//       { _id: userId },
-//       { ...user },
-//       {
-//         new: true,
-//       }
-//     );
-//     revalidatePath(path);
-
-//     if (!updatedUser) throw new Error("User update failed");
-
-//     return JSON.parse(JSON.stringify(updatedUser));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 //! DELETE USER
 // export async function deleteUser(clerkId: string) {
@@ -378,7 +361,7 @@ export async function getWishlistProfil({
         },
         Organizer: {
           select: {
-            name: true,
+            organizationName: true,
             id: true,
           },
         },
@@ -392,7 +375,7 @@ export async function getWishlistProfil({
       Category: event.Category?.name,
       Organizer: {
         id: event.Organizer.id,
-        name: event.Organizer.name,
+        organizationName: event.Organizer.organizationName,
       },
     }));
 
@@ -522,47 +505,62 @@ export async function getMyFollowingUsers({ userId }: { userId: string }) {
   }
 }
 
-// export async function getEventSubscriptions({
-//   userId,
-//   limit = 6,
-//   page,
-// }: GetSuscriptionEvent) {
-//   try {
-//     await connectToDb();
+export async function getEventSubscriptions({
+  userId,
+  limit = 6,
+  page,
+}: GetSuscriptionEvent) {
+  try {
+    // Étape 1: Trouver l'utilisateur et obtenir la liste des abonnements
+    const user = await db.userFollowing.findMany({
+      where: { userId: userId },
+      select: {
+        Following: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (!user) throw new Error("User not found");
 
-//     // Étape 1: Trouver l'utilisateur et obtenir la liste des abonnements
-//     const user = await User.findById(userId);
-//     if (!user) throw new Error("User not found");
+    // Liste des IDs des organisateurs suivis
+    const followingIds = user.map(
+      (userFollowing) => userFollowing.Following.id
+    );
 
-//     // Ajout de la condition pour récupérer les événements à venir ou en cours
-//     const upcomingEventCondition = {
-//       endDateTime: { $gte: new Date() },
-//     };
+    // Filtrer les événements à venir
+    const currentDate = new Date();
 
-//     // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
-//     const skipAmount = (Number(page) - 1) * limit;
+    const skipAmount = (Number(page) - 1) * limit;
 
-//     // Étape 2: Trouver les événements organisés par les abonnements
-//     const events = await Event.find({
-//       organizer: { $in: user.following },
-//       ...upcomingEventCondition,
-//     })
-//       .populate("organizer", "firstName lastName")
-//       .sort({ createdAt: -1 })
-//       .skip(skipAmount)
-//       .limit(limit); // Ajoutez d'autres champs si nécessaire
+    const events = await db.event.findMany({
+      where: {
+        organizer: { in: followingIds },
+        endDateTime: { gte: currentDate },
+      },
+      include: {
+        Organizer: {
+          select: { name: true },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      skip: skipAmount,
+      take: limit,
+    });
 
-//     // Compter uniquement les événements qui correspondent au critère
-//     const eventsCount = await Event.countDocuments({
-//       organizer: { $in: user.following },
-//     });
+    const eventsCount = await db.event.count({
+      where: {
+        organizer: { in: followingIds },
+        endDateTime: { gte: currentDate },
+      },
+    });
 
-//     // Étape 3: Retourner les événements formatés
-//     return {
-//       data: JSON.parse(JSON.stringify(events)),
-//       totalPages: Math.ceil(eventsCount / limit),
-//     };
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+    return {
+      data: events,
+      totalPages: Math.ceil(eventsCount / limit),
+    };
+  } catch (error) {
+    console.log(error);
+  }
+}

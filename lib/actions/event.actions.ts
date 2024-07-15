@@ -103,7 +103,7 @@ export const getEventById = async (eventId: string) => {
         },
         Organizer: {
           select: {
-            name: true, // Sélectionne uniquement le nom de l'organisateur
+            organizationName: true, // Sélectionne uniquement le nom de l'organisateur
           },
         },
       },
@@ -163,7 +163,7 @@ export const getAllEvents = async ({
         },
         Organizer: {
           select: {
-            name: true,
+            organizationName: true,
           },
         },
       },
@@ -236,7 +236,7 @@ export const getAllUpcomingEvents = async ({
         },
         Organizer: {
           select: {
-            name: true,
+            organizationName: true,
             id: true,
           },
         },
@@ -329,7 +329,7 @@ export async function getEventsByUser({
         },
         Organizer: {
           select: {
-            name: true,
+            organizationName: true,
             id: true,
           },
         },
@@ -343,7 +343,7 @@ export async function getEventsByUser({
       Category: event.Category?.name,
       Organizer: {
         id: event.Organizer.id,
-        name: event.Organizer.name,
+        organizationName: event.Organizer.organizationName,
       },
       isUpcoming: new Date(event.startDateTime) >= currentDate,
     }));
@@ -385,7 +385,7 @@ export async function getEventsByUserForPrivateProfl({
         },
         Organizer: {
           select: {
-            name: true,
+            organizationName: true,
             id: true,
           },
         },
@@ -399,7 +399,7 @@ export async function getEventsByUserForPrivateProfl({
       Category: event.Category?.name,
       Organizer: {
         id: event.Organizer.id,
-        name: event.Organizer.name,
+        organizationName: event.Organizer.organizationName,
       },
     }));
 

@@ -112,7 +112,7 @@ export const userSettingSchema = z.object({
   email: z.optional(z.string().email()),
   departement: z.optional(z.string()),
   isTwofactorEnabled: z.optional(z.boolean()),
-  organisationName: z.optional(z.string()),
-  organisationType: z.optional(z.string()),
+  organizationName: z.optional(z.string()),
+  organizationType: z.optional(z.string()),
   isHidenWishlist: z.optional(z.boolean()),
 });

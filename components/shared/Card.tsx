@@ -79,7 +79,7 @@ const Card = async ({
               {event.isFree ? "Gratuit" : `${event.price}€`}
             </span>
             <p className="p-semibold-14 w-min rounded-full bg-gre-500/10 px-4 py-1 text-grey-500 line-clamp-1">
-              {event.Category}
+              {event.Category?.name}
             </p>
           </div>
         )}

@@ -1,10 +1,9 @@
-import { auth } from "@/auth";
+import { currentUser } from "@/lib/auth";
+import { getEventById } from "@/lib/actions/event.actions";
+import { Role } from "@prisma/client";
+
 import { RoleGate } from "@/components/auth/RoleGate";
 import EventForm from "@/components/shared/EventForm";
-import { getEventById } from "@/lib/actions/event.actions";
-import { currentRole, currentUser } from "@/lib/auth";
-import { UpdateEventParams } from "@/types";
-import { Role } from "@prisma/client";
 
 type UpdateEventProps = {
   params: {
@@ -19,7 +18,6 @@ export default async function UpdateEvent({
   const userId = user?.id;
 
   const event = await getEventById(id);
-  console.log(event);
 
   return (
     <>

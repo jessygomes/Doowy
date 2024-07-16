@@ -13,7 +13,11 @@ import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
 
-import { SearchParamProps } from "@/types";
+type SearchParamProps = {
+  page(page: any): unknown;
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
 export default async function EventDetail({
   params: { id },

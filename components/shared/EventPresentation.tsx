@@ -53,8 +53,11 @@ export const EventPresentation = async ({
 
   //! Vérifier si l'event est passé ou pas :
   const currentDateTime = new Date();
+  const startDateTime = new Date(event.startDateTime);
   const endDateTime = new Date(event.endDateTime);
   const isPastEvent = currentDateTime > endDateTime;
+  const isEnCours =
+    currentDateTime >= startDateTime && currentDateTime <= endDateTime;
 
   return (
     <>
@@ -107,6 +110,14 @@ export const EventPresentation = async ({
                     Cette événement s&apos;est terminé le{" "}
                     {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
                   </p>
+                ) : isEnCours ? (
+                  <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
+                    <p className="p-medium-14 text-primary">En cours</p>
+                    <p>
+                      {formatDateTime(event.endDateTime).dateOnly} -{" "}
+                      {formatDateTime(event.endDateTime).timeOnly}
+                    </p>
+                  </div>
                 ) : (
                   <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
                     <p>

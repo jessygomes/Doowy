@@ -1,4 +1,7 @@
 "use server";
+import { db } from "../db";
+import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 
 import {
   CreateEventParams,
@@ -9,19 +12,13 @@ import {
   GetRelatedEventsByCategoryParams,
   UpdateEventParams,
 } from "@/types";
-import { handleError } from "../utils";
-import { connectToDb } from "../mongoDb/database";
-// import User from "../mongoDb/database/models/User";
-// import Event from "../mongoDb/database/models/Event";
-// import Category from "../mongoDb/database/models/Category";
-import { revalidatePath } from "next/cache";
-import { departements } from "@/constants";
+
+import { getUserById } from "./user.actions";
 import { currentRole } from "../auth";
 import { Role } from "@prisma/client";
-import { NextResponse } from "next/server";
-import { getUserById } from "./user.actions";
-import { db } from "../db";
-import { Cat } from "lucide-react";
+import { handleError } from "../utils";
+
+import { departements } from "@/constants";
 
 //! GET CATEGORY BY NAME
 // const getCategoryByName = async (name: string) => {
@@ -116,7 +113,12 @@ export const getEventById = async (eventId: string) => {
     return {
       ...event,
       description: event.description ?? "Aucune description disponible",
-      Category: event.Category ?? { name: "Non spécifiée" },
+      Category:
+        event.Category && event.Category.name
+          ? { name: event.Category.name }
+          : {
+              name: "Non spécifiée",
+            },
       Organizer: {
         ...event.Organizer,
         organizationName: event.Organizer.organizationName ?? "Non spécifié",
@@ -224,7 +226,7 @@ export const getAllUpcomingEvents = async ({
     // Pour gérer la pagination : calcul du nombre d'éléments à ignorer
     const skipAmount = (Number(page) - 1) * limit;
 
-    const events = await db.event.findMany({
+    const eventsQuery = await db.event.findMany({
       where: {
         endDateTime: { gte: new Date() },
         title: {
@@ -252,10 +254,18 @@ export const getAllUpcomingEvents = async ({
       take: limit,
     });
 
-    const transformedEvents = events.map((event) => ({
+    const events = eventsQuery.map((event) => ({
       ...event,
-      Category: event.Category?.name,
-      Organizer: event.Organizer,
+      Category:
+        event.Category && event.Category.name
+          ? { name: event.Category.name }
+          : {
+              name: "Non spécifiée",
+            },
+      Organizer: {
+        id: event.Organizer.id,
+        organizationName: event.Organizer.organizationName,
+      },
     }));
 
     const eventsCount = await db.event.count({
@@ -271,7 +281,7 @@ export const getAllUpcomingEvents = async ({
     });
 
     return {
-      data: transformedEvents,
+      data: events,
       totalPages: Math.ceil(eventsCount / limit),
     };
   } catch (error) {
@@ -346,12 +356,17 @@ export async function getEventsByUser({
 
     const events = eventsQuery.map((event) => ({
       ...event,
-      Category: event.Category?.name,
+      Category:
+        event.Category && event.Category.name
+          ? { name: event.Category.name }
+          : {
+              name: "Non spécifiée",
+            },
       Organizer: {
         id: event.Organizer.id,
         organizationName: event.Organizer.organizationName,
       },
-      isUpcoming: new Date(event.startDateTime) >= currentDate,
+      isUpcoming: new Date(event.endDateTime) > currentDate,
     }));
 
     const upcomingEvents = events.filter((event) => event.isUpcoming);
@@ -402,7 +417,12 @@ export async function getEventsByUserForPrivateProfl({
 
     const events = eventsQuery.map((event) => ({
       ...event,
-      Category: event.Category?.name,
+      Category:
+        event.Category && event.Category.name
+          ? { name: event.Category.name }
+          : {
+              name: "Non spécifiée",
+            },
       Organizer: {
         id: event.Organizer.id,
         organizationName: event.Organizer.organizationName,
@@ -442,12 +462,15 @@ export async function getRelatedEventsByCategory({
 
     const skipAmount = (Number(page) - 1) * limit;
 
+    const currentDate = new Date();
+
     // const conditions = {
     //   $and: [{ category: categoryId }, { _id: { $ne: eventId } }],
     // };
 
     const eventsQuery = await db.event.findMany({
       where: {
+        endDateTime: { gte: new Date() },
         AND: [
           { departement: currentEventDepartmentId },
           { id: { not: eventId } },
@@ -473,12 +496,15 @@ export async function getRelatedEventsByCategory({
     const events = eventsQuery.map((event) => ({
       ...event,
       description: event.description ?? "Aucune description disponible",
-      Category: (event.Category && event.Category.name) ?? {
-        name: "Non spécifiée",
-      },
+      Category:
+        event.Category && event.Category.name
+          ? { name: event.Category.name }
+          : {
+              name: "Non spécifiée",
+            },
       Organizer: {
-        ...event.Organizer,
-        organizationName: event.Organizer.organizationName ?? "Non spécifié",
+        id: event.Organizer.id,
+        organizationName: event.Organizer.organizationName,
       },
     }));
 

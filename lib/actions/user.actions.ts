@@ -13,19 +13,6 @@ import {
   UpdateUserParams,
 } from "@/types";
 
-//! CREER UN USER
-// export const createUser = async (user: CreateUserParams) => {
-//   try {
-//     await connectToDb();
-
-//     const newUser = await User.create(user);
-
-//     return JSON.parse(JSON.stringify(newUser));
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
 //! GET USER BY ID ----- PRISMA MODE
 export async function getUserById(id: string) {
   try {
@@ -466,6 +453,7 @@ export async function getFollowers({ userId }: { userId: string }) {
         Follower: {
           select: {
             id: true,
+            organizationName: true,
             name: true, // Assurez-vous d'ajuster ceci pour correspondre à votre modèle si vous utilisez firstName + lastName
             photo: true,
           },
@@ -490,6 +478,7 @@ export async function getMyFollowingUsers({ userId }: { userId: string }) {
         Following: {
           select: {
             id: true,
+            organizationName: true,
             name: true, // Assurez-vous d'ajuster ceci pour correspondre à votre modèle si vous utilisez firstName + lastName
             photo: true,
           },
@@ -505,6 +494,7 @@ export async function getMyFollowingUsers({ userId }: { userId: string }) {
   }
 }
 
+//! RECUPERATION DES EVENTS EN FONCTION DES ABONNEMENTS
 export async function getEventSubscriptions({
   userId,
   limit = 6,
@@ -534,20 +524,39 @@ export async function getEventSubscriptions({
 
     const skipAmount = (Number(page) - 1) * limit;
 
-    const events = await db.event.findMany({
+    const eventsQuery = await db.event.findMany({
       where: {
         organizer: { in: followingIds },
         endDateTime: { gte: currentDate },
       },
       include: {
+        Category: {
+          select: {
+            name: true,
+          },
+        },
         Organizer: {
-          select: { name: true },
+          select: { organizationName: true, id: true },
         },
       },
       orderBy: { createdAt: "desc" },
       skip: skipAmount,
       take: limit,
     });
+
+    const events = eventsQuery.map((event) => ({
+      ...event,
+      Category:
+        event.Category && event.Category.name
+          ? { name: event.Category.name }
+          : {
+              name: "Non spécifiée",
+            },
+      Organizer: {
+        id: event.Organizer.id,
+        organizationName: event.Organizer.organizationName,
+      },
+    }));
 
     const eventsCount = await db.event.count({
       where: {

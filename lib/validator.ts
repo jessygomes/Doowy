@@ -39,6 +39,8 @@ export const userRegisterSchema = z
       message: "L'email est requis.",
     }),
     role: z.enum(["user", "organizer"]),
+    organizationName: z.optional(z.string()),
+    organizationType: z.optional(z.string()),
     password: z
       .string()
       .min(8, "Le mot de passe doit contenir au moins 6 caractères."),

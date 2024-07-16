@@ -40,15 +40,16 @@ const Card = async ({
     }
   }
 
-  console.log("EVENT ORGA --- ", event);
-
   //! Vérifier si le User est le créateur de l'event
   const isEventCreator = event.organizer ? userId === event.organizer : false;
 
   //! Vérifier si l'event est passé ou pas :
   const currentDateTime = new Date();
+  const startDateTime = new Date(event.startDateTime);
   const endDateTime = new Date(event.endDateTime);
   const isPastEvent = currentDateTime > endDateTime;
+  const isEnCours =
+    currentDateTime >= startDateTime && currentDateTime <= endDateTime;
 
   return (
     <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
@@ -90,6 +91,13 @@ const Card = async ({
               Cette événement s&apos;est terminé le{" "}
               {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
             </p>
+          ) : isEnCours ? (
+            <>
+              <p className="p-medium-14 text-primary">En cours</p>
+              <p className="p-medium-14 p-medium-18 text-grey-500">
+                {event.location}
+              </p>
+            </>
           ) : (
             <div className="w-full flex justify-between">
               <p className="p-medium-14 p-medium-18 text-grey-500">

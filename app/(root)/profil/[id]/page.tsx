@@ -46,6 +46,7 @@ export default async function ProfilPublic({
       limit: 6,
     });
   }
+  console.log("eventsByOrganizer", eventsByOrganizer?.data.upcomingEvents);
 
   let eventsUserFav = null;
   if (userProfile && userProfile.role !== "organizer") {
@@ -78,6 +79,7 @@ export default async function ProfilPublic({
                 <FaUser className="text-white" />
               </AvatarFallback>
             </Avatar>
+
             <h3 className="h3-bold text-center sm:text-left">
               {userProfile?.name}
             </h3>
@@ -132,7 +134,7 @@ export default async function ProfilPublic({
               </AvatarFallback>
             </Avatar>
             <h3 className="h3-bold text-center sm:text-left">
-              {userProfile?.name}
+              {userProfile?.organizationName}
             </h3>
           </div>
 

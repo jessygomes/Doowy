@@ -145,8 +145,6 @@ export const login = async (values: z.infer<typeof userLoginSchema>) => {
 
 //! REGISTER ACTION
 export const register = async (values: z.infer<typeof userRegisterSchema>) => {
-  console.log("REGISTER ACTION", values);
-
   // Revalidation des champs dans le back-end (où personne peut les manipuler)
   const validateFields = userRegisterSchema.safeParse(values);
 
@@ -154,8 +152,16 @@ export const register = async (values: z.infer<typeof userRegisterSchema>) => {
     return { error: "Formulaire Invalide" };
   }
 
-  const { email, password, passwordConfirmation, firstName, lastName, role } =
-    validateFields.data;
+  const {
+    email,
+    password,
+    passwordConfirmation,
+    firstName,
+    lastName,
+    role,
+    organizationName,
+    organizationType,
+  } = validateFields.data;
 
   // Revérifier la correspondance des mots de passe
   if (password !== passwordConfirmation) {
@@ -181,6 +187,8 @@ export const register = async (values: z.infer<typeof userRegisterSchema>) => {
       lastName,
       name: `${firstName} ${lastName}`,
       role,
+      organizationName,
+      organizationType,
     },
   });
 

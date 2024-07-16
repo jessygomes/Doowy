@@ -41,6 +41,8 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
       password: "",
       passwordConfirmation: "",
       role: type,
+      organizationName: "",
+      organizationType: "",
     },
   });
 
@@ -115,6 +117,56 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                 )}
               />
             </div>
+
+            {isOrganizer && (
+              <div className="flex gap-2">
+                <FormField
+                  control={form.control}
+                  name="organizationName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="organizationName">
+                        Nom de l&apos;organisation
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          id="organizationName"
+                          placeholder="Vibey!"
+                          {...field}
+                          disabled={isPending}
+                          className="input rounded-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name="organizationType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel htmlFor="lastName">
+                        Type de l&apos;organisation
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          id="organizationType"
+                          placeholder="Association, etc..."
+                          {...field}
+                          disabled={isPending}
+                          className="input rounded-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            )}
 
             <FormField
               control={form.control}

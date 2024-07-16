@@ -87,7 +87,7 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
                         </Avatar>
                       )}
 
-                      {user.name}
+                      {user.organizationName ?? user.name}
                     </div>
                   </Link>
                 </li>

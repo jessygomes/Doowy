@@ -39,6 +39,8 @@ export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
     }
   }, [userId]);
 
+  console.log("FOLOLWER", followingUsers);
+
   return (
     <div>
       <button
@@ -84,7 +86,7 @@ export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
                           </AvatarFallback>
                         </Avatar>
                       )}
-                      {user.name}
+                      {user.organizationName ?? user.name}
                     </div>
                   </Link>
                 </li>

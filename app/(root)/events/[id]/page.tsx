@@ -8,11 +8,12 @@ import {
 import { getWishlist } from "@/lib/actions/user.actions";
 import { currentUser } from "@/lib/auth";
 import { formatDateTime } from "@/lib/utils";
-import { SearchParamProps } from "@/types";
 
 import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
+
+import { SearchParamProps } from "@/types";
 
 export default async function EventDetail({
   params: { id },

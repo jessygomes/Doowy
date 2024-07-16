@@ -1,14 +1,16 @@
+import Link from "next/link";
+
+import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
+import { SearchParamProps } from "@/types";
+import { currentUser } from "@/lib/auth";
+import { departements } from "@/constants";
+
 import { CategoryFilter } from "@/components/shared/CategoryFilter";
 import Collection from "@/components/shared/Collection";
 import { DepartementFilter } from "@/components/shared/DepartementFilter";
 import { EventSuscription } from "@/components/shared/EventSuscription";
 import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
-import { departements } from "@/constants";
-import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
-import { SearchParamProps } from "@/types";
-import Link from "next/link";
-import { currentUser } from "@/lib/auth";
 
 export default async function Home({ searchParams }: SearchParamProps) {
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous

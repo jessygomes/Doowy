@@ -1,7 +1,7 @@
 // import { SearchParamProps } from "@/types";
 import { EventPresentation } from "@/components/shared/EventPresentation";
 
-export type SearchParamProps = {
+type SearchParamProps = {
   page?(page: any): unknown;
   params: { id: string };
   searchParams: { [key: string]: string | string[] | undefined };

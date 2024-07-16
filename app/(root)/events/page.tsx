@@ -1,4 +1,4 @@
-import { SearchParamProps } from "@/types";
+// import { SearchParamProps } from "@/types";
 import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
 import { departements } from "@/constants";
 
@@ -7,7 +7,11 @@ import Collection from "@/components/shared/Collection";
 import { DepartementFilter } from "@/components/shared/DepartementFilter";
 import { Search } from "@/components/shared/Search";
 
-export default async function Events({ searchParams }: SearchParamProps) {
+export default async function Events({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
   const page = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) || "";

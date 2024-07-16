@@ -22,7 +22,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function ProfilPrivate({
   searchParams,
-}: SearchParamProps) {
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   //! Récupérer l'utilisateur connecté et son ID (mettre une chaine de caractère vide si l'utilisateur n'est pas trouvé pour éviter les erreurs)
   const user = await currentUser();
   if (!user) {

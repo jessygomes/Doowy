@@ -12,7 +12,11 @@ import { EventSuscription } from "@/components/shared/EventSuscription";
 import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 
-export default async function Home({ searchParams }: SearchParamProps) {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
   const page = Number(searchParams?.page) || 1;
   const searchText = (searchParams?.query as string) || "";

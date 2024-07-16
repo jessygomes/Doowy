@@ -58,9 +58,7 @@ export default async function Home({ searchParams }: SearchParamProps) {
       {userId && (
         <EventSuscription
           searchParams={{
-            page: function (page: any): unknown {
-              throw new Error("Function not implemented.");
-            },
+            page,
             params: {
               id: "",
             },

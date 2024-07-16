@@ -1,4 +1,4 @@
-import { SearchParamProps } from "../../../../types/index";
+import { SearchParamProps } from "@/types";
 import { EventPresentation } from "@/components/shared/EventPresentation";
 
 export default function EventDetail({

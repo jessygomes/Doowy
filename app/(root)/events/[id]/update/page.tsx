@@ -19,6 +19,7 @@ export default async function UpdateEvent({
   const userId = user?.id;
 
   const event = await getEventById(id);
+  console.log(event);
 
   return (
     <>
@@ -30,12 +31,7 @@ export default async function UpdateEvent({
         </section>
         <div className="wrapper my-8">
           {event && (
-            <EventForm
-              type="Modifier"
-              event={event}
-              eventId={event.id}
-              userId={userId}
-            />
+            <EventForm type="Modifier" eventId={event.id} userId={userId} />
           )}
         </div>
       </RoleGate>

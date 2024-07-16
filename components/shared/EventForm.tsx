@@ -43,7 +43,7 @@ import { FileUploader } from "./FileUploader";
 type EventFormProps = {
   userId: string | undefined;
   type: "Créer" | "Modifier";
-  event: {
+  event?: {
     title: string;
     description?: string;
     location?: string;
@@ -57,8 +57,16 @@ type EventFormProps = {
     category: string;
     organizer: string;
     nbFav?: number;
+    Category: {
+      name?: string;
+    } | null;
+    Organizer: {
+      id?: string;
+      organizationName?: string;
+      name?: string;
+    };
   };
-  eventId: string;
+  eventId?: string;
 };
 
 const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {

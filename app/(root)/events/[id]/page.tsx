@@ -1,18 +1,18 @@
-import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
-import Collection from "@/components/shared/Collection";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+
 import {
   getEventById,
   getRelatedEventsByCategory,
 } from "@/lib/actions/event.actions";
 import { getWishlist } from "@/lib/actions/user.actions";
-// import { getWishlist } from "@/lib/actions/user.actions";
 import { currentUser } from "@/lib/auth";
 import { formatDateTime } from "@/lib/utils";
 import { SearchParamProps } from "@/types";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
+
+import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
+import Collection from "@/components/shared/Collection";
+import { Button } from "@/components/ui/button";
 
 export default async function EventDetail({
   params: { id },
@@ -22,10 +22,11 @@ export default async function EventDetail({
   const page = Number(searchParams?.page) || 1;
 
   const event = await getEventById(id);
-  console.log(event);
+  if (!event) {
+    throw new Error("Event not found");
+  }
 
-  //! Récupérer les events liés à la catégorie de l'event actuel
-
+  //! Récupérer les events liés à la catégorie de l'event actuel ou département
   const relaledEvents = await getRelatedEventsByCategory({
     departementId: event?.departement || "",
     eventId: event?.id || "",
@@ -60,8 +61,8 @@ export default async function EventDetail({
       <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
         <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
           <Image
-            src={event?.imageUrl ? event.imageUrl : ""} // Configurer le fichier next.config.js pour les images venant du serveur UploadThing
-            alt={event?.title ? event.title : "Event Image"}
+            src={event.imageUrl ? event.imageUrl : ""} // Configurer le fichier next.config.js pour les images venant du serveur UploadThing
+            alt={event.title ? event.title : "Event Image"}
             width={1000}
             height={1000}
             className="h-full min-g-[300px] object-cover object-center"
@@ -69,25 +70,25 @@ export default async function EventDetail({
 
           <div className="flex w-full flex-col gap-8 p-5 md:p-10">
             <div className="flex flex-col gap-6">
-              <h2 className="h2-bold">{event?.title}</h2>
+              <h2 className="h2-bold">{event.title}</h2>
 
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
                 <div className="flex gap-3">
                   <p className="p-bold-20 rounded-full bg-green-200 px-5 py-2 text-green-700">
-                    {event?.isFree ? "Gratuit" : `${event?.price} €`}
+                    {event.isFree ? "Gratuit" : `${event.price} €`}
                   </p>
                   <p className="p-medium-16 rounded-full bg-grey-500/10 px-4 py-2.5 text-grey-500">
-                    {event?.Category?.name}
+                    {event.Category?.name}
                   </p>
                 </div>
 
                 <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
                   by{" "}
                   <Link
-                    href={`/profil/${event?.Organizer.name}`}
+                    href={`/profil/${event?.Organizer.organizationName}`}
                     className="text-primary-500"
                   >
-                    {event?.Organizer.name}
+                    {event?.Organizer.organizationName}
                   </Link>
                 </p>
               </div>
@@ -160,7 +161,7 @@ export default async function EventDetail({
         <h2 className="h2-bold">D&apos;autres événements</h2>
 
         <Collection
-          data={relaledEvents?.data}
+          data={relaledEvents?.data || []}
           emptyTitle="Aucun Event Trouvé"
           emptyStateSubtext="Revenir plus tard"
           collectionType="All_Events"

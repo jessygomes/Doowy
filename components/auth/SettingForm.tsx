@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
 import { userSettingSchema } from "@/lib/validator";
-import { updateProfileUser } from "@/lib/actions/user.actions";
+import { updateSettingUser } from "@/lib/actions/user.actions";
 import { departements } from "@/constants";
 
 import { Input } from "@/components/ui/input";
@@ -36,21 +36,21 @@ import { FormSuccess } from "../shared/FormSuccess";
 import { Switch } from "../ui/switch";
 
 type SettingFormProps = {
-  type: "user" | "organizer";
   userProfile?: {
-    firstName: string;
-    lastName: string;
-    name: string;
-    email: string;
-    departement: string;
-    isTwofactorEnabled: boolean;
-    organizationName?: string;
-    organizationType?: string;
-    isHidenWishlist?: boolean;
+    firstName: string | null;
+    lastName: string | null;
+    name: string | null;
+    email: string | null;
+    departement: string | null;
+    isTwofactorEnabled: boolean | null;
+    organizationName?: string | null;
+    organizationType?: string | null;
+    isHidenWishlist?: boolean | null;
+    role?: string | null;
   };
 };
 
-export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
+export const SettingForm = ({ userProfile }: SettingFormProps) => {
   const user = useCurrentUser();
 
   const [error, setError] = useState<string | undefined>("");
@@ -77,6 +77,8 @@ export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
     setError("");
     setSuccess("");
 
+    console.log(values);
+
     // Création d'une copie des valeurs pour les modifier
     let updatedValues = { ...values };
 
@@ -89,7 +91,7 @@ export const SettingForm = ({ type, userProfile }: SettingFormProps) => {
     }
 
     startTransition(() => {
-      updateProfileUser(updatedValues)
+      updateSettingUser(updatedValues)
         .then((data) => {
           if (data.error) {
             setError(data.error);

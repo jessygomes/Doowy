@@ -123,23 +123,26 @@ export type Event = {
   id: string;
   title: string;
   description?: string;
-  price: string;
+  price: string | null;
   isFree: boolean;
   imageUrl: string;
   location: string;
-  departement: string;
+  departement?: string;
   startDateTime: Date;
   endDateTime: Date;
-  url: string;
-  organizer: string;
-  category: string;
+  url?: string | null;
+  organizer?: string;
+  category?: string | null;
   nbFav: number;
-  Category: string;
+  Category: {
+    name?: string;
+  } | null;
   Organizer: {
     id?: string;
     organizationName?: string;
     name?: string;
   };
+  updatedAt?: Date;
 };
 
 // ====== CATEGORY PARAMS

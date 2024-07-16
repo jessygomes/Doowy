@@ -115,6 +115,12 @@ export const getEventById = async (eventId: string) => {
 
     return {
       ...event,
+      description: event.description ?? "Aucune description disponible",
+      Category: event.Category ?? { name: "Non spécifiée" },
+      Organizer: {
+        ...event.Organizer,
+        organizationName: event.Organizer.organizationName ?? "Non spécifié",
+      },
     };
   } catch (error) {
     console.log(error);
@@ -440,16 +446,41 @@ export async function getRelatedEventsByCategory({
     //   $and: [{ category: categoryId }, { _id: { $ne: eventId } }],
     // };
 
-    const events = await db.event.findMany({
+    const eventsQuery = await db.event.findMany({
       where: {
         AND: [
           { departement: currentEventDepartmentId },
           { id: { not: eventId } },
         ],
       },
+      include: {
+        Category: {
+          select: {
+            name: true,
+          },
+        },
+        Organizer: {
+          select: {
+            organizationName: true,
+            id: true,
+          },
+        },
+      },
       skip: skipAmount,
       take: limit,
     });
+
+    const events = eventsQuery.map((event) => ({
+      ...event,
+      description: event.description ?? "Aucune description disponible",
+      Category: (event.Category && event.Category.name) ?? {
+        name: "Non spécifiée",
+      },
+      Organizer: {
+        ...event.Organizer,
+        organizationName: event.Organizer.organizationName ?? "Non spécifié",
+      },
+    }));
 
     // Étape 3: Modifier la requête pour compter les événements avec les mêmes conditions
     const eventsCount = await db.event.count({

@@ -28,9 +28,7 @@ export default async function ParametreProfil() {
         <h3 className="wrapper h3-bold text-center sm:text-left">Paramètres</h3>
       </section>
       <div className="wrapper my-8">
-        {user && userProfile && (
-          <SettingForm type={user.role} userProfile={userProfile} />
-        )}
+        {user && userProfile && <SettingForm userProfile={userProfile} />}
       </div>
     </>
   );

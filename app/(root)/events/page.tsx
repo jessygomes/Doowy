@@ -38,7 +38,7 @@ export default async function Events({ searchParams }: SearchParamProps) {
       </div>
 
       <Collection
-        data={events.data}
+        data={events?.data}
         emptyTitle="Aucun Event Trouvé"
         emptyStateSubtext="Revenir plus tard"
         collectionType="All_Events"

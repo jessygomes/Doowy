@@ -18,7 +18,6 @@ const BtnAddFavorite = ({
 }) => {
   const user = useCurrentUser();
   const userId = user?.id;
-  // const hasEventFinished = new Date(event.endDateTime) < new Date();
 
   const [isFav, setIsFav] = useState(isFavorite);
 
@@ -28,8 +27,10 @@ const BtnAddFavorite = ({
       ? userId === event.Organizer.id.toString()
       : false;
 
+  //! Etat pour stocker le nombre de favoris et l'afficher dynamquement
   const [nbFav, setNbFav] = useState(event.nbFav);
 
+  //! Fonction pour ajouter un event aux favoris
   const handleAddFavorite = async () => {
     try {
       if (userId === null || userId === undefined) {
@@ -51,6 +52,7 @@ const BtnAddFavorite = ({
     }
   };
 
+  //! Si l'utilisateur n'est pas connecté, afficher un bouton pour le rediriger vers la page de connexion sinon le bouton ajoute aux favoris
   if (userId === null || userId === undefined) {
     return (
       <Button asChild className=" rounded-full">

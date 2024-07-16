@@ -25,12 +25,12 @@ import {
 } from "@/components/ui/form";
 
 type UserFormProps = {
-  organizer?: {
-    description?: string;
-    photo?: string;
-    instagram?: string;
-    twitter?: string;
-    tiktok?: string;
+  organizer: {
+    description?: string | null;
+    photo?: string | null;
+    instagram?: string | null;
+    twitter?: string | null;
+    tiktok?: string | null;
   };
 };
 

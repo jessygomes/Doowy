@@ -10,6 +10,7 @@ module.exports = withUt({
     "./src/**/*.{ts,tsx}",
   ],
   theme: {
+    darkMode: "class",
     container: {
       center: true,
       padding: "2rem",
@@ -24,6 +25,12 @@ module.exports = withUt({
           50: " #F6F8FD",
           DEFAULT: "#624CF5",
           foreground: "hsl(var(--primary-foreground))",
+        },
+        dark: {
+          500: "#1A1A1A",
+          50: "#1A1A1A",
+          DEFAULT: "#1A1A1A",
+          foreground: "hsl(var(--dark-foreground))",
         },
         coral: {
           500: "#15BF59",

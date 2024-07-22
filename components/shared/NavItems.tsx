@@ -18,7 +18,7 @@ const NavItems = () => {
 
   if (role === Role.organizer) {
     return (
-      <ul className="md-flex-between flex flex-col items-start gap-5 md:flex-row">
+      <ul className="md-flex-between flex flex-col items-start gap-16 md:flex-row">
         {headerLinksOrganizer.map((link, index) => {
           const isActive = pathname === link.route;
           return (
@@ -38,7 +38,7 @@ const NavItems = () => {
 
   if (role === Role.user) {
     return (
-      <ul className="md-flex-between flex flex-col items-start gap-5 md:flex-row">
+      <ul className="md-flex-between flex flex-col items-start gap-16 md:flex-row">
         {headerLinksUser.map((link, index) => {
           const isActive = pathname === link.route;
           return (
@@ -58,7 +58,7 @@ const NavItems = () => {
 
   if (role === undefined) {
     return (
-      <ul className="md-flex-between flex flex-col items-start gap-5 md:flex-row">
+      <ul className="md-flex-between flex flex-col items-start gap-16 md:flex-row">
         {headerLinkNoUser.map((link, index) => {
           const isActive = pathname === link.route;
           return (

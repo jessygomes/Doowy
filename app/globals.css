@@ -100,11 +100,19 @@ body {
     box-shadow: 15px 15px 10px 0px rgba(0, 0, 0, 0.324);
   }
 
+  .innerShadow {
+    box-shadow: inset 0px 20px 20px 0px rgba(0, 0, 0, 0.518);
+  }
+
   .bg-linear-text {
     background: linear-gradient(180deg, #ff4000d5 30.35%, #9000ff 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+
+  .bg-linear-hover {
+    background: linear-gradient(180deg, #ff400075 30.35%, #9000ff73 100%);
   }
 
   /* TYPOGRAPHY */
@@ -143,81 +151,81 @@ body {
 
   /* 24 */
   .p-bold-24 {
-    @apply font-bold text-[24px] leading-[36px];
+    @apply font-bold text-[24px] leading-[36px] text-dark dark:text-white;
   }
 
   .p-medium-24 {
-    @apply font-medium text-[24px] leading-[36px];
+    @apply font-medium text-[24px] leading-[36px] text-dark dark:text-white;
   }
 
   .p-regular-24 {
-    @apply font-normal text-[24px] leading-[36px];
+    @apply font-normal text-[24px] leading-[36px] text-dark dark:text-white;
   }
 
   /* 20 */
   .p-bold-20 {
-    @apply font-bold text-[20px] leading-[30px] tracking-[2%];
+    @apply font-bold text-[20px] leading-[30px] tracking-[2%] text-dark dark:text-white;
   }
 
   .p-semibold-20 {
-    @apply text-[20px] font-semibold leading-[30px] tracking-[2%];
+    @apply text-[20px] font-semibold leading-[30px] tracking-[2%] text-dark dark:text-white;
   }
 
   .p-medium-20 {
-    @apply text-[20px] font-medium leading-[30px];
+    @apply text-[20px] font-medium leading-[30px] text-dark dark:text-white;
   }
 
   .p-regular-20 {
-    @apply text-[20px] font-normal leading-[30px] tracking-[2%];
+    @apply text-[20px] font-normal leading-[30px] tracking-[2%] text-dark dark:text-white;
   }
 
   /* 18 */
   .p-semibold-18 {
-    @apply text-[18px] font-semibold leading-[28px] tracking-[2%];
+    @apply text-[18px] font-semibold leading-[28px] tracking-[2%] text-dark dark:text-white;
   }
 
   .p-medium-18 {
-    @apply text-[18px] font-medium leading-[28px];
+    @apply text-[18px] font-medium leading-[28px] text-dark dark:text-white;
   }
 
   .p-regular-18 {
-    @apply text-[18px] font-normal leading-[28px] tracking-[2%];
+    @apply text-[18px] font-normal leading-[28px] tracking-[2%] text-dark dark:text-white;
   }
 
   /* 16 */
   .p-bold-16 {
-    @apply text-[16px] font-bold leading-[24px];
+    @apply text-[16px] font-bold leading-[24px] text-dark dark:text-white;
   }
 
   .p-medium-16 {
-    @apply text-[16px] font-medium leading-[24px];
+    @apply text-[16px] font-medium leading-[24px] text-dark dark:text-white;
   }
 
   .p-regular-16 {
-    @apply text-[16px] font-normal leading-[24px];
+    @apply text-[16px] font-normal leading-[24px] text-dark dark:text-white;
   }
 
   /* 14 */
   .p-semibold-14 {
-    @apply text-[14px] font-semibold leading-[20px];
+    @apply text-[14px] font-semibold leading-[20px] text-dark dark:text-white;
   }
 
   .p-medium-14 {
-    @apply text-[14px] font-medium leading-[20px];
+    @apply text-[14px] font-medium leading-[20px] text-dark dark:text-white;
   }
 
   .p-regular-14 {
-    @apply text-[14px] font-normal leading-[20px];
+    @apply text-[14px] font-normal leading-[20px] text-dark dark:text-white;
   }
 
   /* 12 */
   .p-medium-12 {
-    @apply text-[12px] font-medium leading-[20px];
+    @apply text-[12px] font-medium leading-[20px] text-dark dark:text-white;
   }
 
   /* SHADCN OVERRIDES */
   .select-field {
-    @apply w-full bg-grey-50 h-[54px] placeholder:text-grey-500 rounded-full p-regular-16 px-5 py-3 border-none focus-visible:ring-transparent focus:ring-transparent !important;
+    @apply w-full bg-grey-50 h-[54px] placeholder:text-dark rounded-sm p-regular-16 px-5 py-3 border-none focus-visible:ring-transparent focus:ring-transparent !important;
   }
 
   .input-field {
@@ -233,7 +241,7 @@ body {
   }
 
   .select-item {
-    @apply py-3 cursor-pointer  focus:bg-primary-50;
+    @apply py-3 cursor-pointer bg-primary dark:bg-dark hover:bg-red-50 focus:bg-primary-50;
   }
 
   .toggle-switch {

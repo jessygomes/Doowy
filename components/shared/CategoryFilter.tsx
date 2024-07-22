@@ -62,7 +62,7 @@ export const CategoryFilter = () => {
       <SelectTrigger className="select-field">
         <SelectValue placeholder="Catégorie" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-primary dark:bg-dark">
         <SelectItem value="All" className="select-item p-regular-14">
           Toutes les catégories
         </SelectItem>

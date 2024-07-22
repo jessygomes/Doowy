@@ -12,7 +12,7 @@ const Header = async () => {
   const userName = session?.user?.name;
 
   return (
-    <header className="w-full border-b bg-primary dark:bg-dark">
+    <header className="w-full bg-primary dark:bg-dark">
       <div className="wrapper flex items-center justify-between">
         <Link href="/" className="font-bold text-4xl dark:text-white">
           vibey!

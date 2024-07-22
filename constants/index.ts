@@ -22,6 +22,10 @@ export const headerLinksUser = [
     label: "Events",
     route: "/events",
   },
+  {
+    label: "A Propos",
+    route: "/a-propos",
+  },
 ];
 
 export const headerLinkNoUser = [
@@ -34,8 +38,8 @@ export const headerLinkNoUser = [
     route: "/events",
   },
   {
-    label: "Devenir Organisateur",
-    route: "/devenir-organisateur",
+    label: "A Propos",
+    route: "/a-propos",
   },
 ];
 

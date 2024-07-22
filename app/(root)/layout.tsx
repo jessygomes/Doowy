@@ -14,7 +14,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <div className="flex h-screen flex-col">
         <Header />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 bg-primary dark:bg-dark">{children}</main>
         <Footer />
       </div>
     </SessionProvider>

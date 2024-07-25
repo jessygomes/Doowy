@@ -3,8 +3,12 @@ import { Suspense } from "react";
 
 export default function page() {
   return (
-    <Suspense>
-      <LoginForm />
-    </Suspense>
+    <>
+      <section className="h-screen w-screen bg-auth flex-center">
+        <Suspense>
+          <LoginForm />
+        </Suspense>
+      </section>
+    </>
   );
 }

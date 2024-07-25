@@ -40,30 +40,30 @@ export default async function Home({
 
   return (
     <>
-      <section className=" bg-dotted-pattern bg-contain py-5 md:py-20">
-        <div className="flex gap-12">
-          <div className="w-[65%] h-[23rem] ml-[-2rem] shadow-2xl">
-            <Image
-              src="/assets/images/accueilImg.jpg"
-              alt="photo d'accueil"
-              width={1000}
-              height={1000}
-              className="object-cover w-full h-full rounded-sm shadowCj"
-            />
-          </div>
-          <div className="flex flex-col justify-center">
-            <div className="wrapper ">
-              <h1 className="h1-bold text-dark dark:text-white">
-                Connectez-vous
-                <br />
-                <span className=" bg-linear-text">
-                  aux événements de votre ville !
-                </span>
-              </h1>
+      <section className="wrapper bg-dotted-pattern bg-contain">
+        <div className="flex flex-col sm:justify-center sm:pt-5 lg:pt-2">
+          <div className="flex flex-col justify-center items-center gap-4">
+            <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
+              <Image
+                src="/assets/images/accueilImg.jpg"
+                alt="photo d'accueil"
+                width={2000}
+                height={2000}
+                className="object-cover w-full h-full rounded-sm"
+              />
             </div>
+            <h1 className="h1-bold text-dark dark:text-white sm:text-center">
+              Connectez-vous <br />
+              <span className=" bg-linear-text">
+                aux événements de votre ville!
+              </span>
+            </h1>
             <Button size="lg" asChild className="button w-full sm:w-fit">
-              <Link href="#events">Explorer</Link>
+              <Link href="#events" className="font-bold tracking-widest">
+                EXPLORER
+              </Link>
             </Button>
+            {/* <div className="text-center"></div> */}
           </div>
         </div>
         {/* <div className="wrapper">
@@ -88,17 +88,17 @@ export default async function Home({
 
       <section
         id="events"
-        className="wrapper my-20 flex flex-col gap-8 md:gap-12"
+        className="wrapper my-10 lg:my-20 flex flex-col gap-8 md:gap-12"
       >
         {/* <h2 className="h2-bold">
           Trust by <br /> Thousands of Events
         </h2> */}
-        <div className="flex justify-center items-center gap-8">
+        <div className="flex justify-center items-center gap-8 py-5">
           <p className="font-bold text-dark dark:text-primary text-xl">
             trend!
           </p>
           <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
-          <p className="font-bold text-xl text-dark dark:text-primary">
+          <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
             trend!
           </p>
         </div>
@@ -134,47 +134,47 @@ export default async function Home({
         </div>
       </section>
 
-      <section className="my-20 flex flex-col gap-8 md:gap-12">
-        <div className="wrapper flex justify-center items-center gap-8">
+      <section className="my-10 sm:my-20 flex flex-col">
+        <div className="wrapper flex justify-center items-center gap-8 lg:mb-2">
           <p className="font-bold text-dark dark:text-primary text-xl">
             Organisateur!
           </p>
           <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
-          <p className="font-bold text-xl text-dark dark:text-primary">
+          <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
             Organisateur!
           </p>
         </div>
 
-        <div className="flex gap-12">
-          <div className="w-[65%] h-[23rem] ml-[-2rem] shadow-2xl">
+        <div className="wrapper flex flex-col justify-center items-center gap-4">
+          <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
             <Image
               src="/assets/images/organisateur.jpg"
               alt="photo d'accueil"
               width={1000}
               height={1000}
-              className="object-cover w-full h-full rounded-sm shadowCj"
+              className="object-cover w-full h-full rounded-sm"
             />
           </div>
-          <div className="flex flex-col gap-4 justify-center">
-            <div className="">
-              <h1 className="h2-bold text-dark dark:text-white mr-16">
-                Créez vos événements et
-                <br />
-                <span className=" bg-linear-text">
-                  Partagez-les avec notre communauté !
-                </span>
-              </h1>
-            </div>
-            <p className="text-dark dark:text-white p-regular-20 md:p-regular-20">
+          <h1 className="h2-bold text-dark dark:text-white sm:text-center lg:text-left lg:w-2/3">
+            Créez vos événements et
+            <br />
+            <span className="bg-linear-text">
+              Partagez-les avec notre communauté!
+            </span>
+          </h1>
+          <div className="flex flex-col items-center gap-4 lg:w-2/3">
+            <p className="text-dark dark:text-white p-regular-10 md:p-regular-16">
               Inscris toi en tant qu&apos;organisateur pour créer tes propres
               événements et faire bouger ta ville comme tu l&apos;entends !
             </p>
-            <Button size="lg" asChild className="button w-full sm:w-fit">
-              <Link href="/auth/inscription/org">
-                S&apos;inscrire en tant qu&apos;organisateur
-              </Link>
-            </Button>
           </div>
+        </div>
+        <div className="wrapper flex-center">
+          <Button size="lg" asChild className="button w-full sm:w-fit">
+            <Link href="/auth/inscription/org">
+              S&apos;inscrire en tant qu&apos;organisateur
+            </Link>
+          </Button>
         </div>
       </section>
     </>

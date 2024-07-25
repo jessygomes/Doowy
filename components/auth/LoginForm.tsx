@@ -103,7 +103,7 @@ export const LoginForm = () => {
                         placeholder="123456"
                         {...field}
                         disabled={isPending}
-                        className="input rounded-full"
+                        className="input rounded-sm"
                       />
                     </FormControl>
                     <FormMessage />
@@ -126,7 +126,7 @@ export const LoginForm = () => {
                           placeholder="vibey@email.fr"
                           {...field}
                           disabled={isPending}
-                          className="input rounded-full"
+                          className="input rounded-sm"
                         />
                       </FormControl>
                       <FormMessage />
@@ -147,7 +147,7 @@ export const LoginForm = () => {
                           placeholder="********"
                           {...field}
                           disabled={isPending}
-                          className="input rounded-full"
+                          className="input rounded-sm"
                         />
                       </FormControl>
                       <button className="">

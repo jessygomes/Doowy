@@ -1,8 +1,12 @@
 import { RegisterForm } from "@/components/auth/RegisterForm";
-import React from "react";
+import { Suspense } from "react";
 
 export default function RegisterPage() {
   return (
-    <RegisterForm type="organizer" label="Créer un compte - Organisateur" />
+    <section className="h-screen w-screen bg-auth flex-center">
+      <Suspense>
+        <RegisterForm type="organizer" label="Créer un compte - Organisateur" />
+      </Suspense>
+    </section>
   );
 }

@@ -88,7 +88,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                         placeholder="John"
                         {...field}
                         disabled={isPending}
-                        className="input rounded-full"
+                        className="input rounded-sm"
                       />
                     </FormControl>
                     <FormMessage />
@@ -109,7 +109,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                         placeholder="Doe"
                         {...field}
                         disabled={isPending}
-                        className="input rounded-full"
+                        className="input rounded-sm"
                       />
                     </FormControl>
                     <FormMessage />
@@ -135,7 +135,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                           placeholder="Vibey!"
                           {...field}
                           disabled={isPending}
-                          className="input rounded-full"
+                          className="input rounded-sm"
                         />
                       </FormControl>
                       <FormMessage />
@@ -158,7 +158,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                           placeholder="Association, etc..."
                           {...field}
                           disabled={isPending}
-                          className="input rounded-full"
+                          className="input rounded-sm"
                         />
                       </FormControl>
                       <FormMessage />
@@ -181,7 +181,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                       placeholder="vibey@email.fr"
                       {...field}
                       disabled={isPending}
-                      className="input rounded-full"
+                      className="input rounded-sm"
                     />
                   </FormControl>
                   <FormMessage />
@@ -202,7 +202,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                       placeholder="********"
                       {...field}
                       disabled={isPending}
-                      className="input rounded-full"
+                      className="input rounded-sm"
                     />
                   </FormControl>
                   <FormMessage />
@@ -225,7 +225,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
                       placeholder="********"
                       {...field}
                       disabled={isPending}
-                      className="input rounded-full"
+                      className="input rounded-sm"
                     />
                   </FormControl>
                   <FormMessage />

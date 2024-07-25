@@ -21,13 +21,13 @@ module.exports = withUt({
     extend: {
       colors: {
         primary: {
-          500: "#C8C8C8",
+          500: "#949494",
           50: " #F6F8FD",
           DEFAULT: "#C8C8C8",
           foreground: "hsl(var(--primary-foreground))",
         },
         dark: {
-          500: "#121212",
+          500: "#060606",
           50: "#1A1A1A",
           DEFAULT: "#121212",
           foreground: "hsl(var(--dark-foreground))",

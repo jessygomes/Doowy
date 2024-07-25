@@ -38,41 +38,45 @@ export default async function Home({
   const user = await currentUser();
   const userId = user?.id;
 
+  console.log("user", userId);
+
   return (
     <>
-      <section className="wrapper bg-dotted-pattern bg-contain">
-        <div className="flex flex-col sm:justify-center sm:pt-5 lg:pt-2">
-          <div className="flex flex-col justify-center items-center gap-4">
-            <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
-              <Image
-                src="/assets/images/accueilImg.jpg"
-                alt="photo d'accueil"
-                width={2000}
-                height={2000}
-                className="object-cover w-full h-full rounded-sm"
-              />
+      {userId === undefined && (
+        <section className="wrapper bg-dotted-pattern bg-contain">
+          <div className="flex flex-col sm:justify-center sm:pt-5 lg:pt-2">
+            <div className="flex flex-col justify-center items-center gap-4">
+              <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
+                <Image
+                  src="/assets/images/accueilImg.jpg"
+                  alt="photo d'accueil"
+                  width={2000}
+                  height={2000}
+                  className="object-cover w-full h-full rounded-sm"
+                />
+              </div>
+              <h1 className="h1-bold text-dark dark:text-white sm:text-center">
+                Connectez-vous <br />
+                <span className=" bg-linear-text">
+                  aux événements de votre ville!
+                </span>
+              </h1>
+              <Button size="lg" asChild className="button w-full sm:w-fit">
+                <Link href="#events" className="font-bold tracking-widest">
+                  EXPLORER
+                </Link>
+              </Button>
+              {/* <div className="text-center"></div> */}
             </div>
-            <h1 className="h1-bold text-dark dark:text-white sm:text-center">
-              Connectez-vous <br />
-              <span className=" bg-linear-text">
-                aux événements de votre ville!
-              </span>
-            </h1>
-            <Button size="lg" asChild className="button w-full sm:w-fit">
-              <Link href="#events" className="font-bold tracking-widest">
-                EXPLORER
-              </Link>
-            </Button>
-            {/* <div className="text-center"></div> */}
           </div>
-        </div>
-        {/* <div className="wrapper">
+          {/* <div className="wrapper">
           <p className="text-dark dark:text-white p-regular-20 md:p-regular-20">
             Créer et poste ton événement, rejoins notre communauté pour être au
             courant du moindre event de ta ville.
           </p>
         </div> */}
-      </section>
+        </section>
+      )}
 
       {userId && (
         <EventSuscription
@@ -134,49 +138,51 @@ export default async function Home({
         </div>
       </section>
 
-      <section className="my-10 sm:my-20 flex flex-col">
-        <div className="wrapper flex justify-center items-center gap-8 lg:mb-2">
-          <p className="font-bold text-dark dark:text-primary text-xl">
-            Organisateur!
-          </p>
-          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
-          <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
-            Organisateur!
-          </p>
-        </div>
-
-        <div className="wrapper flex flex-col justify-center items-center gap-4">
-          <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
-            <Image
-              src="/assets/images/organisateur.jpg"
-              alt="photo d'accueil"
-              width={1000}
-              height={1000}
-              className="object-cover w-full h-full rounded-sm"
-            />
-          </div>
-          <h1 className="h2-bold text-dark dark:text-white sm:text-center lg:text-left lg:w-2/3">
-            Créez vos événements et
-            <br />
-            <span className="bg-linear-text">
-              Partagez-les avec notre communauté!
-            </span>
-          </h1>
-          <div className="flex flex-col items-center gap-4 lg:w-2/3">
-            <p className="text-dark dark:text-white p-regular-10 md:p-regular-16">
-              Inscris toi en tant qu&apos;organisateur pour créer tes propres
-              événements et faire bouger ta ville comme tu l&apos;entends !
+      {userId === undefined && (
+        <section className="my-10 sm:my-20 flex flex-col">
+          <div className="wrapper flex justify-center items-center gap-8 lg:mb-2">
+            <p className="font-bold text-dark dark:text-primary text-xl">
+              Organisateur!
+            </p>
+            <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
+            <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
+              Organisateur!
             </p>
           </div>
-        </div>
-        <div className="wrapper flex-center">
-          <Button size="lg" asChild className="button w-full sm:w-fit">
-            <Link href="/auth/inscription/org">
-              S&apos;inscrire en tant qu&apos;organisateur
-            </Link>
-          </Button>
-        </div>
-      </section>
+
+          <div className="wrapper flex flex-col justify-center items-center gap-4">
+            <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
+              <Image
+                src="/assets/images/organisateur.jpg"
+                alt="photo d'accueil"
+                width={1000}
+                height={1000}
+                className="object-cover w-full h-full rounded-sm"
+              />
+            </div>
+            <h1 className="h2-bold text-dark dark:text-white sm:text-center lg:text-left lg:w-2/3">
+              Créez vos événements et
+              <br />
+              <span className="bg-linear-text">
+                Partagez-les avec notre communauté!
+              </span>
+            </h1>
+            <div className="flex flex-col items-center gap-4 lg:w-2/3">
+              <p className="text-dark dark:text-white p-regular-10 md:p-regular-16">
+                Inscris toi en tant qu&apos;organisateur pour créer tes propres
+                événements et faire bouger ta ville comme tu l&apos;entends !
+              </p>
+            </div>
+          </div>
+          <div className="wrapper flex-center">
+            <Button size="lg" asChild className="button w-full sm:w-fit">
+              <Link href="/auth/inscription/org">
+                S&apos;inscrire en tant qu&apos;organisateur
+              </Link>
+            </Button>
+          </div>
+        </section>
+      )}
     </>
   );
 }

@@ -52,80 +52,78 @@ const Card = async ({
     currentDateTime >= startDateTime && currentDateTime <= endDateTime;
 
   return (
-    <div className="group relative flex min-h-[380px] w-full max-w-[400px] flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all hover:shadow-lg md:min-h-[438px]">
-      <Link
-        href={`/events/${event.id}`}
-        style={{ backgroundImage: `url(${event.imageUrl}` }}
-        className="flex-center flex-grow bg-grey-50 bg-cover bg-center text-grey-500"
-      />
+    <div className="group relative flex min-h-[320px] w-full max-w-[400px] flex-col gap-2 overflow-hidden rounded-sm transition-all md:min-h-[350px]">
+      <div className="relative h-full w-full overflow-hidden rounded-sm">
+        <Link
+          href={`/events/${event.id}`}
+          style={{ backgroundImage: `url(${event.imageUrl})` }}
+          className="flex-center h-full w-full bg-grey-50 bg-cover bg-center transition-transform duration-300 ease-in-out transform hover:scale-110"
+        />
+      </div>
+
       {/* IS EVENT CREATOR */}
       {isEventCreator && !hidePrice && (
-        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-xl bg-white p-3 shadow-sm transition-all">
+        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm bg-white p-3 shadow-sm transition-all">
           <Link href={`/events/${event.id}/update`}>
             <Image
               src="/assets/icons/edit.svg"
               alt="edit"
               width={20}
               height={20}
+              className="rounded-sm"
             />
           </Link>
 
           <DeleteConfirmation eventId={event.id} />
         </div>
       )}
-      <div className="flex min-h-[230px] flex-col gap-3 p-5 md:gap-4">
-        {!hidePrice && (
-          <div className="flex gap-2">
-            <span className="p-semibold-14 w-min rounded-full bg-green-100 px-4 py-1 text-green-600">
-              {event.isFree ? "Gratuit" : `${event.price}€`}
-            </span>
-            <p className="p-semibold-14 w-min rounded-full bg-gre-500/10 px-4 py-1 text-grey-500 line-clamp-1">
-              {event.Category?.name}
+
+      {/* DIV INFOS EVENT */}
+      <div className=" flex flex-row justify-between rounded-sm">
+        <div className="flex flex-col gap-2">
+          {/* TITRE */}
+          <Link href={`/events/${event.id}`}>
+            <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black">
+              {event.title}
             </p>
-          </div>
-        )}
-
-        <div className="flex justify-between gap-4">
-          {isPastEvent ? (
-            <p className="p-medium-14 text-red-400">
-              Cette événement s&apos;est terminé le{" "}
-              {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
-            </p>
-          ) : isEnCours ? (
-            <>
-              <p className="p-medium-14 text-primary">En cours</p>
-              <p className="p-medium-14 p-medium-18 text-grey-500">
-                {event.location}
-              </p>
-            </>
-          ) : (
-            <div className="w-full flex justify-between">
-              <p className="p-medium-14 p-medium-18 text-grey-500">
-                {formatDateTime(event.startDateTime).dateTime}
-              </p>
-
-              <p className="p-medium-14 p-medium-18 text-grey-500">
-                {event.location}
-              </p>
-            </div>
-          )}
-        </div>
-
-        <Link href={`/events/${event.id}`}>
-          <p className="p-medium-16 md:p-medium-20 line-clamp-2 flex-1 text-black">
-            {event.title}
-          </p>
-        </Link>
-
-        <div className="flex-between w-full">
-          <Link
-            href={`/profil/${event.Organizer?.id}`}
-            className="p-medium-14 md:p-medium-16 text-grey-600"
-          >
-            {event.Organizer?.organizationName}
           </Link>
 
-          {/* {hasOrderLink && (
+          {/* DATE ET LIEU */}
+          <div className="flex justify-between gap-4">
+            {isPastEvent ? (
+              <p className="p-medium-12 text-red-400">
+                Terminé le{" "}
+                {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
+              </p>
+            ) : isEnCours ? (
+              <>
+                <p className="p-medium-14 text-primary">En cours</p>
+                <p className="p-medium-14 p-medium-18 text-grey-500">
+                  {event.location}
+                </p>
+              </>
+            ) : (
+              <div className="w-full flex justify-between">
+                <p className="p-medium-14 p-medium-18 text-grey-500">
+                  {formatDateTime(event.startDateTime).dateTime}
+                </p>
+
+                <p className="p-medium-14 p-medium-18 text-grey-500">
+                  {event.location}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* ORGANISATEUR */}
+          <div className="flex-between w-full">
+            <Link
+              href={`/profil/${event.Organizer?.id}`}
+              className="p-medium-12 md:p-medium-12 text-grey-600"
+            >
+              {event.Organizer?.organizationName}
+            </Link>
+            {/* {hasOrderLink && (
             <Link href={`/orders?eventId=${event._id}`} className="flex gap-2">
               <p className=" text-primary-500">Order Details</p>
               <Image
@@ -136,9 +134,23 @@ const Card = async ({
               />
             </Link>
           )} */}
-
-          <BtnAddFavorite isFavorite={isFavorite} event={event} />
+          </div>
         </div>
+
+        {/* PRIX ET CATEGORIE */}
+        <div className="flex flex-col gap-3 md:gap-4">
+          {!hidePrice && (
+            <div className="h-full flex flex-col justify-center gap-2">
+              <p className="p-semibold-14 w-full rounded-sm bg-primary-500 text-white dark:bg-dark-500 dark:text-white px-4 py-1 line-clamp-1 text-center">
+                {event.isFree ? "Gratuit" : `${event.price}€`}
+              </p>
+              <p className="p-semibold-14 w-full rounded-sm bg-grey-500/10 px-4 py-1 text-grey-500 line-clamp-1">
+                {event.Category?.name}
+              </p>
+            </div>
+          )}
+        </div>
+        {/* <BtnAddFavorite isFavorite={isFavorite} event={event} /> */}
       </div>
     </div>
   );

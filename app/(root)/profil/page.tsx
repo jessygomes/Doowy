@@ -19,6 +19,11 @@ import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
 import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
 import { FaUser, FaCertificate, FaPen } from "react-icons/fa";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Image from "next/image";
+
+import { CiInstagram } from "react-icons/ci";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaTiktok } from "react-icons/fa";
 
 export default async function ProfilPrivate({
   searchParams,
@@ -47,89 +52,116 @@ export default async function ProfilPrivate({
 
   return (
     <>
-      <section className="wrapper">
-        <div className="wrapper flex flex-col gap-4 items-center justify-center sm:flex-row sm:gap-8 sm:justify-between">
-          <h3 className="h3-bold text-center sm:text-left">
-            {user.role === "organizer" ? "Mon profil" : "Mon compte"}
-          </h3>
-
-          <div className="flex gap-4 items-center sm:gap-8">
-            {/* Les followers sont uniquement disponible pour les organisateurs */}
-            {currentUserProfile?.role === "organizer" && (
-              <div className="flex gap-4 sm:gap-8">
-                <PersonnesFollowers userId={user.id} />
+      <section className="">
+        <div className=" bg-gradient-to-t from-primary-500 dark:from-dark-500 to-transparent">
+          {/* PHOTO NOM ABONNEMENT ET BTNMODIF */}
+          <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between  sm:pt-20 w-full">
+            <div className="flex flex-col justify-center gap-8 lg:wrapper">
+              <div className="flex gap-4 items-center">
+                <div className=" w-20 h-20 sm:w-32 sm:h-32">
+                  {currentUserProfile?.photo ? (
+                    <Image
+                      src={currentUserProfile.photo}
+                      width={1000}
+                      height={1000}
+                      alt="photo d'accueil"
+                      className="object-cover w-full h-full rounded-sm"
+                    />
+                  ) : (
+                    <Image
+                      src="/assets/images/accueilImg.jpg"
+                      alt="photo d'accueil"
+                      width={1000}
+                      height={1000}
+                      className="object-cover w-full h-full rounded-sm"
+                    />
+                  )}
+                </div>
+                <div className="flex">
+                  <p className="h3-bold">{currentUserProfile?.name}</p>
+                  <FaCertificate className="text-primary-500" />
+                </div>
               </div>
-            )}
-            <PersonnesSuivies userId={user.id} />
-            <Button asChild size="lg" className="button hidden sm:flex">
-              {user.role === "organizer" ? (
-                <Link href={`/profil/${user.id}/update`} aria-label="Modifier">
-                  <FaPen />
+            </div>
+
+            <div className="flex gap-4 items-center sm:gap-8 ">
+              {/* Les followers sont uniquement disponible pour les organisateurs */}
+              {currentUserProfile?.role === "organizer" && (
+                <div className="flex gap-4 sm:gap-8">
+                  <PersonnesFollowers userId={user.id} />
+                </div>
+              )}
+              <PersonnesSuivies userId={user.id} />
+              <Button asChild size="lg" className="button hidden sm:flex">
+                {user.role === "organizer" ? (
+                  <Link
+                    href={`/profil/${user.id}/update`}
+                    aria-label="Modifier"
+                  >
+                    <FaPen />
+                  </Link>
+                ) : null}
+
+                {/* <UserForm user={userProfile} userId={userId} /> */}
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* La description et les réseaux sociaux sont disponible seulement pour les organisateurs */}
+        {currentUserProfile?.role === "organizer" && (
+          <>
+            <p className="wrapper mt-4 sm:mt-8 text-dark dark:text-white">
+              {currentUserProfile?.description ||
+                "Cliquer sur Modifier pour ajouter une description"}
+            </p>
+            <div className="max-w-7xl lg:mx-auto px-5 md:px-10 xl:px-0 flex gap-8">
+              {currentUserProfile && currentUserProfile.instagram && (
+                <Link href={currentUserProfile.instagram}>
+                  <CiInstagram
+                    size={30}
+                    className="text-dark dark:text-white"
+                  />
                 </Link>
-              ) : null}
-
-              {/* <UserForm user={userProfile} userId={userId} /> */}
-            </Button>
-            <form
-              action={async () => {
-                "use server";
-                await signOut();
-              }}
-            ></form>
-          </div>
-        </div>
-
-        <div className="wrapper flex flex-col justify-center">
-          <div className="flex gap-4 items-center">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src={currentUserProfile?.photo || ""} />
-              <AvatarFallback className="bg-primary ">
-                <FaUser className="text-white" />
-              </AvatarFallback>
-            </Avatar>
-            <p className="font-bold">{currentUserProfile?.name}</p>
-            <FaCertificate className="text-primary-500" />
-          </div>
-          {/* La description et les réseaux sociaux sont disponible seulement pour les organisateurs */}
-          {currentUserProfile?.role === "organizer" && (
-            <>
-              <p className="mt-4">
-                {currentUserProfile?.description ||
-                  "Cliquer sur Modifier pour ajouter une description"}
-              </p>
-              <div className="flex gap-8 mt-4">
-                {currentUserProfile && currentUserProfile.instagram && (
-                  <Link href={currentUserProfile.instagram}>Instagram</Link>
-                )}
-                {currentUserProfile && currentUserProfile.twitter && (
-                  <Link href={currentUserProfile.twitter}>X</Link>
-                )}
-                {currentUserProfile && currentUserProfile.tiktok && (
-                  <Link href={currentUserProfile.tiktok}>TikTok</Link>
-                )}
-              </div>
-            </>
-          )}
-          <Button asChild size="lg" className="button sm:hidden">
-            <Link href={`/profil/${user.id}/update`}>Modifier</Link>
-            {/* <UserForm user={userProfile} userId={session?.user.id} /> */}
-          </Button>
-        </div>
+              )}
+              {currentUserProfile && currentUserProfile.twitter && (
+                <Link href={currentUserProfile.twitter}>
+                  <FaXTwitter size={40} className="text-dark dark:text-white" />
+                </Link>
+              )}
+              {currentUserProfile && currentUserProfile.tiktok && (
+                <Link href={currentUserProfile.tiktok}>
+                  <FaTiktok size={40} className="text-dark dark:text-white" />
+                </Link>
+              )}
+            </div>
+          </>
+        )}
       </section>
 
       {/* EVENTS ORGANIZED */}
       {currentUserProfile?.role === "organizer" && (
         <>
-          <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
-            <div className="wrapper flex items-center justify-center sm:justify-between">
+          <section className="wrapper bg-primary dark:bg-dark bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
+            <div className="flex justify-center items-center gap-8 py-5">
+              <p className="font-bold text-dark dark:text-primary text-xl">
+                Events!
+              </p>
+              <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
+              <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
+                Events!
+              </p>
+            </div>
+
+            {/* <div className="wrapper flex items-center justify-center sm:justify-between">
               <h3 className="h3-bold text-center sm:text-left">Mes Events</h3>
               <Button asChild size="lg" className="button hidden sm:flex">
                 <Link href="/events/create">Créer un nouvel événement</Link>
               </Button>
-            </div>
+            </div> */}
           </section>
 
-          <section className="wrapper my-8">
+          <section className="wrapper">
             <Collection
               data={organizedEvents?.data}
               emptyTitle="Aucun Event créé"
@@ -145,16 +177,26 @@ export default async function ProfilPrivate({
       )}
 
       {/* MES FAVORIS */}
-      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
-        <div className="wrapper flex items-center justify-center sm:justify-between">
+      <section className="bg-primary dark:bg-dark bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
+        <div className="wrapper flex justify-center items-center gap-8 py-5">
+          <p className="font-bold text-dark dark:text-primary text-xl">
+            Favoris!
+          </p>
+          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
+          <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
+            Favoris!
+          </p>
+        </div>
+
+        {/* <div className="wrapper flex items-center justify-center sm:justify-between">
           <h3 className="h3-bold text-center sm:text-left">Mes Favoris</h3>
           <Button asChild size="lg" className="button hidden sm:flex">
             <Link href="/#events">Découvrir d&apos;autres événements</Link>
           </Button>
-        </div>
+        </div> */}
       </section>
 
-      <section className="wrapper my-8">
+      <section className="wrapper mb-12">
         <Collection
           data={favoriteEvent?.data}
           emptyTitle="Aucun Event dans mes favoris"

@@ -1,5 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 import { withUt } from "uploadthing/tw";
+const defaultTheme = require("tailwindcss/defaultTheme");
+const colors = require("tailwindcss/colors");
+const {
+  default: flattenColorPalette,
+} = require("tailwindcss/lib/util/flattenColorPalette");
 
 module.exports = withUt({
   darkMode: ["class"],
@@ -19,6 +24,10 @@ module.exports = withUt({
       },
     },
     extend: {
+      fontFamily: {
+        kronaOne: ["krona-one"],
+        rubik: ["rubik"],
+      },
       colors: {
         primary: {
           500: "#949494",
@@ -73,9 +82,9 @@ module.exports = withUt({
           foreground: "hsl(var(--card-foreground))",
         },
       },
-      fontFamily: {
-        poppins: ["var(--font-poppins)"],
-      },
+      // fontFamily: {
+      //   poppins: ["var(--font-poppins)"],
+      // },
       backgroundImage: {
         "dotted-pattern": "url('/assets/images/dotted-pattern.png')",
         "hero-img": "url('/assets/images/hero.png')",
@@ -101,5 +110,16 @@ module.exports = withUt({
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), addVariablesForColors],
 });
+
+function addVariablesForColors({ addBase, theme }: any) {
+  let allColors = flattenColorPalette(theme("colors"));
+  let newVars = Object.fromEntries(
+    Object.entries(allColors).map(([key, val]) => [`--${key}`, val])
+  );
+
+  addBase({
+    ":root": newVars,
+  });
+}

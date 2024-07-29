@@ -12,9 +12,12 @@ const Header = async () => {
   const userName = session?.user?.name;
 
   return (
-    <header className="w-full bg-primary dark:bg-dark">
+    <header className="w-full border-b-0 border-dark dark:border-primary bg-primary dark:bg-dark">
       <div className="wrapper flex items-center justify-between">
-        <Link href="/" className="font-bold text-4xl dark:text-white">
+        <Link
+          href="/"
+          className="font-bold text-4xl dark:text-white kronaOne -tracking-[0.35rem]"
+        >
           vibey!
         </Link>
 
@@ -40,7 +43,7 @@ const Header = async () => {
                 <NavItems />
               </nav>
               <div className="flex gap-4">
-                <Button asChild className="button">
+                <Button asChild className="button uppercase">
                   <Link href="/auth/connexion">Connexion/Inscription</Link>
                 </Button>
                 <ThemeToggle />

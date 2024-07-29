@@ -10,6 +10,7 @@ export const publicRoutes = [
   "/profil/[id]",
   "/devenir-organisateur",
   "/auth/new-verification",
+  "/a-propos",
 ];
 
 /**

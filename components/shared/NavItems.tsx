@@ -18,7 +18,7 @@ const NavItems = () => {
 
   if (role === Role.organizer) {
     return (
-      <ul className="md-flex-between flex flex-col items-start gap-16 md:flex-row">
+      <ul className="md-flex-between flex flex-col items-start gap-16 md:flex-row rubik">
         {headerLinksOrganizer.map((link, index) => {
           const isActive = pathname === link.route;
           return (

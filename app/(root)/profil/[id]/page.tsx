@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 import { currentUser } from "@/lib/auth";
 import { getEventsByUser } from "@/lib/actions/event.actions";
@@ -15,7 +16,12 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
 import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
-import { FaUser } from "react-icons/fa";
+
+import { CiInstagram } from "react-icons/ci";
+import { FaXTwitter } from "react-icons/fa6";
+import { FaTiktok } from "react-icons/fa";
+import { FaCertificate } from "react-icons/fa";
+import { Boxes } from "@/components/ui/background-boxes";
 
 interface Props {
   params: {
@@ -71,29 +77,51 @@ export default async function ProfilPublic({
   if (userProfile?.role !== "organizer") {
     return (
       <>
-        <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
-          <div className="wrapper flex flex-col gap-8 items-center justify-center sm:justify-between">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src={userProfile?.photo || ""} />
-              <AvatarFallback className="bg-primary ">
-                <FaUser className="text-white" />
-              </AvatarFallback>
-            </Avatar>
+        <section className="">
+          <div className="">
+            <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
+              <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
+              <Boxes />
 
-            <h3 className="h3-bold text-center sm:text-left">
-              {userProfile?.name}
-            </h3>
+              <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
+                <div className="flex gap-4 items-center">
+                  <div className="w-20 h-20 sm:w-32 sm:h-32">
+                    {userProfile?.photo ? (
+                      <Image
+                        src={userProfile.photo}
+                        width={1000}
+                        height={1000}
+                        alt="photo d'accueil"
+                        className="object-cover w-full h-full rounded-full"
+                      />
+                    ) : (
+                      <Image
+                        src="/assets/images/accueilImg.jpg"
+                        alt="photo d'accueil"
+                        width={1000}
+                        height={1000}
+                        className="object-cover w-full h-full rounded-full"
+                      />
+                    )}
+                  </div>
 
-            <div className="flex gap-4">
-              <PersonnesFollowers userId={userProfile?.id} />
-              <PersonnesSuivies userId={userProfile?.id} />
+                  <h3 className="h3-bold text-center sm:text-left">
+                    {userProfile?.name}
+                  </h3>
+                </div>
+
+                <div className="flex gap-6">
+                  <PersonnesFollowers userId={userProfile?.id} />
+                  <PersonnesSuivies userId={userProfile?.id} />
+
+                  {currentUserId === id ? (
+                    <div></div>
+                  ) : (
+                    <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+                  )}
+                </div>
+              </div>
             </div>
-
-            {currentUserId === id ? (
-              <div></div>
-            ) : (
-              <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
-            )}
           </div>
         </section>
 
@@ -124,48 +152,70 @@ export default async function ProfilPublic({
 
   return (
     <>
-      <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10">
-        <div className="wrapper flex items-center justify-center sm:justify-between">
-          <div className="flex gap-4 items-center justify-center">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src={userProfile?.photo || ""} />
-              <AvatarFallback className="bg-primary ">
-                <FaUser className="text-white" />
-              </AvatarFallback>
-            </Avatar>
-            <h3 className="h3-bold text-center sm:text-left">
-              {userProfile?.organizationName}
-            </h3>
-          </div>
+      <section className="">
+        <div className="">
+          <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
+            <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
+            <Boxes />
 
-          <div className="flex gap-6 items-center">
-            <PersonnesFollowers userId={userProfile?.id} />
-            {currentUserId === id ? (
-              <Button asChild size="lg" className="button hidden sm:flex">
-                <Link href="/profil">Modifier mon profil</Link>
-              </Button>
-            ) : (
-              <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
-            )}
+            <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
+              <div className="flex gap-4 items-center justify-center">
+                <div className=" w-20 h-20 sm:w-32 sm:h-32">
+                  {userProfile?.photo ? (
+                    <Image
+                      src={userProfile.photo}
+                      width={1000}
+                      height={1000}
+                      alt="photo d'accueil"
+                      className="object-cover w-full h-full rounded-full"
+                    />
+                  ) : (
+                    <Image
+                      src="/assets/images/accueilImg.jpg"
+                      alt="photo d'accueil"
+                      width={1000}
+                      height={1000}
+                      className="object-cover w-full h-full rounded-full"
+                    />
+                  )}
+                </div>
+                <div className="flex">
+                  <h3 className="h3-bold rubik">
+                    {userProfile?.organizationName}
+                  </h3>
+                  <FaCertificate className="text-dark dark:text-primary" />
+                </div>
+              </div>
+
+              <div className="flex gap-6 items-center">
+                <PersonnesFollowers userId={userProfile?.id} />
+                {currentUserId === id ? (
+                  <Button asChild size="lg" className="button hidden sm:flex">
+                    <Link href="/profil">Modifier mon profil</Link>
+                  </Button>
+                ) : (
+                  <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+                )}
+              </div>
+            </div>
           </div>
         </div>
-
-        <div className="wrapper">
+        <div className="wrapper rubik mt-4 sm:mt-8 text-dark dark:text-white">
           <p>{userProfile?.description}</p>
           <div className="flex gap-8 mt-4">
             {userProfile && userProfile.instagram && (
               <Link href={userProfile.instagram} target="_blank">
-                Instagram
+                <CiInstagram size={30} className="text-dark dark:text-white" />
               </Link>
             )}
             {userProfile && userProfile.twitter && (
               <Link href={userProfile.twitter} target="_blank">
-                X
+                <FaXTwitter size={40} className="text-dark dark:text-white" />
               </Link>
             )}
             {userProfile && userProfile.tiktok && (
               <Link href={userProfile.tiktok} target="_blank">
-                TikTok
+                <FaTiktok size={40} className="text-dark dark:text-white" />
               </Link>
             )}
           </div>
@@ -173,10 +223,14 @@ export default async function ProfilPublic({
       </section>
 
       <section className="bg-cover bg-center py-5 md:py-5">
-        <div className="wrapper flex items-center justify-center sm:justify-between">
-          <h3 className="h3-bold text-center sm:text-left">
-            Les Events à venir
-          </h3>
+        <div className="wrapper flex justify-center items-center gap-8 py-5">
+          <p className="font-bold text-dark dark:text-white text-sm kronaOne">
+            Prochainement!
+          </p>
+          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
+          <p className="hidden sm:block font-bold text-sm text-dark dark:text-white kronaOne">
+            Prochainement!
+          </p>
         </div>
       </section>
 
@@ -194,10 +248,14 @@ export default async function ProfilPublic({
       </section>
 
       <section className="bg-cover bg-center py-5 md:py-5">
-        <div className="wrapper flex items-center justify-center sm:justify-between">
-          <h3 className="h3-bold text-center sm:text-left">
-            Les Events passés
-          </h3>
+        <div className="wrapper flex justify-center items-center gap-8 py-5">
+          <p className="font-bold text-dark dark:text-white text-sm kronaOne">
+            Passés!
+          </p>
+          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
+          <p className="hidden sm:block font-bold text-sm text-dark dark:text-white kronaOne">
+            Passés!
+          </p>
         </div>
       </section>
 

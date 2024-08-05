@@ -29,11 +29,22 @@ export default async function Events({
   });
 
   return (
-    <section id="events" className="wrapper my-8 flex flex-col gap-8 md:gap-12">
+    <section
+      id="events"
+      className="wrapper my-20 flex flex-col gap-8 md:gap-12"
+    >
       {/* <h2 className="h2-bold">
     Trust by <br /> Thousands of Events
   </h2> */}
-      <h2 className="h2-bold">Events</h2>
+      <div className="flex justify-center items-center gap-8 pt-5">
+        <p className="font-bold text-dark dark:text-white text-sm kronaOne">
+          Events!
+        </p>
+        <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
+        <p className="hidden sm:block font-bold text-sm text-dark dark:text-white kronaOne">
+          Events!
+        </p>
+      </div>
 
       <div className="flex w-full flex-col gap-5 md:flex-row">
         <Search />

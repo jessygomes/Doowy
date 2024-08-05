@@ -28,10 +28,11 @@ export const EventSuscription = async ({
   }
 
   return (
-    <section id="events" className="wrapper my-8 flex flex-col gap-8 md:gap-12">
-      <h2 className="h2-bold">
-        <span className="text-grey-400">A VENIR | </span> Mes abonnements
-      </h2>
+    <section
+      id="events"
+      className="wrapper my-8 flex flex-col gap-8 md:gap-12 z-20"
+    >
+      <h2 className="h3-bold sm:h3-bold rubik">Mes abonnements</h2>
 
       <Collection
         data={eventsAbonnements?.data}

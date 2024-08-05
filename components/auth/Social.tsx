@@ -13,7 +13,7 @@ export function Social() {
   return (
     <div className="flex items-center w-full gap-x-2">
       <button
-        className="w-full flex justify-center bg-grey-50 p-2 rounded-full hover:bg-slate-300 transition-all ease-in-out duration-200"
+        className="w-full flex justify-center bg-grey-50 p-2 rounded-sm hover:bg-slate-300 transition-all ease-in-out duration-200"
         onClick={() => onClick("google")}
       >
         <FcGoogle className="h-5 w-5" />

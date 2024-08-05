@@ -38,7 +38,7 @@ const NavItems = () => {
 
   if (role === Role.user) {
     return (
-      <ul className="md-flex-between flex flex-col items-start gap-16 md:flex-row">
+      <ul className="md:flex-between flex flex-col items-start gap-16 md:flex-row">
         {headerLinksUser.map((link, index) => {
           const isActive = pathname === link.route;
           return (

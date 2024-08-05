@@ -72,99 +72,110 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
       showSocial={!isOrganizer}
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex gap-2">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="firstName">Prénom</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        id="firstName"
-                        placeholder="John"
-                        {...field}
-                        disabled={isPending}
-                        className="input rounded-sm"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-6 w-full"
+        >
+          <div className="space-y-4">
+            <div className="flex gap-2 w-full">
+              <div className="flex-grow">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      {/* <FormLabel htmlFor="firstName">Prénom</FormLabel> */}
+                      <FormControl>
+                        <Input
+                          type="text"
+                          id="firstName"
+                          placeholder="Prénom"
+                          {...field}
+                          disabled={isPending}
+                          className="input-field w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
 
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel htmlFor="lastName">Nom</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="text"
-                        id="lastName"
-                        placeholder="Doe"
-                        {...field}
-                        disabled={isPending}
-                        className="input rounded-sm"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="flex-grow">
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      {/* <FormLabel htmlFor="lastName">Nom</FormLabel> */}
+                      <FormControl>
+                        <Input
+                          type="text"
+                          id="lastName"
+                          placeholder="Nom"
+                          {...field}
+                          disabled={isPending}
+                          className="input-field w-full"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             {isOrganizer && (
               <div className="flex gap-2">
-                <FormField
-                  control={form.control}
-                  name="organizationName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="organizationName">
+                <div className="flex-grow">
+                  <FormField
+                    control={form.control}
+                    name="organizationName"
+                    render={({ field }) => (
+                      <FormItem>
+                        {/* <FormLabel htmlFor="organizationName">
                         Nom de l&apos;organisation
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          id="organizationName"
-                          placeholder="Vibey!"
-                          {...field}
-                          disabled={isPending}
-                          className="input rounded-sm"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      </FormLabel> */}
+                        <FormControl>
+                          <Input
+                            type="text"
+                            id="organizationName"
+                            placeholder="Nom de l'organisation"
+                            {...field}
+                            disabled={isPending}
+                            className="input-field"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-                <FormField
-                  control={form.control}
-                  name="organizationType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel htmlFor="lastName">
+                <div className="flex-grow">
+                  <FormField
+                    control={form.control}
+                    name="organizationType"
+                    render={({ field }) => (
+                      <FormItem>
+                        {/* <FormLabel htmlFor="lastName">
                         Type de l&apos;organisation
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          type="text"
-                          id="organizationType"
-                          placeholder="Association, etc..."
-                          {...field}
-                          disabled={isPending}
-                          className="input rounded-sm"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                      </FormLabel> */}
+                        <FormControl>
+                          <Input
+                            type="text"
+                            id="organizationType"
+                            placeholder="Type d'organisation : association, entreprise..."
+                            {...field}
+                            disabled={isPending}
+                            className="input-field"
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
             )}
 
@@ -173,15 +184,15 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="email">Email</FormLabel>
+                  {/* <FormLabel htmlFor="email">Email</FormLabel> */}
                   <FormControl>
                     <Input
                       type="email"
                       id="email"
-                      placeholder="vibey@email.fr"
+                      placeholder="Email"
                       {...field}
                       disabled={isPending}
-                      className="input rounded-sm"
+                      className="input-field"
                     />
                   </FormControl>
                   <FormMessage />
@@ -194,15 +205,15 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="password">Mot de passe</FormLabel>
+                  {/* <FormLabel htmlFor="password">Mot de passe</FormLabel> */}
                   <FormControl>
                     <Input
                       type="password"
                       id="password"
-                      placeholder="********"
+                      placeholder="Mot de passe"
                       {...field}
                       disabled={isPending}
-                      className="input rounded-sm"
+                      className="input-field"
                     />
                   </FormControl>
                   <FormMessage />
@@ -215,17 +226,17 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
               name="passwordConfirmation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel htmlFor="passwordConfirmation">
+                  {/* <FormLabel htmlFor="passwordConfirmation">
                     Confirmation du mot de passe
-                  </FormLabel>
+                  </FormLabel> */}
                   <FormControl>
                     <Input
                       type="password"
                       id="passwordConfirmation"
-                      placeholder="********"
+                      placeholder="Confirmation du mot de passe"
                       {...field}
                       disabled={isPending}
-                      className="input rounded-sm"
+                      className="input-field"
                     />
                   </FormControl>
                   <FormMessage />

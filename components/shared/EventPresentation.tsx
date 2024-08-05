@@ -13,6 +13,7 @@ import { formatDateTime } from "@/lib/utils";
 import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
+import { Boxes } from "@/components/ui/background-boxes";
 
 export const EventPresentation = async ({
   params: { id },
@@ -61,122 +62,131 @@ export const EventPresentation = async ({
 
   return (
     <>
-      <section className="flex justify-center bg-primary-50 bg-dotted-pattern bg-contain">
-        <div className="grid grid-cols-1 md:grid-cols-2 2xl:max-w-7xl">
-          <Image
-            src={event.imageUrl ? event.imageUrl : ""} // Configurer le fichier next.config.js pour les images venant du serveur UploadThing
-            alt={event.title ? event.title : "Event Image"}
-            width={1000}
-            height={1000}
-            className="h-full min-g-[300px] object-cover object-center"
-          />
+      <div className="relative w-screen overflow-hidden flex flex-col rounded-sm">
+        <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
+        <Boxes />
 
-          <div className="flex w-full flex-col gap-8 p-5 md:p-10">
-            <div className="flex flex-col gap-6">
-              <h2 className="h2-bold">{event.title}</h2>
+        <section className="flex justify-center z-20 my-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 2xl:max-w-7xl rounded-sm sm:py-10">
+            <Image
+              src={event.imageUrl ? event.imageUrl : ""} // Configurer le fichier next.config.js pour les images venant du serveur UploadThing
+              alt={event.title ? event.title : "Event Image"}
+              width={1000}
+              height={1000}
+              className="h-full min-g-[300px] object-cover object-center rounded-sm p-5 sm:p-0 "
+            />
 
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <div className="flex gap-3">
-                  <p className="p-bold-20 rounded-full bg-green-200 px-5 py-2 text-green-700">
-                    {event.isFree ? "Gratuit" : `${event.price} €`}
-                  </p>
-                  <p className="p-medium-16 rounded-full bg-grey-500/10 px-4 py-2.5 text-grey-500">
-                    {event.Category?.name}
-                  </p>
+            <div className="flex w-full flex-col gap-8 p-5 md:p-10 bg-transparent backdrop-blur-[2px] shadow-2xl rounded-sm">
+              <div className="flex flex-col gap-6">
+                <div className="flex justify-between">
+                  <h2 className="h2-bold">{event.title}</h2>
+                  <BtnAddFavorite isFavorite={isFavorite} event={event} />
                 </div>
 
-                <p className="p-medium-18 ml-2 mt-2 sm:mt-0">
-                  by{" "}
-                  <Link
-                    href={`/profil/${event?.Organizer.organizationName}`}
-                    className="text-primary-500"
-                  >
-                    {event?.Organizer.organizationName}
-                  </Link>
-                </p>
-              </div>
-            </div>
-            {/* Checkout Button */}
-            <div className="flex flex-col gap-5">
-              <div className="flex items-center gap-2 md:gap-3">
-                <Image
-                  src="/assets/icons/calendar.svg"
-                  alt="Calendar Icon"
-                  width={32}
-                  height={32}
-                />
-                {isPastEvent && event ? (
-                  <p className="p-medium-16 lg:p-medium-20 text-red-400 flex flex-wrap items-center">
-                    Cette événement s&apos;est terminé le{" "}
-                    {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
+                <div className="flex sm:justify-between items-center gap-3 sm:flex-row sm:items-center">
+                  <div className="flex gap-3">
+                    <p className="p-bold-20 rounded-sm bg-primary-500 text-white dark:bg-dark-500 dark:text-white px-5 py-2 ">
+                      {event.isFree ? "Gratuit" : `${event.price} €`}
+                    </p>
+                    <p className="p-medium-16 rounded-sm bg-grey-500/10 px-4 py-2.5 text-grey-500">
+                      {event.Category?.name}
+                    </p>
+                  </div>
+
+                  <p className="p-medium-14 ml-2 mt-2 sm:mt-0">
+                    par{" "}
+                    <Link
+                      href={`/profil/${event?.Organizer.organizationName}`}
+                      className="text-primary-500 hover:text-grey-600"
+                    >
+                      {event?.Organizer.organizationName}
+                    </Link>
                   </p>
-                ) : isEnCours ? (
-                  <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
-                    <p className="p-medium-14 text-primary">En cours</p>
-                    <p>
-                      {formatDateTime(event.endDateTime).dateOnly} -{" "}
-                      {formatDateTime(event.endDateTime).timeOnly}
+                </div>
+              </div>
+              {/* Checkout Button */}
+              <div className="flex flex-col gap-5">
+                <div className="flex items-center gap-2 md:gap-3">
+                  <Image
+                    src="/assets/icons/calendar.svg"
+                    alt="Calendar Icon"
+                    width={32}
+                    height={32}
+                  />
+                  {isPastEvent && event ? (
+                    <p className="p-medium-16 lg:p-medium-16 text-red-400 flex flex-wrap items-center">
+                      Cette événement s&apos;est terminé le{" "}
+                      {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
                     </p>
-                  </div>
-                ) : (
-                  <div className="p-medium-16 lg:p-regular-20 flex flex-wrap items-center gap-1">
-                    <p>
-                      {formatDateTime(event.startDateTime).dateOnly ?? ""} -{" "}
-                      {formatDateTime(event.startDateTime).timeOnly} |{" "}
-                    </p>
-                    <p>
-                      {formatDateTime(event.endDateTime).dateOnly} -{" "}
-                      {formatDateTime(event.endDateTime).timeOnly}
-                    </p>
-                  </div>
-                )}
+                  ) : isEnCours ? (
+                    <div className="p-medium-16 lg:p-regular-16 flex flex-wrap items-center gap-1">
+                      <p className="p-medium-14 text-primary">En cours</p>
+                      <p>
+                        {formatDateTime(event.endDateTime).dateOnly} -{" "}
+                        {formatDateTime(event.endDateTime).timeOnly}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="p-medium-16 lg:p-regular-18 flex flex-wrap items-center gap-1">
+                      <p>
+                        {formatDateTime(event.startDateTime).dateOnly ?? ""} -{" "}
+                        {formatDateTime(event.startDateTime).timeOnly} |{" "}
+                      </p>
+                      <p>
+                        {formatDateTime(event.endDateTime).dateOnly} -{" "}
+                        {formatDateTime(event.endDateTime).timeOnly}
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-regular-20 flex items-center gap-3">
+                  <Image
+                    src="/assets/icons/location.svg"
+                    alt="Location"
+                    width={32}
+                    height={32}
+                  />
+                  <p className="p-medium-16 lg:p-regular-18">
+                    {event?.location}
+                  </p>
+                </div>
               </div>
 
-              <div className="p-regular-20 flex items-center gap-3">
-                <Image
-                  src="/assets/icons/location.svg"
-                  alt="Location"
-                  width={32}
-                  height={32}
-                />
-                <p className="p-medium-16 lg:p-regular-20">{event?.location}</p>
+              <div className="flex flex-col gap-2">
+                <p className="p-bold-20 text-grey-600">
+                  Ce qu&apos;il faut savoir :{" "}
+                </p>
+                <p className="p-medium-16 lg:p-regular-18">
+                  {event?.description}
+                </p>
+
+                {/* <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
+            {event.url}
+            </p> */}
               </div>
               <div className="flex justify-center items-center gap-8">
                 <Link href={event?.url ? event.url : ""} className="w-full">
-                  <Button className="rounded-full w-full">
+                  <Button className="button rounded-sm w-full">
                     Prendre mon billet
                   </Button>
                 </Link>
-                <BtnAddFavorite isFavorite={isFavorite} event={event} />
               </div>
             </div>
-
-            <div className="flex flex-col gap-2">
-              <p className="p-bold-20 text-grey-600">
-                Ce qu&apos;il faut savoir :{" "}
-              </p>
-              <p className="p-medium-16 lg:p-regular-18">
-                {event?.description}
-              </p>
-
-              {/* <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
-            {event.url}
-          </p> */}
-            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
 
       {/* EVENT FROM THE SAME ORGANIZER */}
       <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
-        <h2 className="h2-bold">D&apos;autres événements</h2>
+        <h2 className="h3-bold rubik">D&apos;autres événements</h2>
 
         <Collection
           data={relaledEvents?.data || []}
           emptyTitle="Aucun Event Trouvé"
           emptyStateSubtext="Revenir plus tard"
           collectionType="All_Events"
-          limit={6}
+          limit={3}
           page={page}
           totalPages={relaledEvents?.totalPages}
         />

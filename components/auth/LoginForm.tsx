@@ -118,7 +118,7 @@ export const LoginForm = () => {
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="email">Email</FormLabel>
+                      {/* <FormLabel htmlFor="email">Email</FormLabel> */}
                       <FormControl>
                         <Input
                           type="email"
@@ -126,7 +126,7 @@ export const LoginForm = () => {
                           placeholder="vibey@email.fr"
                           {...field}
                           disabled={isPending}
-                          className="input rounded-sm"
+                          className="input rounded-sm text-dark"
                         />
                       </FormControl>
                       <FormMessage />
@@ -139,15 +139,15 @@ export const LoginForm = () => {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel htmlFor="email">Mot de passe</FormLabel>
+                      {/* <FormLabel htmlFor="email">Mot de passe</FormLabel> */}
                       <FormControl>
                         <Input
                           type="password"
                           id="password"
-                          placeholder="********"
+                          placeholder="Mot de passe"
                           {...field}
                           disabled={isPending}
-                          className="input rounded-sm"
+                          className="input rounded-sm text-dark"
                         />
                       </FormControl>
                       <button className="">

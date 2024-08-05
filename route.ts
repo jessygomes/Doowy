@@ -8,7 +8,7 @@ export const publicRoutes = [
   "/events",
   "/events/[id]",
   "/profil/[id]",
-  "/devenir-organisateur",
+  "/organisateur",
   "/auth/new-verification",
   "/a-propos",
 ];

@@ -41,6 +41,10 @@ export const headerLinkNoUser = [
     label: "A Propos",
     route: "/a-propos",
   },
+  {
+    label: "Organisateur ?",
+    route: "#organisateur",
+  },
 ];
 
 export const eventDefaultValues = {

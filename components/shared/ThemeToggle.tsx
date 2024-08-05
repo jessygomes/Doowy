@@ -26,11 +26,11 @@ export const ThemeToggle = () => {
 
   return (
     <div
-      className="relative flex items-center bg-gradient-to-r from-purple-600 to-orange-600 cursor-pointer rounded-full"
+      className="relative flex items-center cursor-pointer rounded-full"
       onClick={() => setDarkMode(!darkMode)}
     >
       <div
-        className="absolute bg-gradient-to-r from-purple-600 to-orange-600 w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center"
+        className="bg-gradient-to-r from-purple-600 to-orange-600 w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 flex items-center justify-center"
         // style={darkMode ? { left: "2px" } : { right: "2px" }}
       >
         {darkMode ? (

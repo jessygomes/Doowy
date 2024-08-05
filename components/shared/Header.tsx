@@ -12,11 +12,11 @@ const Header = async () => {
   const userName = session?.user?.name;
 
   return (
-    <header className="w-full border-b-0 border-dark dark:border-primary bg-primary dark:bg-dark">
+    <header className="bg-transparent bg-slate-400">
       <div className="wrapper flex items-center justify-between">
         <Link
           href="/"
-          className="font-bold text-4xl dark:text-white kronaOne -tracking-[0.35rem]"
+          className="text-4xl text-dark dark:text-white kronaOne -tracking-[0.40rem] font-semibold"
         >
           vibey!
         </Link>
@@ -25,26 +25,26 @@ const Header = async () => {
           <NavMobile />
 
           {session ? (
-            <div className="flex gap-16">
+            <div className="flex gap-16 w-fit">
               <nav className="md:flex-between hidden w-full max-w-xs dark:text-white">
                 <NavItems />
               </nav>
               <div className="flex justify-center items-center gap-4">
-                <p className="h4-bold font-bold text-center dark:text-white">
+                {/* <p className="h4-bold font-semibold rubik text-center dark:text-white">
                   {userName?.split(" ")[0]}
-                </p>
+                </p> */}
                 <UserBtn />
                 <ThemeToggle />
               </div>
             </div>
           ) : (
             <div className="flex gap-16">
-              <nav className="md:flex-between hidden w-full max-w-xs dark:text-white">
+              <nav className="md:flex-between hidden w-full max-w-fit dark:text-white">
                 <NavItems />
               </nav>
-              <div className="flex gap-4">
+              <div className="flex gap-2">
                 <Button asChild className="button uppercase">
-                  <Link href="/auth/connexion">Connexion/Inscription</Link>
+                  <Link href="/auth/connexion">Connexion</Link>
                 </Button>
                 <ThemeToggle />
               </div>

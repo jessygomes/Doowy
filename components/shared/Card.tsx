@@ -97,19 +97,30 @@ const Card = async ({
               </p>
             ) : isEnCours ? (
               <>
-                <p className="p-medium-14 text-primary">En cours</p>
-                <p className="p-medium-14 p-medium-18 text-grey-500">
+                <p className="p-medium-12 text-primary">En cours</p>
+                <p className="p-medium-12 p-medium-18 text-grey-500">
                   {event.location}
                 </p>
               </>
             ) : (
-              <div className="w-full flex justify-between">
+              <div className="w-full flex justify-between gap-2">
+                <Image
+                  src="/assets/icons/calendar.svg"
+                  width={15}
+                  height={15}
+                  alt="calendrier icon"
+                />
                 <p className="p-medium-14 p-medium-18 text-grey-500">
                   {formatDateTime(event.startDateTime).dateTime}
                 </p>
-
+                <Image
+                  src="/assets/icons/location-grey.svg"
+                  width={15}
+                  height={15}
+                  alt="location icon"
+                />
                 <p className="p-medium-14 p-medium-18 text-grey-500">
-                  {event.location}
+                  {event.departement}
                 </p>
               </div>
             )}
@@ -119,7 +130,7 @@ const Card = async ({
           <div className="flex-between w-full">
             <Link
               href={`/profil/${event.Organizer?.id}`}
-              className="p-medium-12 md:p-medium-12 text-grey-600"
+              className="p-medium-12 md:p-medium-12 hover:text-grey-500 dark:hover:text-grey-500"
             >
               {event.Organizer?.organizationName}
             </Link>

@@ -36,7 +36,7 @@ export function FileUploader({
   return (
     <div
       {...getRootProps()}
-      className="flex-center bg-dark-3 flex h-72 cursor-pointer flex-col overflow-hidden rounded-xl bg-grey-50"
+      className="flex-center bg-dark-3 flex h-72 cursor-pointer flex-col overflow-hidden rounded-sm bg-grey-50"
     >
       <input {...getInputProps()} className="cursor-pointer" />
 
@@ -58,9 +58,9 @@ export function FileUploader({
             height={77}
             alt="file upload"
           />
-          <h3 className="mb-2 mt-2">Glisser ici</h3>
-          <p className="p-medium-12 mb-4">SVG, PNG, JPG</p>
-          <Button type="button" className="rounded-full">
+          <h3 className="mb-2 mt-2 rubik">Glisser ici</h3>
+          <p className="mb-4 rubik text-dark">SVG, PNG, JPG</p>
+          <Button type="button" className="rounded-sm rubik">
             Sélectionner depuis l&apos;ordinateur
           </Button>
         </div>

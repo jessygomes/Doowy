@@ -44,59 +44,60 @@ export default async function Home({
 
   return (
     <>
-      <div className="h-[40rem] relative w-full overflow-hidden flex flex-col items-center justify-center rounded-sm">
-        <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
-        <Boxes />
-
+      <div className="flex justify-center items-center">
         {userId === undefined && (
-          <section className="wrapper bg-dotted-pattern bg-contain z-20">
-            <div className="flex flex-col sm:justify-center sm:pt-5 lg:pt-2 z-20">
-              <div className="flex flex-col justify-center items-center gap-4">
-                {/* <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
-                  <Image
-                    src="/assets/images/accueilImg.jpg"
-                    alt="photo d'accueil"
-                    width={2000}
-                    height={2000}
-                    className="object-cover w-full h-full rounded-sm"
-                  />
-                </div> */}
+          <div className="h-screen relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
+            <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
+            <Boxes />
 
-                <h1 className="h1-bold text-dark dark:text-white sm:text-center kronaOne">
-                  Connectez-vous <br />
-                  <span className=" bg-linear-text">
-                    aux événements de votre ville!
-                  </span>
-                </h1>
-                <Button size="lg" asChild className="button w-full sm:w-fit">
-                  <Link href="#events" className="font-bold tracking-widest">
-                    EXPLORER
-                  </Link>
-                </Button>
-                {/* <div className="text-center"></div> */}
+            <section className="sm:wrapper z-20">
+              <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2 z-20">
+                <div className=" flex flex-col justify-start items-start gap-4">
+                  <h1 className="h1-bold text-dark dark:text-white sm:text-left rubik uppercase">
+                    Connectez-vous <br />
+                    <span className="bg-linear-text">
+                      aux événements de votre ville!
+                    </span>
+                  </h1>
+                  {/* <div className="w-full h-[5rem] sm:w-full sm:h-[10rem] lg:h-[5rem] z-20 rounded-sm">
+                    <Image
+                      src="/assets/images/accueilImg.jpg"
+                      alt="photo d'accueil"
+                      width={2000}
+                      height={2000}
+                      className="object-cover w-full h-full rounded-sm"
+                    />
+                  </div> */}
+                  <Button
+                    size="sm"
+                    asChild
+                    className="button w-full sm:w-52 lg:w-full"
+                  >
+                    <Link href="#events" className="font-bold tracking-widest">
+                      EXPLORER
+                    </Link>
+                  </Button>
+                </div>
               </div>
-            </div>
-
-            {/* <div className="wrapper">
-          <p className="text-dark dark:text-white p-regular-20 md:p-regular-20">
-          Créer et poste ton événement, rejoins notre communauté pour être au
-          courant du moindre event de ta ville.
-          </p>
-          </div> */}
-          </section>
+            </section>
+          </div>
         )}
       </div>
+
       {userId && (
-        <EventSuscription
-          searchParams={{
-            page,
-            params: {
-              id: "",
-            },
-            searchParams: {},
-          }}
-        />
+        <section className="mt-28">
+          <EventSuscription
+            searchParams={{
+              page,
+              params: {
+                id: "",
+              },
+              searchParams: {},
+            }}
+          />
+        </section>
       )}
+
       <section
         id="events"
         className="wrapper my-10 lg:my-20 flex flex-col gap-8 md:gap-12"
@@ -105,11 +106,9 @@ export default async function Home({
           Trust by <br /> Thousands of Events
         </h2> */}
         <div className="flex justify-center items-center gap-8 py-5 kronaOne">
-          <p className="font-bold text-dark dark:text-primary text-xl ">
-            trend!
-          </p>
-          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
-          <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
+          <p className="font-bold text-dark dark:text-white text-sm ">trend!</p>
+          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
+          <p className="hidden sm:block font-bold text-sm text-dark dark:text-white">
             trend!
           </p>
         </div>
@@ -145,27 +144,72 @@ export default async function Home({
         </div>
       </section>
       {userId === undefined && (
-        <section className="my-10 sm:my-20 flex flex-col">
-          <div className="wrapper flex justify-center items-center gap-8 lg:mb-2 kronaOne">
-            <p className="font-bold text-dark dark:text-primary text-xl">
+        <section id="organisateur" className="my-10 sm:my-20 flex flex-col">
+          <div className="sm:hidden wrapper flex justify-center items-center gap-8 lg:mb-2 kronaOne">
+            <p className="font-bold text-dark dark:text-white text-sm">
               Organisateur!
             </p>
-            <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-primary"></div>
-            <p className="hidden sm:block font-bold text-xl text-dark dark:text-primary">
+            <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
+            <p className="hidden sm:block font-bold text-sm text-dark dark:text-white">
               Organisateur!
             </p>
           </div>
 
-          <div className="wrapper flex flex-col justify-center items-center gap-4">
-            <div className="w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-2/3 lg:h-[20rem]">
+          <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
+            <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
+            <Boxes />
+
+            <section className="sm:wrapper z-20">
+              <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2 z-20">
+                <div className="flex flex-col justify-start items-start gap-4">
+                  <div className="w-full h-[10rem] sm:h-[10rem] lg:h-[15rem] z-20 rounded-sm">
+                    <Image
+                      src="/assets/images/organisateur.jpg"
+                      alt="photo d'accueil"
+                      width={1000}
+                      height={1000}
+                      className="object-cover w-full h-full rounded-sm filter grayscale"
+                    />
+                  </div>
+                  <h1 className="h1-bold text-dark dark:text-white sm:text-left rubik uppercase">
+                    Créez vos évenements et <br />
+                    <span className="bg-linear-text">
+                      Partagez-les avec la communauté!
+                    </span>
+                  </h1>
+                  <p className="p-regular-16 md:p-regular-18 rbik">
+                    Vous êtes une association, un particulier ou un
+                    professionnel et vous souhaitez organiser des événements
+                    dans votre région ?
+                  </p>
+                  <Button
+                    size="sm"
+                    asChild
+                    className="button w-full sm:w-52 lg:w-full"
+                  >
+                    <Link
+                      href="/auth/inscription/org"
+                      className="font-bold tracking-widest"
+                    >
+                      S&apos;inscrire en tant qu&apos;organisateur
+                    </Link>
+                  </Button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          {/* <div className="wrapper flex justify-center items-center gap-4">
+            <div className=" w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-1/2 lg:h-[10rem]">
               <Image
                 src="/assets/images/organisateur.jpg"
                 alt="photo d'accueil"
                 width={1000}
                 height={1000}
-                className="object-cover w-full h-full rounded-sm"
+                className="object-cover w-full h-full rounded-sm filter grayscale"
               />
             </div>
+
             <h1 className="h2-bold text-dark dark:text-white sm:text-center lg:text-left lg:w-2/3 kronaOne">
               Créez vos événements et
               <br />
@@ -173,24 +217,26 @@ export default async function Home({
                 Partagez-les avec notre communauté!
               </span>
             </h1>
-            <div className="flex flex-col items-center gap-4 lg:w-2/3">
-              <p className="text-dark dark:text-white p-regular-10 md:p-regular-16 rubik">
-                Inscris-toi en tant qu&apos;organisateur pour créer tes propres
-                événements et faire bouger ta ville comme tu l&apos;entends !
-              </p>
-            </div>
-          </div>
-          <div className="wrapper flex-center">
+          </div> */}
+
+          {/* <div className="wrapper">
+            <p className="text-dark dark:text-white p-regular-10 md:p-regular-16 rubik">
+              Inscris-toi en tant qu&apos;organisateur pour créer tes propres
+              événements et faire bouger ta ville comme tu l&apos;entends !
+            </p>
+          </div> */}
+
+          {/* <div className="wrapper flex-center">
             <Button
               size="lg"
               asChild
               className="button w-full sm:w-fit uppercase"
             >
-              <Link href="/auth/inscription/org">
+              <Link href="/organisateur">
                 S&apos;inscrire en tant qu&apos;organisateur
               </Link>
             </Button>
-          </div>
+          </div> */}
         </section>
       )}
     </>

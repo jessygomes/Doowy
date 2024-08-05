@@ -45,28 +45,28 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
     <div>
       <button
         onClick={toggleModal}
-        className="p-medium-14 flex flex-col-reverse items-center justify-center hover:text-primary transition-all ease-in-out"
+        className="p-medium-14 flex flex-col-reverse items-center justify-center hover:text-grey-600 dark:hover:text-primary transition-all ease-in-out"
       >
         Abonné(e)s <span>{followers.length}</span>
       </button>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm flex justify-center items-center z-10">
-          <div className="flex flex-col gap-4 bg-white p-4 rounded-xl border-4 border-primary-500 w-[80%] lg:w-[30%]">
-            <div className="flex flex-row-reverse justify-between items-center border-b-2">
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm flex justify-center items-center z-10 ">
+          <div className="flex flex-col gap-4 bg-primary dark:bg-dark p-8 rounded-sm w-[80%] lg:w-[30%] shadow-2xl">
+            <div className="flex flex-row-reverse justify-between items-center border-b-2 border-dark dark:border-white">
               <span
-                className="close cursor-pointer text-center text-2xl hover:text-red-500"
+                className="close cursor-pointer text-center text-2xl dark:text-white hover:text-red-500"
                 onClick={toggleModal}
               >
                 &times;
               </span>
-              <h2 className="h2-bold text-center">ABONNES</h2>
+              <h2 className="h3-bold text-center rubik">ABONNES</h2>
             </div>
             <ul className="flex flex-col gap-4">
               {followers.map((user: any) => (
                 <li
                   key={user.id}
-                  className="p-medium-14 hover:text-primary transition-all ease-in-out"
+                  className="p-medium-14 hover:text-grey-600 transition-all ease-in-out"
                 >
                   <Link href={`/profil/${user.id}`}>
                     <div className="flex gap-4 items-center">
@@ -81,12 +81,11 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
                       ) : (
                         <Avatar>
                           <AvatarImage src={user?.image || ""} />
-                          <AvatarFallback className="bg-primary">
+                          <AvatarFallback className="bg-linear-hover">
                             <FaUser className="text-white" />
                           </AvatarFallback>
                         </Avatar>
                       )}
-
                       {user.organizationName ?? user.name}
                     </div>
                   </Link>

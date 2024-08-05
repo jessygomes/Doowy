@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FaUser, FaSignOutAlt, FaRegSun } from "react-icons/fa";
-import { ThemeToggle } from "../shared/ThemeToggle";
 
 export const UserBtn = () => {
   const user = useCurrentUser();
@@ -28,9 +27,12 @@ export const UserBtn = () => {
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40 dark:bg-primary-500" align="end">
+      <DropdownMenuContent
+        className="w-40 bg-primary font-semibold dark:bg-dark rounded-sm"
+        align="end"
+      >
         <Link href="/profil">
-          <DropdownMenuItem className="cursor-pointer dark:hover:bg-red-900">
+          <DropdownMenuItem className="cursor-pointer hover:bg-linear-hover">
             <FaUser className="h-4 w-4 mr-2" />
             {user?.role === "organizer" ? "Mon profil" : "Mon compte"}
           </DropdownMenuItem>
@@ -52,14 +54,14 @@ export const UserBtn = () => {
 
         <DropdownMenuSeparator className="bg-white" />
         <Link href={`/profil/${user?.id}/parametres`}>
-          <DropdownMenuItem className="cursor-pointer dark:hover:bg-red-900">
+          <DropdownMenuItem className="cursor-pointer hover:bg-linear-hover">
             <FaRegSun className="h-4 w-4 mr-2" />
             Paramètres
           </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator className="bg-white" />
         <LogoutBtn>
-          <DropdownMenuItem className="cursor-pointer dark:hover:bg-red-900">
+          <DropdownMenuItem className="cursor-pointer hover:bg-linear-hover">
             <FaSignOutAlt className="h-4 w-4 mr-2" />
             Se déconnecter
           </DropdownMenuItem>

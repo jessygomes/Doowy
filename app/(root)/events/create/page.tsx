@@ -11,8 +11,8 @@ export default async function CreateEvent() {
   return (
     <>
       <RoleGate allowedRole={Role.organizer}>
-        <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10 ">
-          <h3 className="wrapper h3-bold text-center sm:text-left">
+        <section className="bg-primary dark:bg-dark bg-dotted-pattern bg-cover bg-center py-5 md:py-10 ">
+          <h3 className="wrapper h3-bold text-center sm:text-left sm:mt-20 rubik">
             Créer un événement
           </h3>
         </section>

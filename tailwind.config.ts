@@ -41,8 +41,8 @@ module.exports = withUt({
           DEFAULT: "#121212",
           foreground: "hsl(var(--dark-foreground))",
         },
-        coral: {
-          500: "#15BF59",
+        second: {
+          DEFAULT: "#ff4000d5",
         },
 
         grey: {

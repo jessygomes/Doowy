@@ -57,7 +57,10 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
   return (
     <Select onValueChange={onChangeHandler} defaultValue={value}>
       <SelectTrigger className="select-field">
-        <SelectValue placeholder="Catégorie" />
+        <SelectValue
+          placeholder="Catégorie"
+          className="placeholder:text-dark dark:placeholder:text-dark text-dark dark:text-dark"
+        />
       </SelectTrigger>
       <SelectContent>
         {categories.length > 0 &&
@@ -73,7 +76,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
 
         {/* Créer la catégorie */}
         <AlertDialog>
-          <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 text-primary-500 hover:bg-primary-50 focus:text-primary-500">
+          <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 hover:bg-primary-50 focus:text-primary-500">
             Ajouter une catégorie
           </AlertDialogTrigger>
 

@@ -28,11 +28,11 @@ export const CardWrapper = ({
   showSocial,
 }: CardWrapperProps) => {
   return (
-    <Card className="w-[90%] lg:w-[400px] shadow-xl bg-dark border-none rounded-sm bg-auth">
+    <Card className="w-[90%] lg:w-[800px] shadow-xl bg-dark border-none rounded-sm bg-auth">
       <CardHeader className="text-white">
         <HeaderAuth label={headerLabel} />
       </CardHeader>
-      <CardContent className="text-white">{children}</CardContent>
+      <CardContent className="text-white rubik">{children}</CardContent>
       {showSocial && (
         <CardFooter>
           <Social />

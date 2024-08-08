@@ -16,7 +16,7 @@ export default async function RootLayout({
         <div className="absolute w-screen z-30">
           <Header />
         </div>
-        <main className="flex-1 bg-primary dark:bg-dark">{children}</main>
+        <main className="flex-1 bg-primary-50 dark:bg-dark">{children}</main>
         <Footer />
       </div>
     </SessionProvider>

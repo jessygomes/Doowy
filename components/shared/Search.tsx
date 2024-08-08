@@ -35,7 +35,7 @@ export const Search = () => {
   }, [query, searchParams, router]);
 
   return (
-    <div className="flex-center min-h-[30px] w-full overflow-hidden rounded-sm bg-grey-50 px-4 ">
+    <div className="flex-center min-h-[30px] w-full overflow-hidden rounded-sm bg-transparent px-4 ">
       <Image
         src="/assets/icons/search.svg"
         alt="Search"
@@ -46,7 +46,7 @@ export const Search = () => {
         type="text"
         placeholder="Rechercher"
         onChange={(e) => setQuery(e.target.value)}
-        className="p-regular-16 border-0 bg-grey-50 outline-offset-0 placeholder:text-grey-500 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="rubik p-regular-16 border-0 bg-transparent outline-offset-0 placeholder:text-grey-500  focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       />
     </div>
   );

@@ -43,8 +43,11 @@ const Header = async () => {
                 <NavItems />
               </nav>
               <div className="flex gap-2">
-                <Button asChild className="button uppercase">
-                  <Link href="/auth/connexion">Connexion</Link>
+                <Button
+                  asChild
+                  className="text-dark dark:text-white border border-dark dark:border-white bg-transparent uppercase text-[12px] hover:bg-primary dark:hover:bg-dark dark:hover:text-white"
+                >
+                  <Link href="/auth/connexion">connexion</Link>
                 </Button>
                 <ThemeToggle />
               </div>

@@ -14,6 +14,7 @@ import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 
 import { Boxes } from "@/components/ui/background-boxes";
+import Ripple from "@/components/magicui/ripple";
 
 export default async function Home({
   searchParams,
@@ -40,38 +41,26 @@ export default async function Home({
   const user = await currentUser();
   const userId = user?.id;
 
-  console.log("user", userId);
-
   return (
     <>
-      <div className="flex justify-center items-center">
+      <div className="flex justify-center items-center ">
         {userId === undefined && (
-          <div className="h-screen relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
-            <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
-            <Boxes />
+          <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
+            <Ripple />
 
             <section className="sm:wrapper z-20">
-              <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2 z-20">
-                <div className=" flex flex-col justify-start items-start gap-4">
-                  <h1 className="h1-bold text-dark dark:text-white sm:text-left rubik uppercase">
+              <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2">
+                <div className=" flex flex-col justify-end items-end lg:justify-center lg:items-center gap-4">
+                  <h1 className="h1-bold text-dark dark:text-white sm:text-center rubik uppercase">
                     Connectez-vous <br />
                     <span className="bg-linear-text">
                       aux événements de votre ville!
                     </span>
                   </h1>
-                  {/* <div className="w-full h-[5rem] sm:w-full sm:h-[10rem] lg:h-[5rem] z-20 rounded-sm">
-                    <Image
-                      src="/assets/images/accueilImg.jpg"
-                      alt="photo d'accueil"
-                      width={2000}
-                      height={2000}
-                      className="object-cover w-full h-full rounded-sm"
-                    />
-                  </div> */}
                   <Button
                     size="sm"
                     asChild
-                    className="button w-full sm:w-52 lg:w-full"
+                    className="button w-full sm:w-52 lg:w-fit"
                   >
                     <Link href="#events" className="font-bold tracking-widest">
                       EXPLORER
@@ -98,71 +87,66 @@ export default async function Home({
         </section>
       )}
 
-      <section
-        id="events"
-        className="wrapper my-10 lg:my-20 flex flex-col gap-8 md:gap-12"
-      >
-        {/* <h2 className="h2-bold">
-          Trust by <br /> Thousands of Events
-        </h2> */}
-        <div className="flex justify-center items-center gap-8 py-5 kronaOne">
-          <p className="font-bold text-dark dark:text-white text-sm ">trend!</p>
-          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
-          <p className="hidden sm:block font-bold text-sm text-dark dark:text-white">
-            trend!
-          </p>
-        </div>
-        {/* <h2 className="h2-bold">
-          Découvrez les événements proche de chez vous !
-        </h2> */}
-
-        <div className="flex w-full flex-col gap-5 md:flex-row">
-          <Search />
-          <CategoryFilter />
-          <DepartementFilter
-            departements={departements.departements}
-            userDepartement={user?.departement}
-          />
-        </div>
-
-        <Collection
-          data={events?.data}
-          emptyTitle="Aucun Event Trouvé"
-          emptyStateSubtext="Revenir plus tard"
-          collectionType="All_Events"
-          limit={6}
-          page={page}
-          totalPages={events?.totalPages}
-        />
-
-        <div className="flex justify-center">
-          <Button asChild className="button w-full sm:w-fit uppercase">
-            <Link href="/events" className="">
-              Voir tous les événements
-            </Link>
-          </Button>
-        </div>
-      </section>
-      {userId === undefined && (
-        <section id="organisateur" className="my-10 sm:my-20 flex flex-col">
-          <div className="sm:hidden wrapper flex justify-center items-center gap-8 lg:mb-2 kronaOne">
-            <p className="font-bold text-dark dark:text-white text-sm">
-              Organisateur!
-            </p>
-            <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
-            <p className="hidden sm:block font-bold text-sm text-dark dark:text-white">
-              Organisateur!
+      {/* SECTION TREND */}
+      <div className="bg-gradient-to-t from-primary-50 via-primary-50 to-primary-50  dark:from-[#9000ff73]  dark:to-[#ff4000c0] shadowCj">
+        <section
+          id="events"
+          className="wrapper py-10 lg:py-20 flex flex-col gap-8 md:gap-12"
+        >
+          <div className="flex justify-start items-center gap-8 pt-5 kronaOne">
+            <p className="h3-bold text-dark dark:text-white text-xl uppercase">
+              TREND! - évenements populaires
             </p>
           </div>
 
-          <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
-            <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
-            <Boxes />
+          <div className="flex w-full flex-col gap-5 md:flex-row">
+            <Search />
+            <CategoryFilter />
+            <DepartementFilter
+              departements={departements.departements}
+              userDepartement={user?.departement}
+            />
+          </div>
 
-            <section className="sm:wrapper z-20">
-              <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2 z-20">
-                <div className="flex flex-col justify-start items-start gap-4">
-                  <div className="w-full h-[10rem] sm:h-[10rem] lg:h-[15rem] z-20 rounded-sm">
+          <Collection
+            data={events?.data}
+            emptyTitle="Aucun Event Trouvé"
+            emptyStateSubtext="Revenir plus tard"
+            collectionType="All_Events"
+            limit={6}
+            page={page}
+            totalPages={events?.totalPages}
+          />
+
+          <div className="flex justify-center">
+            <Button asChild className="button w-full sm:w-fit uppercase">
+              <Link href="/events" className="">
+                Voir tous les événements
+              </Link>
+            </Button>
+          </div>
+        </section>
+      </div>
+
+      {userId === undefined && (
+        <section
+          id="organisateur"
+          className="mt-10 flex flex-col bg-gradient-to-bl from-primary-50 to-primary-50 dark:from-dark dark:to-dark"
+        >
+          <div className="wrapper flex justify-start items-center gap-8  kronaOne">
+            <p className="h4-bold bg-linear-text text-xl uppercase">
+              Organisateur! - Organiser son évenements
+            </p>
+          </div>
+
+          {/* <div className="h-screen relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
+            <div className="absolute inset-0 w-full h-full bg-transparent dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
+            <Boxes /> */}
+
+          <section className="sm:wrapper">
+            <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2 z-20">
+              <div className="flex flex-col justify-start items-start gap-4">
+                {/* <div className="w-full h-[10rem] sm:h-[10rem] lg:h-[15rem] z-20 rounded-sm">
                     <Image
                       src="/assets/images/organisateur.jpg"
                       alt="photo d'accueil"
@@ -170,73 +154,29 @@ export default async function Home({
                       height={1000}
                       className="object-cover w-full h-full rounded-sm filter grayscale"
                     />
-                  </div>
-                  <h1 className="h1-bold text-dark dark:text-white sm:text-left rubik uppercase">
-                    Créez vos évenements et <br />
-                    <span className="bg-linear-text">
-                      Partagez-les avec la communauté!
-                    </span>
-                  </h1>
-                  <p className="p-regular-16 md:p-regular-18 rbik">
-                    Vous êtes une association, un particulier ou un
-                    professionnel et vous souhaitez organiser des événements
-                    dans votre région ?
-                  </p>
-                  <Button
-                    size="sm"
-                    asChild
-                    className="button w-full sm:w-52 lg:w-full"
+                  </div> */}
+                <h1 className="h1-bold text-dark dark:text-white sm:text-left rubik uppercase">
+                  Créez vos évenements et <br />
+                  <span className="bg-linear-text">
+                    Partagez-les avec la communauté!
+                  </span>
+                </h1>
+                <p className="p-regular-16 md:p-regular-18 rbik">
+                  Vous êtes une association, un particulier ou un professionnel
+                  et vous souhaitez organiser des événements dans votre région ?
+                </p>
+                <Button size="sm" asChild className="button w-full lg:w-fit">
+                  <Link
+                    href="/auth/inscription/org"
+                    className="font-bold tracking-widest uppercase"
                   >
-                    <Link
-                      href="/auth/inscription/org"
-                      className="font-bold tracking-widest"
-                    >
-                      S&apos;inscrire en tant qu&apos;organisateur
-                    </Link>
-                  </Button>
-                </div>
+                    S&apos;inscrire en tant qu&apos;organisateur
+                  </Link>
+                </Button>
               </div>
-            </section>
-          </div>
-
-          {/* <div className="wrapper flex justify-center items-center gap-4">
-            <div className=" w-full h-[20rem] sm:w-full sm:h-[10rem] lg:w-1/2 lg:h-[10rem]">
-              <Image
-                src="/assets/images/organisateur.jpg"
-                alt="photo d'accueil"
-                width={1000}
-                height={1000}
-                className="object-cover w-full h-full rounded-sm filter grayscale"
-              />
             </div>
-
-            <h1 className="h2-bold text-dark dark:text-white sm:text-center lg:text-left lg:w-2/3 kronaOne">
-              Créez vos événements et
-              <br />
-              <span className="bg-linear-text">
-                Partagez-les avec notre communauté!
-              </span>
-            </h1>
-          </div> */}
-
-          {/* <div className="wrapper">
-            <p className="text-dark dark:text-white p-regular-10 md:p-regular-16 rubik">
-              Inscris-toi en tant qu&apos;organisateur pour créer tes propres
-              événements et faire bouger ta ville comme tu l&apos;entends !
-            </p>
-          </div> */}
-
-          {/* <div className="wrapper flex-center">
-            <Button
-              size="lg"
-              asChild
-              className="button w-full sm:w-fit uppercase"
-            >
-              <Link href="/organisateur">
-                S&apos;inscrire en tant qu&apos;organisateur
-              </Link>
-            </Button>
-          </div> */}
+          </section>
+          {/* </div> */}
         </section>
       )}
     </>

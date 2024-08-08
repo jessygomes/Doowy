@@ -4,7 +4,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="bg-primary dark:bg-dark">
+    <footer className="h-screen bg-gradient-to-b from-primary-50 to-white dark:from-dark dark:to-dark">
       {/* <div className="wrapper flex justify-center items-center gap-8">
         <p className="font-bold text-dark dark:text-primary text-sm kronaOne">
           vibey!

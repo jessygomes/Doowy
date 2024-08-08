@@ -22,6 +22,7 @@ import { FaXTwitter } from "react-icons/fa6";
 import { FaTiktok } from "react-icons/fa";
 import { FaCertificate } from "react-icons/fa";
 import { Boxes } from "@/components/ui/background-boxes";
+import Ripple from "@/components/magicui/ripple";
 
 interface Props {
   params: {
@@ -78,48 +79,48 @@ export default async function ProfilPublic({
     return (
       <>
         <section className="">
-          <div className="">
-            <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
-              <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
-              <Boxes />
+          <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
+            <Ripple />
+            {/* <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm"> */}
+            {/* <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" /> */}
+            {/* <Boxes /> */}
 
-              <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
-                <div className="flex gap-4 items-center">
-                  <div className="w-20 h-20 sm:w-32 sm:h-32">
-                    {userProfile?.photo ? (
-                      <Image
-                        src={userProfile.photo}
-                        width={1000}
-                        height={1000}
-                        alt="photo d'accueil"
-                        className="object-cover w-full h-full rounded-full"
-                      />
-                    ) : (
-                      <Image
-                        src="/assets/images/accueilImg.jpg"
-                        alt="photo d'accueil"
-                        width={1000}
-                        height={1000}
-                        className="object-cover w-full h-full rounded-full"
-                      />
-                    )}
-                  </div>
-
-                  <h3 className="h3-bold text-center sm:text-left">
-                    {userProfile?.name}
-                  </h3>
-                </div>
-
-                <div className="flex gap-6">
-                  <PersonnesFollowers userId={userProfile?.id} />
-                  <PersonnesSuivies userId={userProfile?.id} />
-
-                  {currentUserId === id ? (
-                    <div></div>
+            <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
+              <div className="flex gap-4 items-center">
+                <div className="w-20 h-20 sm:w-32 sm:h-32">
+                  {userProfile?.photo ? (
+                    <Image
+                      src={userProfile.photo}
+                      width={1000}
+                      height={1000}
+                      alt="photo d'accueil"
+                      className="object-cover w-full h-full rounded-full"
+                    />
                   ) : (
-                    <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+                    <Image
+                      src="/assets/images/accueilImg.jpg"
+                      alt="photo d'accueil"
+                      width={1000}
+                      height={1000}
+                      className="object-cover w-full h-full rounded-full"
+                    />
                   )}
                 </div>
+
+                <h3 className="h3-bold text-center sm:text-left">
+                  {userProfile?.name}
+                </h3>
+              </div>
+
+              <div className="flex gap-6">
+                <PersonnesFollowers userId={userProfile?.id} />
+                <PersonnesSuivies userId={userProfile?.id} />
+
+                {currentUserId === id ? (
+                  <div></div>
+                ) : (
+                  <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+                )}
               </div>
             </div>
           </div>
@@ -152,54 +153,52 @@ export default async function ProfilPublic({
 
   return (
     <>
-      <section className="">
-        <div className="">
-          <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
-            <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
-            <Boxes />
+      <section className="bg-gradient-to-t from-dark to-[#505050]">
+        <div className="relative flex w-screen flex-col items-end justify-end overflow-hidden bg-dark shadowCj">
+          <Ripple />
 
-            <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
-              <div className="flex gap-4 items-center justify-center">
-                <div className=" w-20 h-20 sm:w-32 sm:h-32">
-                  {userProfile?.photo ? (
-                    <Image
-                      src={userProfile.photo}
-                      width={1000}
-                      height={1000}
-                      alt="photo d'accueil"
-                      className="object-cover w-full h-full rounded-full"
-                    />
-                  ) : (
-                    <Image
-                      src="/assets/images/accueilImg.jpg"
-                      alt="photo d'accueil"
-                      width={1000}
-                      height={1000}
-                      className="object-cover w-full h-full rounded-full"
-                    />
-                  )}
-                </div>
-                <div className="flex">
-                  <h3 className="h3-bold rubik">
-                    {userProfile?.organizationName}
-                  </h3>
-                  <FaCertificate className="text-dark dark:text-primary" />
-                </div>
-              </div>
-
-              <div className="flex gap-6 items-center">
-                <PersonnesFollowers userId={userProfile?.id} />
-                {currentUserId === id ? (
-                  <Button asChild size="lg" className="button hidden sm:flex">
-                    <Link href="/profil">Modifier mon profil</Link>
-                  </Button>
+          <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
+            <div className="flex gap-4 items-center justify-center">
+              <div className=" w-20 h-20 sm:w-32 sm:h-32">
+                {userProfile?.photo ? (
+                  <Image
+                    src={userProfile.photo}
+                    width={1000}
+                    height={1000}
+                    alt="photo d'accueil"
+                    className="object-cover w-full h-full rounded-full"
+                  />
                 ) : (
-                  <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+                  <Image
+                    src="/assets/images/accueilImg.jpg"
+                    alt="photo d'accueil"
+                    width={1000}
+                    height={1000}
+                    className="object-cover w-full h-full rounded-full"
+                  />
                 )}
               </div>
+              <div className="flex">
+                <h3 className="h3-bold rubik">
+                  {userProfile?.organizationName}
+                </h3>
+                <FaCertificate className="text-dark dark:text-primary" />
+              </div>
+            </div>
+
+            <div className="flex gap-6 items-center">
+              <PersonnesFollowers userId={userProfile?.id} />
+              {currentUserId === id ? (
+                <Button asChild size="lg" className="button hidden sm:flex">
+                  <Link href="/profil">Modifier mon profil</Link>
+                </Button>
+              ) : (
+                <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+              )}
             </div>
           </div>
         </div>
+
         <div className="wrapper rubik mt-4 sm:mt-8 text-dark dark:text-white">
           <p>{userProfile?.description}</p>
           <div className="flex gap-8 mt-4">
@@ -222,19 +221,12 @@ export default async function ProfilPublic({
         </div>
       </section>
 
-      <section className="bg-cover bg-center py-5 md:py-5">
-        <div className="wrapper flex justify-center items-center gap-8 py-5">
-          <p className="font-bold text-dark dark:text-white text-sm kronaOne">
-            Prochainement!
-          </p>
-          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
-          <p className="hidden sm:block font-bold text-sm text-dark dark:text-white kronaOne">
-            Prochainement!
+      <section className="wrapper my-8">
+        <div className="wrapper mb-4 kronaOne">
+          <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
+            prochainement!
           </p>
         </div>
-      </section>
-
-      <section className="wrapper my-8">
         <Collection
           data={eventsByOrganizer?.data.upcomingEvents}
           emptyTitle="Aucun Event créé"
@@ -247,19 +239,12 @@ export default async function ProfilPublic({
         />
       </section>
 
-      <section className="bg-cover bg-center py-5 md:py-5">
-        <div className="wrapper flex justify-center items-center gap-8 py-5">
-          <p className="font-bold text-dark dark:text-white text-sm kronaOne">
-            Passés!
-          </p>
-          <div className="w-full h-[1px] rounded-sm bg-dark dark:bg-white"></div>
-          <p className="hidden sm:block font-bold text-sm text-dark dark:text-white kronaOne">
-            Passés!
+      <section className="wrapper my-8">
+        <div className="wrapper mb-4 kronaOne">
+          <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
+            événements passés!
           </p>
         </div>
-      </section>
-
-      <section className="wrapper my-8">
         <Collection
           data={eventsByOrganizer?.data.pastEvents}
           emptyTitle="Aucun Event créé"

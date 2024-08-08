@@ -52,18 +52,24 @@ const Card = async ({
     currentDateTime >= startDateTime && currentDateTime <= endDateTime;
 
   return (
-    <div className="group relative flex min-h-[320px] w-full max-w-[400px] flex-col gap-2 overflow-hidden rounded-sm transition-all md:min-h-[350px]">
-      <div className="relative h-full w-full overflow-hidden rounded-sm">
+    <div
+      className="group relative flex min-h-[320px] w-full max-w-[400px] flex-col gap-1 overflow-hidden rounded-sm transition-all md:min-h-[350px] backdrop-blur-sm"
+      // style={{
+      //   backgroundImage: `url(${event.imageUrl})`,
+      //   // backgroundPosition: "center",
+      // }}
+    >
+      <div className="relative h-full w-full overflow-hidden ">
         <Link
           href={`/events/${event.id}`}
           style={{ backgroundImage: `url(${event.imageUrl})` }}
-          className="flex-center h-full w-full bg-grey-50 bg-cover bg-center transition-transform duration-300 ease-in-out transform hover:scale-110"
+          className="flex-center h-full w-full bg-grey-50 bg-cover bg-center transition-transform duration-300 ease-in-out transform hover:scale-110 shadow-xl"
         />
       </div>
 
       {/* IS EVENT CREATOR */}
       {isEventCreator && !hidePrice && (
-        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm bg-white p-3 shadow-sm transition-all">
+        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm bg-white p-3 transition-all">
           <Link href={`/events/${event.id}/update`}>
             <Image
               src="/assets/icons/edit.svg"
@@ -79,7 +85,7 @@ const Card = async ({
       )}
 
       {/* DIV INFOS EVENT */}
-      <div className=" flex flex-row justify-between rounded-sm">
+      <div className="flex flex-row justify-between rounded-b-sm px-2 py-1 backdrop-blur-lg shadow-xl">
         <div className="flex flex-col gap-2">
           {/* TITRE */}
           <Link href={`/events/${event.id}`}>

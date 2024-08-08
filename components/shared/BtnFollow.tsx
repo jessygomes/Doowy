@@ -38,7 +38,7 @@ const BtnFollow = ({
   if (currentUserId === null || currentUserId === undefined) {
     // Si aucun utilisateur n'est connecté, afficher le bouton avec un lien vers la page de connexion
     return (
-      <Button asChild className="rounded-full">
+      <Button asChild className="button rounded-sm">
         <Link href="/auth/connexion">Suivre</Link>
       </Button>
     );

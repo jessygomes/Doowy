@@ -179,7 +179,7 @@ export default async function ProfilPublic({
                 <h3 className="h3-bold rubik">
                   {userProfile?.organizationName}
                 </h3>
-                <FaCertificate className="text-dark dark:text-primary" />
+                <FaCertificate className="text-white" />
               </div>
             </div>
 
@@ -196,31 +196,31 @@ export default async function ProfilPublic({
           </div>
         </div>
 
-        <div className="wrapper rubik mt-4 sm:mt-8 text-dark dark:text-white">
+        <div className="wrapper rubik mt-4 sm:mt-8 text-white">
           <p>{userProfile?.description}</p>
           <div className="flex gap-8 mt-4">
             {userProfile && userProfile.instagram && (
               <Link href={userProfile.instagram} target="_blank">
-                <CiInstagram size={30} className="text-dark dark:text-white" />
+                <CiInstagram size={30} className="text-white" />
               </Link>
             )}
             {userProfile && userProfile.twitter && (
               <Link href={userProfile.twitter} target="_blank">
-                <FaXTwitter size={40} className="text-dark dark:text-white" />
+                <FaXTwitter size={40} className="text-white" />
               </Link>
             )}
             {userProfile && userProfile.tiktok && (
               <Link href={userProfile.tiktok} target="_blank">
-                <FaTiktok size={40} className="text-dark dark:text-white" />
+                <FaTiktok size={40} className="text-white" />
               </Link>
             )}
           </div>
         </div>
       </section>
 
-      <section className="my-8 shadowCj pb-8">
+      <section className="mt-8 shadowCj pb-8">
         <div className="wrapper flex flex-col gap-8">
-          <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
+          <p className="h4-bold kronaOne text-white text-xl uppercase">
             prochainement!
           </p>
           <Collection
@@ -236,9 +236,9 @@ export default async function ProfilPublic({
         </div>
       </section>
 
-      <section className="my-8 shadowCj pb-8">
+      <section className="mt-8 shadowCj pb-8">
         <div className="wrapper flex flex-col gap-8">
-          <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
+          <p className="h4-bold kronaOne text-white text-xl uppercase">
             événements passés!
           </p>
           <Collection

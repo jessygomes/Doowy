@@ -82,7 +82,7 @@ export default async function ProfilPrivate({
                 </div>
                 <div className="flex gap-2">
                   <p className="h3-bold rubik">{currentUserProfile?.name}</p>
-                  <FaCertificate className="text-dark dark:text-primary" />
+                  <FaCertificate className="text-white" />
                 </div>
               </div>
             </div>
@@ -123,27 +123,24 @@ export default async function ProfilPrivate({
         {/* La description et les réseaux sociaux sont disponible seulement pour les organisateurs */}
         {currentUserProfile?.role === "organizer" && (
           <>
-            <p className="wrapper rubik mt-4 sm:mt-8 text-dark dark:text-white">
+            <p className="wrapper rubik mt-4 sm:mt-8 text-white">
               {currentUserProfile?.description ||
                 "Cliquer sur Modifier pour ajouter une description"}
             </p>
             <div className="max-w-7xl lg:mx-auto px-5 md:px-10 xl:px-0 flex gap-8">
               {currentUserProfile && currentUserProfile.instagram && (
                 <Link href={currentUserProfile.instagram}>
-                  <CiInstagram
-                    size={30}
-                    className="text-dark dark:text-white"
-                  />
+                  <CiInstagram size={30} className="text-white" />
                 </Link>
               )}
               {currentUserProfile && currentUserProfile.twitter && (
                 <Link href={currentUserProfile.twitter}>
-                  <FaXTwitter size={40} className="text-dark dark:text-white" />
+                  <FaXTwitter size={40} className="text-white" />
                 </Link>
               )}
               {currentUserProfile && currentUserProfile.tiktok && (
                 <Link href={currentUserProfile.tiktok}>
-                  <FaTiktok size={40} className="text-dark dark:text-white" />
+                  <FaTiktok size={40} className="text-white" />
                 </Link>
               )}
             </div>
@@ -156,7 +153,7 @@ export default async function ProfilPrivate({
         <>
           <section className="my-8 pb-8 py-5 md:py-10 shadowCj">
             <div className="wrapper flex flex-col gap-8">
-              <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
+              <p className="h4-bold kronaOne text-white text-xl uppercase">
                 Mes events!
               </p>
 
@@ -176,9 +173,9 @@ export default async function ProfilPrivate({
       )}
 
       {/* MES FAVORIS */}
-      <section className="my-8 pb-8 py-5 md:py-10 shadowCj">
-        <div className="wrapper">
-          <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
+      <section className="mt-8 pb-8 py-5 md:py-10 shadowCj">
+        <div className="wrapper flex flex-col gap-8">
+          <p className="h4-bold kronaOne text-white text-xl uppercase">
             Mes favoris!
           </p>
 

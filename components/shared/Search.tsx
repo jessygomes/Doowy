@@ -46,7 +46,7 @@ export const Search = () => {
         type="text"
         placeholder="Rechercher"
         onChange={(e) => setQuery(e.target.value)}
-        className="rubik p-regular-16 border-0 bg-transparent outline-offset-0 placeholder:text-grey-500  focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+        className="rubik p-regular-16 border-0 bg-transparent outline-offset-0 placeholder:text-white  focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
       />
     </div>
   );

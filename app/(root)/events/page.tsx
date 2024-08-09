@@ -30,7 +30,7 @@ export default async function Events({
   });
 
   return (
-    <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
+    <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background pb-8 shadowCj">
       <Ripple />
       <section
         id="events"

@@ -22,13 +22,14 @@ export const UserBtn = () => {
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage src={user?.image || ""} />
-          <AvatarFallback className="bg-gradient-to-r from-purple-600 to-orange-600 dark:bg-white">
+          <AvatarFallback className="bg-gradient-to-r from-purple-600 to-orange-600">
             <FaUser className="text-white" />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent
-        className="w-40 bg-primary font-semibold dark:bg-dark rounded-sm"
+        className="w-40 border-none font-semibold bg-dark rounded-sm text-white rubik shadowCj"
         align="end"
       >
         <Link href="/profil">
@@ -37,29 +38,16 @@ export const UserBtn = () => {
             {user?.role === "organizer" ? "Mon profil" : "Mon compte"}
           </DropdownMenuItem>
         </Link>
-        {/* <DropdownMenuSeparator />
 
-        <DropdownMenuItem
-          className="cursor-pointer"
-          style={{ pointerEvents: "none" }}
-        >
-          <FaRegSun className="h-4 w-4 mr-2" />
-          <div className="flex gap-4 justify-between items-center">
-            <p>Thème</p>
-            <div style={{ pointerEvents: "auto" }}>
-              <ThemeToggle />
-            </div>
-          </div>
-        </DropdownMenuItem> */}
-
-        <DropdownMenuSeparator className="bg-white" />
+        <DropdownMenuSeparator className="bg-dark" />
         <Link href={`/profil/${user?.id}/parametres`}>
           <DropdownMenuItem className="cursor-pointer hover:bg-linear-hover">
             <FaRegSun className="h-4 w-4 mr-2" />
             Paramètres
           </DropdownMenuItem>
         </Link>
-        <DropdownMenuSeparator className="bg-white" />
+
+        <DropdownMenuSeparator className="bg-dark" />
         <LogoutBtn>
           <DropdownMenuItem className="cursor-pointer hover:bg-linear-hover">
             <FaSignOutAlt className="h-4 w-4 mr-2" />

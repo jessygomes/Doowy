@@ -259,7 +259,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                       alt="location icon"
                     />
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="rubik text-dark dark:text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm p-regular-16 px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
+                      <SelectTrigger className="rubik text-[16px] leading-[24px] text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm  px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
                         <SelectValue placeholder="Département" />
                       </SelectTrigger>
                       <SelectContent>

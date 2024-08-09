@@ -177,18 +177,20 @@ export const EventPresentation = async ({
       </div>
 
       {/* EVENT FROM THE SAME ORGANIZER */}
-      <section className="wrapper my-8 flex flex-col gap-8 md:gap-12">
-        <h2 className="h3-bold rubik">D&apos;autres événements</h2>
+      <section className="mt-8 shadowCj pb-8">
+        <div className="wrapper flex flex-col gap-8 md:gap-12">
+          <h2 className="h3-bold rubik">D&apos;autres événements</h2>
 
-        <Collection
-          data={relaledEvents?.data || []}
-          emptyTitle="Aucun Event Trouvé"
-          emptyStateSubtext="Revenir plus tard"
-          collectionType="All_Events"
-          limit={3}
-          page={page}
-          totalPages={relaledEvents?.totalPages}
-        />
+          <Collection
+            data={relaledEvents?.data || []}
+            emptyTitle="Aucun Event Trouvé"
+            emptyStateSubtext="Revenir plus tard"
+            collectionType="All_Events"
+            limit={3}
+            page={page}
+            totalPages={relaledEvents?.totalPages}
+          />
+        </div>
       </section>
     </>
   );

@@ -45,17 +45,17 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
     <div>
       <button
         onClick={toggleModal}
-        className="p-medium-14 flex flex-col-reverse items-center justify-center hover:text-grey-600 dark:hover:text-primary transition-all ease-in-out"
+        className="p-medium-14 flex flex-col-reverse items-center justify-center hover:text-grey-400 transition-all ease-in-out"
       >
         Abonné(e)s <span>{followers.length}</span>
       </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm flex justify-center items-center z-10 ">
-          <div className="flex flex-col gap-4 bg-primary dark:bg-dark p-8 rounded-sm w-[80%] lg:w-[30%] shadow-2xl">
-            <div className="flex flex-row-reverse justify-between items-center border-b-2 border-dark dark:border-white">
+          <div className="flex flex-col gap-4 bg-dark p-8 rounded-sm w-[80%] lg:w-[30%] shadow-2xl">
+            <div className="flex flex-row-reverse justify-between items-center border-b-2 border-white">
               <span
-                className="close cursor-pointer text-center text-2xl dark:text-white hover:text-red-500"
+                className="close cursor-pointer text-center text-2xl text-white hover:text-red-500"
                 onClick={toggleModal}
               >
                 &times;
@@ -66,7 +66,7 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
               {followers.map((user: any) => (
                 <li
                   key={user.id}
-                  className="p-medium-14 rubik hover:text-grey-600 transition-all ease-in-out"
+                  className="p-medium-14 rubik hover:text-grey-400 transition-all ease-in-out"
                 >
                   <Link href={`/profil/${user.id}`}>
                     <div className="flex gap-4 items-center">

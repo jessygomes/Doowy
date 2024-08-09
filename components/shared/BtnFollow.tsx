@@ -47,7 +47,7 @@ const BtnFollow = ({
     return (
       <>
         {!isCurrentUser && (
-          <Button onClick={handleFollow} className="rounded-full">
+          <Button onClick={handleFollow} className="button">
             {isFollow ? "Abonné(e)" : "Suivre"}
           </Button>
         )}

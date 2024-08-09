@@ -51,7 +51,7 @@ export const DepartementFilter = ({
       <SelectTrigger className="select-field">
         <SelectValue placeholder="Département" />
       </SelectTrigger>
-      <SelectContent className="bg-primary dark:bg-dark">
+      <SelectContent className="bg-transparent">
         <SelectItem value="All" className="select-item p-regular-14">
           Tous les départements
         </SelectItem>

@@ -249,7 +249,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
                       alt="location icon"
                     />
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="rubik text-dark dark:text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm p-regular-16 px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
+                      <SelectTrigger className="rubik text-[16px] leading-[24px] text-dark dark:text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
                         <SelectValue placeholder="Département" />
                       </SelectTrigger>
                       <SelectContent>
@@ -272,7 +272,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
           />
         </div>
 
-        <div className="flex flex-col gap-5 md:flex-row w-full">
+        <div className="flex flex-col gap-2 w-full">
           {user?.isOAuth === false && (
             <>
               <div className="w-full">
@@ -312,8 +312,8 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
                 control={form.control}
                 name="isHidenWishlist"
                 render={({ field }) => (
-                  <FormItem className="w-full flex items-center rounded-full justify-between p-2 px-4 shadow-sm">
-                    <div className="space-y-0.5 ">
+                  <FormItem className="w-full flex items-center rounded-sm justify-between p-2 px-4 bg-grey-50 shadow-sm">
+                    <div className="space-y-0.5 rubik">
                       <FormLabel>Confidentialité</FormLabel>
                       <FormDescription>
                         Ne pas montrer ma liste de favoris aux autres
@@ -343,7 +343,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
           type="submit"
           size="lg"
           // disabled={form.formState.isSubmitted}
-          className="button col-span-2 w-full"
+          className="button rubik uppercase col-span-2 w-full"
         >
           {isPending ? "En cours..." : "Modifier"}
         </Button>

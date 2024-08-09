@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { IoMenu } from "react-icons/io5";
+
 import {
   Sheet,
   SheetContent,
@@ -6,7 +9,6 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Image from "next/image";
 import { Separator } from "../ui/separator";
 import NavItems from "./NavItems";
 
@@ -15,23 +17,17 @@ const NavMobile = () => {
     <nav className="md:hidden">
       <Sheet>
         <SheetTrigger className="align-middle">
-          <Image
-            src="/assets/icons/menu.svg"
-            alt="menu"
-            width={24}
-            height={24}
-            className="cursor-pointer"
-          />
+          <IoMenu size={40} className="text-white" />
         </SheetTrigger>
 
-        <SheetContent className="flex flex-col gap-6 bg-white md:hidden">
-          <Image
-            src="/assets/images/logo.svg"
-            width={128}
-            height={38}
-            alt="logo"
-          />
-          <Separator className="border border-gray-50" />
+        <SheetContent className="flex flex-col gap-6 bg-dark md:hidden">
+          <Link
+            href="/"
+            className="text-4xl text-white kronaOne -tracking-[0.40rem] font-semibold"
+          >
+            vibey!
+          </Link>
+          <Separator className="border border-white" />
           <NavItems />
         </SheetContent>
       </Sheet>

@@ -14,6 +14,7 @@ import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 
 import Ripple from "@/components/magicui/ripple";
+import BlurIn from "@/components/magicui/blur-in";
 
 export default async function Home({
   searchParams,
@@ -51,10 +52,14 @@ export default async function Home({
               <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2">
                 <div className=" flex flex-col justify-end items-end lg:justify-center lg:items-center gap-4">
                   <h1 className="h1-bold text-dark dark:text-white sm:text-center rubik uppercase">
-                    Connectez-vous <br />
-                    <span className="bg-linear-text">
+                    <BlurIn word="Connectez-vous" className="" />
+                    <BlurIn
+                      word="aux événements de votre ville!"
+                      className="bg-linear-text h1-bold"
+                    />
+                    {/* <span className="bg-linear-text">
                       aux événements de votre ville!
-                    </span>
+                    </span> */}
                   </h1>
                   <Button
                     size="sm"
@@ -92,13 +97,13 @@ export default async function Home({
       </div>
 
       {/* SECTION TREND */}
-      <div className="bg-gradient-to-t from-primary-50 via-primary-50 to-primary-50  dark:from-[#9000ff73]  dark:to-[#ff4000c0] shadowCj">
+      <div className="bg-gradient-to-t from-[#9000ff73]  to-[#ff4000c0] shadowCj">
         <section
           id="events"
           className="wrapper py-10 lg:py-20 flex flex-col gap-8 md:gap-12"
         >
           <div className="flex justify-start items-center gap-8 pt-5 kronaOne">
-            <p className="h4-bold sm:h3-bold text-dark dark:text-white uppercase">
+            <p className="h4-bold sm:h3-bold text-white uppercase">
               TREND! - évenements populaires
             </p>
           </div>
@@ -135,7 +140,7 @@ export default async function Home({
       {userId === undefined && (
         <section
           id="organisateur"
-          className="mt-10 flex flex-col bg-gradient-to-bl from-primary-50 to-primary-50 dark:from-dark dark:to-dark"
+          className="mt-10 flex flex-col bg-dark shadowCj pb-8"
         >
           <div className="wrapper flex justify-start items-center gap-8  kronaOne">
             <p className="h4-bold sm:h4-bold text-white uppercase">

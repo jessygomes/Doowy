@@ -13,7 +13,6 @@ import { EventSuscription } from "@/components/shared/EventSuscription";
 import { Search } from "@/components/shared/Search";
 import { Button } from "@/components/ui/button";
 
-import { Boxes } from "@/components/ui/background-boxes";
 import Ripple from "@/components/magicui/ripple";
 
 export default async function Home({
@@ -40,14 +39,14 @@ export default async function Home({
   //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
   const user = await currentUser();
   const userId = user?.id;
+  console.log("userId", user);
 
   return (
     <>
-      <div className="flex justify-center items-center ">
+      <div className="flex justify-center items-center">
         {userId === undefined && (
           <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
             <Ripple />
-
             <section className="sm:wrapper z-20">
               <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2">
                 <div className=" flex flex-col justify-end items-end lg:justify-center lg:items-center gap-4">
@@ -71,21 +70,26 @@ export default async function Home({
             </section>
           </div>
         )}
+        {/* SECTION SUBSCRIPTION */}
+        {userId && (
+          <>
+            <div className="relative flex  w-screen flex-col items-start justify-start overflow-hidden bg-background shadowCj pt-16 sm:pt-20">
+              <Ripple />
+              <section className="wrapper z-20">
+                <EventSuscription
+                  searchParams={{
+                    page,
+                    params: {
+                      id: "",
+                    },
+                    searchParams: {},
+                  }}
+                />
+              </section>
+            </div>
+          </>
+        )}
       </div>
-
-      {userId && (
-        <section className="mt-28">
-          <EventSuscription
-            searchParams={{
-              page,
-              params: {
-                id: "",
-              },
-              searchParams: {},
-            }}
-          />
-        </section>
-      )}
 
       {/* SECTION TREND */}
       <div className="bg-gradient-to-t from-primary-50 via-primary-50 to-primary-50  dark:from-[#9000ff73]  dark:to-[#ff4000c0] shadowCj">
@@ -94,7 +98,7 @@ export default async function Home({
           className="wrapper py-10 lg:py-20 flex flex-col gap-8 md:gap-12"
         >
           <div className="flex justify-start items-center gap-8 pt-5 kronaOne">
-            <p className="h3-bold text-dark dark:text-white text-xl uppercase">
+            <p className="h4-bold sm:h3-bold text-dark dark:text-white uppercase">
               TREND! - évenements populaires
             </p>
           </div>
@@ -134,8 +138,8 @@ export default async function Home({
           className="mt-10 flex flex-col bg-gradient-to-bl from-primary-50 to-primary-50 dark:from-dark dark:to-dark"
         >
           <div className="wrapper flex justify-start items-center gap-8  kronaOne">
-            <p className="h4-bold bg-linear-text text-xl uppercase">
-              Organisateur! - Organiser son évenements
+            <p className="h4-bold sm:h4-bold text-white uppercase">
+              Organisateur! - Organiser son évenement
             </p>
           </div>
 

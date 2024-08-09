@@ -45,7 +45,7 @@ export default async function Events({
           </p>
         </div>
 
-        <div className="flex w-full flex-col gap-5 md:flex-row">
+        <div className="flex w-full flex-col gap-5 md:flex-row z-20">
           <Search />
           <CategoryFilter />
           <DepartementFilter departements={departements.departements} />

@@ -66,7 +66,7 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
               {followers.map((user: any) => (
                 <li
                   key={user.id}
-                  className="p-medium-14 hover:text-grey-600 transition-all ease-in-out"
+                  className="p-medium-14 rubik hover:text-grey-600 transition-all ease-in-out"
                 >
                   <Link href={`/profil/${user.id}`}>
                     <div className="flex gap-4 items-center">

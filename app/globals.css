@@ -259,7 +259,7 @@ body {
   }
 
   .input-field {
-    @apply rubik text-dark dark:text-white bg-grey-50 h-[40px]  focus-visible:ring-offset-0 placeholder:text-grey-500 rounded-sm p-regular-16 px-4 py-2 border-none focus-visible:ring-transparent !important;
+    @apply rubik text-dark dark:text-dark bg-grey-50 h-[40px]  focus-visible:ring-offset-0 placeholder:text-grey-500 rounded-sm p-regular-16 px-4 py-2 border-none focus-visible:ring-transparent !important;
   }
 
   .textarea {

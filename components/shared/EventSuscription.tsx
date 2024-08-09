@@ -30,14 +30,16 @@ export const EventSuscription = async ({
   return (
     <section
       id="events"
-      className="wrapper my-8 flex flex-col gap-8 md:gap-12 z-20"
+      className="sm:wrapper my-8 flex flex-col gap-8 md:gap-12 z-20"
     >
-      <h2 className="h3-bold sm:h3-bold rubik">Mes abonnements</h2>
+      <h2 className="h4-bold sm:h3-bold text-white kronaOne uppercase">
+        Mes abonnements!
+      </h2>
 
       <Collection
         data={eventsAbonnements?.data}
-        emptyTitle="Aucun Event Trouvé"
-        emptyStateSubtext="Revenir plus tard"
+        emptyTitle="Aucun événement à venir"
+        emptyStateSubtext="Découvrez des événements et abonnez-vous pour ne rien manquer"
         collectionType="All_Events"
         limit={6}
         page={page}

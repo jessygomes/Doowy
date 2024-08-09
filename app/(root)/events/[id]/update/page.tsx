@@ -5,6 +5,8 @@ import { Role } from "@prisma/client";
 import { RoleGate } from "@/components/auth/RoleGate";
 import EventForm from "@/components/shared/EventForm";
 
+import Ripple from "@/components/magicui/ripple2";
+
 type UpdateEventProps = {
   params: {
     id: string;
@@ -22,10 +24,13 @@ export default async function UpdateEvent({
   return (
     <>
       <RoleGate allowedRole={Role.organizer}>
-        <section className="bg-primary-50 bg-dotted-pattern bg-cover bg-center py-5 md:py-10 ">
-          <h3 className="wrapper h3-bold text-center sm:text-left">
-            Modifier mon événement
-          </h3>
+        <section className="">
+          <div className="relative flex w-screen flex-col items-end justify-end overflow-hidden bg-background bg-dark shadowCj pt-20 sm:pt-20">
+            <Ripple />
+            <h3 className="wrapper h3-bold text-center sm:text-left">
+              Modifier mon événement
+            </h3>
+          </div>
         </section>
         <div className="wrapper my-8">
           {event && (

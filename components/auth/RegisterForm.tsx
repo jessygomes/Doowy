@@ -3,7 +3,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { userRegisterSchema } from "@/lib/validator";
-import { CardWrapper } from "./CardWrapper";
+import { CardWrapper } from "./CardWrapperBis";
 import {
   Form,
   FormControl,
@@ -74,7 +74,7 @@ export const RegisterForm = ({ type, label }: RegisterFormProps) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-6 w-full"
+          className="space-y-6 w-full text-dark"
         >
           <div className="space-y-4">
             <div className="flex gap-2 w-full">

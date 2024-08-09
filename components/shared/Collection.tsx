@@ -59,7 +59,7 @@ const Collection = ({
           )}
         </div>
       ) : (
-        <div className="flex-center wrapper min-h-[200px] w-2/3 flex-col gap-3 rounded-sm bg-primary dark:bg-dark py-28 text-center">
+        <div className="flex-center wrapper min-h-[200px] w-2/3 flex-col gap-3 rounded-sm bg-transparent backdrop-blur-sm py-28 text-center">
           {" "}
           <h3 className="rubik p-bold-20 md:h5-bold ">{emptyTitle}</h3>
           <p className="rubik p-regular-16 ">{emptyStateSubtext}</p>

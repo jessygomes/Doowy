@@ -78,12 +78,9 @@ export default async function ProfilPublic({
   if (userProfile?.role !== "organizer") {
     return (
       <>
-        <section className="">
-          <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
+        <section className="bg-gradient-to-t from-dark to-[#ff63be8e]">
+          <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-dark shadowCj">
             <Ripple />
-            {/* <div className="h-full relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm"> */}
-            {/* <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" /> */}
-            {/* <Boxes /> */}
 
             <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
               <div className="flex gap-4 items-center">
@@ -153,7 +150,7 @@ export default async function ProfilPublic({
 
   return (
     <>
-      <section className="bg-gradient-to-t from-dark to-[#505050]">
+      <section className="bg-gradient-to-t from-dark to-[#ff63be8e]">
         <div className="relative flex w-screen flex-col items-end justify-end overflow-hidden bg-dark shadowCj">
           <Ripple />
 
@@ -221,40 +218,40 @@ export default async function ProfilPublic({
         </div>
       </section>
 
-      <section className="wrapper my-8">
-        <div className="wrapper mb-4 kronaOne">
+      <section className="my-8 shadowCj pb-8">
+        <div className="wrapper flex flex-col gap-8">
           <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
             prochainement!
           </p>
+          <Collection
+            data={eventsByOrganizer?.data.upcomingEvents}
+            emptyTitle="Aucun Event créé"
+            emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
+            collectionType="All_Events"
+            limit={6}
+            page={page}
+            // urlParamName="ordersPage"
+            totalPages={eventsByOrganizer?.totalPages}
+          />
         </div>
-        <Collection
-          data={eventsByOrganizer?.data.upcomingEvents}
-          emptyTitle="Aucun Event créé"
-          emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
-          collectionType="All_Events"
-          limit={6}
-          page={page}
-          // urlParamName="ordersPage"
-          totalPages={eventsByOrganizer?.totalPages}
-        />
       </section>
 
-      <section className="wrapper my-8">
-        <div className="wrapper mb-4 kronaOne">
+      <section className="my-8 shadowCj pb-8">
+        <div className="wrapper flex flex-col gap-8">
           <p className="h4-bold kronaOne text-dark dark:text-white text-xl uppercase">
             événements passés!
           </p>
+          <Collection
+            data={eventsByOrganizer?.data.pastEvents}
+            emptyTitle="Aucun Event créé"
+            emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
+            collectionType="All_Events"
+            limit={6}
+            page={page}
+            // urlParamName="ordersPage"
+            totalPages={eventsByOrganizer?.totalPages}
+          />
         </div>
-        <Collection
-          data={eventsByOrganizer?.data.pastEvents}
-          emptyTitle="Aucun Event créé"
-          emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
-          collectionType="All_Events"
-          limit={6}
-          page={page}
-          // urlParamName="ordersPage"
-          totalPages={eventsByOrganizer?.totalPages}
-        />
       </section>
     </>
   );

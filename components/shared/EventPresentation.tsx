@@ -2,6 +2,8 @@ import { SearchParamProps } from "@/types";
 import Image from "next/image";
 import Link from "next/link";
 
+import Ripple from "@/components/magicui/ripple2";
+
 import {
   getEventById,
   getRelatedEventsByCategory,
@@ -62,38 +64,37 @@ export const EventPresentation = async ({
 
   return (
     <>
-      <div className="relative w-screen overflow-hidden flex flex-col rounded-sm">
-        <div className="absolute inset-0 w-full h-full bg-primary dark:bg-dark [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
-        <Boxes />
+      <div className="relative flex  w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
+        <Ripple />
 
-        <section className="flex justify-center z-20 my-20">
+        <section className="wrapper flex justify-center z-20 my-20">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 2xl:max-w-7xl rounded-sm sm:py-10">
             <Image
               src={event.imageUrl ? event.imageUrl : ""} // Configurer le fichier next.config.js pour les images venant du serveur UploadThing
               alt={event.title ? event.title : "Event Image"}
               width={1000}
               height={1000}
-              className="h-full min-g-[300px] object-cover object-center rounded-sm p-5 sm:p-0 "
+              className="h-full min-g-[300px] object-cover object-center rounded-sm p-5 sm:p-0"
             />
 
-            <div className="flex w-full flex-col gap-8 p-5 md:p-10 bg-transparent backdrop-blur-[2px] shadow-2xl rounded-sm">
+            <div className="flex w-full flex-col gap-8 p-5 md:p-10 bg-transparent backdrop-blur-[4px] shadow-2xl rounded-sm">
               <div className="flex flex-col gap-6">
                 <div className="flex justify-between">
-                  <h2 className="h2-bold">{event.title}</h2>
+                  <h2 className="h2-bold rubik">{event.title}</h2>
                   <BtnAddFavorite isFavorite={isFavorite} event={event} />
                 </div>
 
                 <div className="flex sm:justify-between items-center gap-3 sm:flex-row sm:items-center">
                   <div className="flex gap-3">
-                    <p className="p-bold-20 rounded-sm bg-primary-500 text-white dark:bg-dark-500 dark:text-white px-5 py-2 ">
+                    <p className="p-bold-16 rubik rounded-sm bg-primary-500 text-white dark:bg-dark-500 dark:text-white px-5 py-2">
                       {event.isFree ? "Gratuit" : `${event.price} €`}
                     </p>
-                    <p className="p-medium-16 rounded-sm bg-grey-500/10 px-4 py-2.5 text-grey-500">
+                    <p className="p-medium-16 rubik rounded-sm bg-grey-500/30 px-4 py-2.5 text-grey-500">
                       {event.Category?.name}
                     </p>
                   </div>
 
-                  <p className="p-medium-14 ml-2 mt-2 sm:mt-0">
+                  <p className="p-medium-14 rubik ml-2 mt-2 sm:mt-0">
                     par{" "}
                     <Link
                       href={`/profil/${event?.Organizer.organizationName}`}
@@ -114,20 +115,20 @@ export const EventPresentation = async ({
                     height={32}
                   />
                   {isPastEvent && event ? (
-                    <p className="p-medium-16 lg:p-medium-16 text-red-400 flex flex-wrap items-center">
+                    <p className="p-medium-16 rubik text-red-400 flex flex-wrap items-center">
                       Cette événement s&apos;est terminé le{" "}
                       {new Date(event.endDateTime).toLocaleDateString("fr-FR")}
                     </p>
                   ) : isEnCours ? (
-                    <div className="p-medium-16 lg:p-regular-16 flex flex-wrap items-center gap-1">
-                      <p className="p-medium-14 text-primary">En cours</p>
+                    <div className="p-regular-16 flex flex-wrap items-center gap-1">
+                      <p className="p-medium-14 text-white rubik">En cours</p>
                       <p>
                         {formatDateTime(event.endDateTime).dateOnly} -{" "}
                         {formatDateTime(event.endDateTime).timeOnly}
                       </p>
                     </div>
                   ) : (
-                    <div className="p-medium-16 lg:p-regular-18 flex flex-wrap items-center gap-1">
+                    <div className="rubik p-regular-16 flex flex-wrap items-center gap-1">
                       <p>
                         {formatDateTime(event.startDateTime).dateOnly ?? ""} -{" "}
                         {formatDateTime(event.startDateTime).timeOnly} |{" "}
@@ -140,24 +141,22 @@ export const EventPresentation = async ({
                   )}
                 </div>
 
-                <div className="p-regular-20 flex items-center gap-3">
+                <div className="rubik p-regular-20 flex items-center gap-3">
                   <Image
                     src="/assets/icons/location.svg"
                     alt="Location"
                     width={32}
                     height={32}
                   />
-                  <p className="p-medium-16 lg:p-regular-18">
-                    {event?.location}
-                  </p>
+                  <p className="p-regular-16">{event?.location}</p>
                 </div>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 rubik">
                 <p className="p-bold-20 text-grey-600">
                   Ce qu&apos;il faut savoir :{" "}
                 </p>
-                <p className="p-medium-16 lg:p-regular-18">
+                <p className="p-regular-16 lg:p-regular-16">
                   {event?.description}
                 </p>
 
@@ -167,7 +166,7 @@ export const EventPresentation = async ({
               </div>
               <div className="flex justify-center items-center gap-8">
                 <Link href={event?.url ? event.url : ""} className="w-full">
-                  <Button className="button rounded-sm w-full">
+                  <Button className="button rounded-sm uppercase rubik w-full">
                     Prendre mon billet
                   </Button>
                 </Link>

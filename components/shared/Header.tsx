@@ -30,11 +30,8 @@ const Header = async () => {
                 <NavItems />
               </nav>
               <div className="flex justify-center items-center gap-4">
-                {/* <p className="h4-bold font-semibold rubik text-center dark:text-white">
-                  {userName?.split(" ")[0]}
-                </p> */}
                 <UserBtn />
-                <ThemeToggle />
+                {/* <ThemeToggle /> */}
               </div>
             </div>
           ) : (
@@ -49,7 +46,7 @@ const Header = async () => {
                 >
                   <Link href="/auth/connexion">connexion</Link>
                 </Button>
-                <ThemeToggle />
+                {/* <ThemeToggle /> */}
               </div>
             </div>
           )}

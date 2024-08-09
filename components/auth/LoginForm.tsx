@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { userLoginSchema } from "@/lib/validator";
 import { login } from "@/lib/actions/auth.actions";
 
-import { CardWrapper } from "./CardWrapper";
+import { CardWrapper } from "./CardWrapperBis";
 import { FormError } from "../shared/FormError";
 import { FormSuccess } from "../shared/FormSuccess";
 import { useState, useTransition } from "react";
@@ -103,7 +103,7 @@ export const LoginForm = () => {
                         placeholder="123456"
                         {...field}
                         disabled={isPending}
-                        className="input rounded-sm"
+                        className="input-field rounded-sm"
                       />
                     </FormControl>
                     <FormMessage />
@@ -126,7 +126,7 @@ export const LoginForm = () => {
                           placeholder="vibey@email.fr"
                           {...field}
                           disabled={isPending}
-                          className="input rounded-sm text-dark"
+                          className="input-field rounded-sm text-dark"
                         />
                       </FormControl>
                       <FormMessage />
@@ -147,13 +147,13 @@ export const LoginForm = () => {
                           placeholder="Mot de passe"
                           {...field}
                           disabled={isPending}
-                          className="input rounded-sm text-dark"
+                          className="input-field rounded-sm"
                         />
                       </FormControl>
                       <button className="">
                         <Link
                           href="/auth/reset"
-                          className="text-[0.8rem] hover:text-grey-500"
+                          className="text-[0.8rem] hover:text-grey-500 rubik"
                         >
                           Mot de passe oublié ?
                         </Link>

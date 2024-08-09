@@ -110,83 +110,21 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-5"
+        className="flex flex-col gap-5 w-full sm:w-1/2 mx-auto"
       >
-        <div className="flex flex-col gap-5 md:flex-row justify-center items-center">
-          <Label htmlFor="firstName" className="text-right">
-            Prénom
-          </Label>
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Input
-                    id="firstName"
-                    {...field}
-                    className="input-field"
-                    disabled={isPending}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-
-          <Label htmlFor="lastName" className="text-right">
-            Nom
-          </Label>
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <Input
-                    id="lastName"
-                    {...field}
-                    className="input-field"
-                    disabled={isPending}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {user?.role === "organizer" && (
-          <div className="flex flex-col gap-5 md:flex-row justify-center items-center">
-            <Label htmlFor="firstName" className="text-right">
-              Nom de l&apos;organisation
+        <div className="flex flex-row gap-2 w-full">
+          <div className="flex flex-col gap-2 w-full">
+            <Label htmlFor="firstName" className="text-white rubik">
+              Prénom
             </Label>
             <FormField
               control={form.control}
-              name="organizationName"
+              name="firstName"
               render={({ field }) => (
                 <FormItem className="w-full">
                   <FormControl>
                     <Input
-                      id="organizationName"
-                      {...field}
-                      className="input-field"
-                      disabled={isPending}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <Label htmlFor="lastName" className="text-right">
-              Type d&apos;organisation
-            </Label>
-            <FormField
-              control={form.control}
-              name="organizationType"
-              render={({ field }) => (
-                <FormItem className="w-full">
-                  <FormControl>
-                    <Input
-                      id="organizationType"
+                      id="firstName"
                       {...field}
                       className="input-field"
                       disabled={isPending}
@@ -196,32 +134,104 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
               )}
             />
           </div>
-        )}
 
-        <div className="flex flex-col gap-5 md:flex-row justify-center items-center">
-          {user?.isOAuth === false && (
-            <>
-              <Label htmlFor="email" className="text-right">
-                Email
+          <div className="flex flex-col gap-2 w-full">
+            <Label htmlFor="lastName" className="text-white rubik">
+              Nom
+            </Label>
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input
+                      id="lastName"
+                      {...field}
+                      className="input-field"
+                      disabled={isPending}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+          </div>
+        </div>
+
+        {user?.role === "organizer" && (
+          <div className="flex gap-2 w-full">
+            <div className="flex flex-col gap-2 w-full">
+              <Label htmlFor="firstName" className="text-white rubik">
+                Nom de l&apos;organisation
               </Label>
               <FormField
                 control={form.control}
-                name="email"
+                name="organizationName"
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
                       <Input
-                        type="email"
-                        id="email"
+                        id="organizationName"
                         {...field}
                         className="input-field"
                         disabled={isPending}
                       />
                     </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />
+            </div>
+
+            <div className="flex flex-col gap-2 w-full">
+              <Label htmlFor="lastName" className="text-white rubik">
+                Type d&apos;organisation
+              </Label>
+              <FormField
+                control={form.control}
+                name="organizationType"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input
+                        id="organizationType"
+                        {...field}
+                        className="input-field"
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col gap-6">
+          {user?.isOAuth === false && (
+            <>
+              <div className="flex flex-col gap-2 w-full">
+                <Label htmlFor="email" className="text-white rubik">
+                  Email
+                </Label>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <Input
+                          type="email"
+                          id="email"
+                          {...field}
+                          className="input-field"
+                          disabled={isPending}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </>
           )}
 
@@ -231,7 +241,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormControl>
-                  <div className="flex-center h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
+                  <div className="flex-center h-[40px] w-full overflow-hidden rounded-sm bg-grey-50 px-4 py-2 text-dark">
                     <Image
                       src="/assets/icons/location-grey.svg"
                       width={24}
@@ -239,7 +249,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
                       alt="location icon"
                     />
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="select-field">
+                      <SelectTrigger className="rubik text-dark dark:text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm p-regular-16 px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
                         <SelectValue placeholder="Département" />
                       </SelectTrigger>
                       <SelectContent>
@@ -247,7 +257,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
                           <SelectItem
                             key={departement.numero}
                             value={departement.numero}
-                            className="select-item p-regular-14 "
+                            className="rubik text-white bg-dark"
                           >
                             {departement.nom} - {departement.numero}
                           </SelectItem>
@@ -262,40 +272,42 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
           />
         </div>
 
-        <div className="flex flex-col gap-5 md:flex-row">
+        <div className="flex flex-col gap-5 md:flex-row w-full">
           {user?.isOAuth === false && (
             <>
-              <Label htmlFor="email" className="text-right"></Label>
-              <FormField
-                control={form.control}
-                name="isTwofactorEnabled"
-                render={({ field }) => (
-                  <FormItem className="w-full flex items-center rounded-full justify-between p-2 px-4 shadow-sm">
-                    <div className="space-y-0.5 ">
-                      <FormLabel>Authentification à 2 facteurs</FormLabel>
-                      <FormDescription>
-                        Activer l&apos;authentification à deux facteurs pour
-                        sécuriser votre compte :{" "}
-                        {user.isTwofactorEnabled ? "Activé" : "Désactivé"}
-                      </FormDescription>
-                    </div>
-                    <FormControl>
-                      <Switch
-                        id="isTwofactorEnabled"
-                        disabled={isPending}
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <div className="w-full">
+                <Label htmlFor="email" className="text-white rubik"></Label>
+                <FormField
+                  control={form.control}
+                  name="isTwofactorEnabled"
+                  render={({ field }) => (
+                    <FormItem className="w-full flex items-center rounded-sm justify-between p-2 px-4 bg-grey-50 shadow-sm">
+                      <div className="space-y-0.5 rubik">
+                        <FormLabel>Authentification à 2 facteurs</FormLabel>
+                        <FormDescription>
+                          Activer l&apos;authentification à deux facteurs pour
+                          sécuriser votre compte :{" "}
+                          {user.isTwofactorEnabled ? "Activé" : "Désactivé"}
+                        </FormDescription>
+                      </div>
+                      <FormControl>
+                        <Switch
+                          id="isTwofactorEnabled"
+                          disabled={isPending}
+                          checked={field.value}
+                          onCheckedChange={field.onChange}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
             </>
           )}
 
           {user?.role === "user" && (
             <>
-              <Label htmlFor="email" className="text-right"></Label>
+              <Label htmlFor="email" className="text-white rubik"></Label>
               <FormField
                 control={form.control}
                 name="isHidenWishlist"

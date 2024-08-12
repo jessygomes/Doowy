@@ -43,7 +43,7 @@ export const headerLinkNoUser = [
   },
   {
     label: "Organisateur ?",
-    route: "#organisateur",
+    route: "/organisateur",
   },
 ];
 

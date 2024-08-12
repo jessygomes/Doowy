@@ -176,7 +176,7 @@ export default async function Home({
                 </p>
                 <Button size="sm" asChild className="button w-full lg:w-fit">
                   <Link
-                    href="/auth/inscription/org"
+                    href="/organisateur"
                     className="font-bold tracking-widest uppercase"
                   >
                     S&apos;inscrire en tant qu&apos;organisateur

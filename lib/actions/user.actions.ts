@@ -48,7 +48,7 @@ export async function getUserByIdForProfile(userId: string) {
         firstName: true,
         lastName: true,
         email: true,
-        photo: true,
+        image: true,
         description: true,
         followers: true,
         following: true,
@@ -455,7 +455,7 @@ export async function getFollowers({ userId }: { userId: string }) {
             id: true,
             organizationName: true,
             name: true, // Assurez-vous d'ajuster ceci pour correspondre à votre modèle si vous utilisez firstName + lastName
-            photo: true,
+            image: true,
           },
         },
       },
@@ -480,7 +480,7 @@ export async function getMyFollowingUsers({ userId }: { userId: string }) {
             id: true,
             organizationName: true,
             name: true, // Assurez-vous d'ajuster ceci pour correspondre à votre modèle si vous utilisez firstName + lastName
-            photo: true,
+            image: true,
           },
         },
       },

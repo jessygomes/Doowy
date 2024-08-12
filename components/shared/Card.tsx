@@ -126,7 +126,7 @@ const Card = async ({
                   alt="location icon"
                 />
                 <p className="p-medium-14 p-medium-18 text-grey-500">
-                  {event.departement}
+                  {event.departement === "100" ? "Online" : event.departement}
                 </p>
               </div>
             )}

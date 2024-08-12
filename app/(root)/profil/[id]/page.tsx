@@ -4,16 +4,15 @@ import Image from "next/image";
 import { currentUser } from "@/lib/auth";
 import { getEventsByUser } from "@/lib/actions/event.actions";
 import {
-  getUserById,
   getUserByIdForProfile,
   getWishlistProfil,
 } from "@/lib/actions/user.actions";
-import { GetUserParams, SearchParamProps } from "@/types";
+import { SearchParamProps } from "@/types";
 
 import BtnFollow from "@/components/shared/BtnFollow";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+
 import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
 import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
 
@@ -21,7 +20,6 @@ import { CiInstagram } from "react-icons/ci";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaTiktok } from "react-icons/fa";
 import { FaCertificate } from "react-icons/fa";
-import { Boxes } from "@/components/ui/background-boxes";
 import Ripple from "@/components/magicui/ripple";
 
 interface Props {
@@ -41,6 +39,8 @@ export default async function ProfilPublic({
 
   //! Récupération des infos du profil visité
   const userProfile = await getUserByIdForProfile(id);
+
+  console.log("userProfile", userProfile);
 
   //! Récupération des événements de l'utilisateur
   const page = Number(searchParams?.page) || 1;
@@ -85,12 +85,12 @@ export default async function ProfilPublic({
             <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
               <div className="flex gap-4 items-center">
                 <div className="w-20 h-20 sm:w-32 sm:h-32">
-                  {userProfile?.photo ? (
+                  {userProfile?.image ? (
                     <Image
-                      src={userProfile.photo}
+                      src={userProfile.image}
                       width={1000}
                       height={1000}
-                      alt="photo d'accueil"
+                      alt="Photo de profil"
                       className="object-cover w-full h-full rounded-full"
                     />
                   ) : (
@@ -157,9 +157,9 @@ export default async function ProfilPublic({
           <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
             <div className="flex gap-4 items-center justify-center">
               <div className=" w-20 h-20 sm:w-32 sm:h-32">
-                {userProfile?.photo ? (
+                {userProfile?.image ? (
                   <Image
-                    src={userProfile.photo}
+                    src={userProfile.image}
                     width={1000}
                     height={1000}
                     alt="photo d'accueil"

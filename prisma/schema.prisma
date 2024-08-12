@@ -33,11 +33,13 @@ model User {
   departement            String?
   organizationName       String?
   organizationType       String?
-  photo                  String?
+  imageProfile           String?
+  image                  String?
   description            String?
   instagram              String?
   twitter                String?
   tiktok                 String?
+  youtube                String?
   isHidenWishlist       Boolean                @default(false)
   followers              Int                    @default(0)
   following              Int                    @default(0)

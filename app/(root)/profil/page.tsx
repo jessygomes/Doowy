@@ -62,9 +62,9 @@ export default async function ProfilPrivate({
             <div className="flex flex-col justify-center gap-8 lg:wrapper">
               <div className="flex flex-col sm:flex-row gap-4 items-center">
                 <div className=" w-20 h-20 sm:w-32 sm:h-32">
-                  {currentUserProfile?.photo ? (
+                  {currentUserProfile?.image ? (
                     <Image
-                      src={currentUserProfile.photo}
+                      src={currentUserProfile.image}
                       width={1000}
                       height={1000}
                       alt="photo d'accueil"

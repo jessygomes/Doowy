@@ -10,7 +10,7 @@ import { FaUser } from "react-icons/fa";
 type Following = {
   id: string;
   name: string | null;
-  photo: string | null;
+  image: string | null;
 };
 
 export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
@@ -38,8 +38,6 @@ export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
       loadFollowingUsers();
     }
   }, [userId]);
-
-  console.log("FOLOLWER", followingUsers);
 
   return (
     <div>
@@ -70,22 +68,12 @@ export const PersonnesSuivies = ({ userId }: { userId?: string }) => {
                 >
                   <Link href={`/profil/${user.id}`}>
                     <div className="flex gap-4 items-center">
-                      {user.photo ? (
-                        <Image
-                          src={user.photo ? user.photo : ""}
-                          alt="avatar"
-                          width={30}
-                          height={30}
-                          className="rounded-full"
-                        />
-                      ) : (
-                        <Avatar>
-                          <AvatarImage src={user?.image || ""} />
-                          <AvatarFallback className="bg-linear-hover">
-                            <FaUser className="text-white" />
-                          </AvatarFallback>
-                        </Avatar>
-                      )}
+                      <Avatar>
+                        <AvatarImage src={user?.image || ""} />
+                        <AvatarFallback className="bg-linear-hover">
+                          <FaUser className="text-white" />
+                        </AvatarFallback>
+                      </Avatar>
                       {user.organizationName ?? user.name}
                     </div>
                   </Link>

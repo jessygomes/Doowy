@@ -100,7 +100,8 @@ export const userProfileSchema = z.object({
   instagram: z.string().url().or(z.string().length(0)).optional(),
   twitter: z.string().url().or(z.string().length(0)).optional(),
   tiktok: z.string().url().or(z.string().length(0)).optional(),
-  // photo: z.string(),
+  youtube: z.string().url().or(z.string().length(0)).optional(),
+  image: z.string(),
 });
 
 export const userSettingSchema = z.object({

@@ -23,11 +23,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { FileUploader } from "./FileUploader";
+import { useUploadThing } from "@/lib/uploadthing";
 
 type UserFormProps = {
   organizer: {
     description?: string | null;
-    photo?: string | null;
+    image?: string | null;
+    imageProfile?: string | null;
     instagram?: string | null;
     twitter?: string | null;
     tiktok?: string | null;
@@ -44,7 +47,7 @@ const UserForm2 = ({ organizer }: UserFormProps) => {
 
   const initialValue = {
     description: organizer?.description ?? "",
-    // photo: organizer?.photo,
+    image: organizer?.imageProfile ?? "",
     instagram: organizer?.instagram ?? "",
     twitter: organizer?.twitter ?? "",
     tiktok: organizer?.tiktok ?? "",
@@ -55,9 +58,20 @@ const UserForm2 = ({ organizer }: UserFormProps) => {
     defaultValues: initialValue,
   });
 
+  const [files, setFiles] = useState<File[]>([]); // Pour la gestion des fichiers (images)
+  const { startUpload } = useUploadThing("imageUploader"); //! Hook pour uploader des images
+
   async function onSubmit(values: z.infer<typeof userProfileSchema>) {
+    let uploadedImgUrl = values.image;
+
+    if (files.length > 0) {
+      const uploadedImages = await startUpload(files);
+      if (!uploadedImages) return;
+      uploadedImgUrl = uploadedImages[0].url;
+    }
+
     startTransition(() => {
-      updateProfileUser(values)
+      updateProfileUser({ ...values, image: uploadedImgUrl })
         .then((data) => {
           if (data.error) {
             console.error(data.error);
@@ -85,6 +99,28 @@ const UserForm2 = ({ organizer }: UserFormProps) => {
         className="flex flex-col justify-center items-center gap-5"
       >
         <div className="flex flex-col sm:flex-row gap-4 w-full">
+          <div className="flex flex-col gap-2 w-full">
+            <Label htmlFor="description" className="text-white rubik">
+              Photo de profil
+            </Label>
+            <FormField
+              control={form.control}
+              name="image"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl className="h-72">
+                    <FileUploader
+                      onFieldChange={field.onChange}
+                      imageUrl={field.value}
+                      setFiles={setFiles}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <div className="flex flex-col gap-2 w-full">
             <Label htmlFor="description" className="text-white rubik">
               Description
@@ -165,6 +201,28 @@ const UserForm2 = ({ organizer }: UserFormProps) => {
                     <FormControl>
                       <Input
                         id="tiktok"
+                        {...field}
+                        className="input-field"
+                        disabled={isPending}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="tiktok" className="text-white rubik">
+                YouTube
+              </Label>
+              <FormField
+                control={form.control}
+                name="youtube"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormControl>
+                      <Input
+                        id="youtube"
                         {...field}
                         className="input-field"
                         disabled={isPending}

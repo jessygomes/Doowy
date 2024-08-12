@@ -1,13 +1,13 @@
 "use client";
-import Image from "next/image";
 
 import { useCallback, Dispatch, SetStateAction } from "react";
 
 import { useDropzone } from "react-dropzone";
 import { generateClientDropzoneAccept } from "uploadthing/client";
-import { convertFileToUrl } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
+import { convertFileToUrl } from "@/lib/utils";
+import Image from "next/image";
 
 type FileUploaderProps = {
   onFieldChange: (url: string) => void;

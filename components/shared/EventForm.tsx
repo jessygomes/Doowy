@@ -11,7 +11,7 @@ import { createEvent, updateEvent } from "@/lib/actions/event.actions";
 import { departements, eventDefaultValues } from "@/constants"; //! Valeur initiale du formulaire (vide)
 
 import "react-datepicker/dist/react-datepicker.css";
-import { registerLocale, setDefaultLocale } from "react-datepicker";
+import { registerLocale } from "react-datepicker";
 import { fr } from "date-fns/locale/fr";
 import { useUploadThing } from "../../lib/uploadthing";
 import DatePicker from "react-datepicker";
@@ -19,10 +19,8 @@ import DatePicker from "react-datepicker";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import {

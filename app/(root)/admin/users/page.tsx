@@ -10,8 +10,8 @@ export default async function UserAdminPage() {
   const users = await getAllUsers();
   console.log("users", users);
 
-  const organizers = users.filter((user) => user.role === "organizer");
-  const regularUsers = users.filter((user) => user.role === "user");
+  const organizers = users?.filter((user) => user.role === "organizer") || [];
+  const regularUsers = users?.filter((user) => user.role === "user") || [];
 
   return (
     <>

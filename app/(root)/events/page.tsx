@@ -40,7 +40,7 @@ export default async function Events({
     Trust by <br /> Thousands of Events
   </h2> */}
         <div className="flex justify-start items-center gap-8 mt-10 kronaOne">
-          <p className="h3-bold text-dark dark:text-white text-xl uppercase">
+          <p className="h3-bold text-dark dark:text-white text-xl uppercase z-20">
             tous les évenements
           </p>
         </div>

@@ -15,7 +15,6 @@ import { formatDateTime } from "@/lib/utils";
 import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
-import { Boxes } from "@/components/ui/background-boxes";
 
 export const EventPresentation = async ({
   params: { id },
@@ -98,7 +97,7 @@ export const EventPresentation = async ({
                     par{" "}
                     <Link
                       href={`/profil/${event?.Organizer.organizationName}`}
-                      className="text-primary-500 hover:text-grey-600"
+                      className="text-primary-500 hover:text-second transition-all ease-in-out duration-300"
                     >
                       {event?.Organizer.organizationName}
                     </Link>

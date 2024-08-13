@@ -44,6 +44,9 @@ module.exports = withUt({
         second: {
           DEFAULT: "#ff4000d5",
         },
+        third: {
+          DEFAULT: "#9000ff73",
+        },
 
         grey: {
           600: "#545454", // Subdued - color name in figma

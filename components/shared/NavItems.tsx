@@ -7,6 +7,7 @@ import { Role } from "@prisma/client";
 
 import {
   headerLinkNoUser,
+  headerLinksAdmin,
   headerLinksOrganizer,
   headerLinksUser,
 } from "@/constants";
@@ -20,6 +21,26 @@ const NavItems = () => {
     return (
       <ul className="md-flex-between flex flex-col items-start gap-8 sm:gap-16 md:flex-row rubik">
         {headerLinksOrganizer.map((link, index) => {
+          const isActive = pathname === link.route;
+          return (
+            <li
+              key={index}
+              className={`${
+                isActive && "text-white border-white font-bold"
+              } flex-center p-medium-20 sm:p-medium-16 whitespace-nowrap py-2 border-b-2 border-transparent hover:border-white transition-all ease-in-out`}
+            >
+              <Link href={link.route}>{link.label}</Link>
+            </li>
+          );
+        })}
+      </ul>
+    );
+  }
+
+  if (role === Role.admin) {
+    return (
+      <ul className="md-flex-between flex flex-col items-start gap-8 sm:gap-16 md:flex-row rubik">
+        {headerLinksAdmin.map((link, index) => {
           const isActive = pathname === link.route;
           return (
             <li

@@ -7,7 +7,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { Event } from "@/types";
 
 import { Button } from "../ui/button";
-import { FaRegBookmark } from "react-icons/fa";
+import { MdOutlineFavorite } from "react-icons/md";
 
 const BtnAddFavorite = ({
   event,
@@ -55,9 +55,9 @@ const BtnAddFavorite = ({
   //! Si l'utilisateur n'est pas connecté, afficher un bouton pour le rediriger vers la page de connexion sinon le bouton ajoute aux favoris
   if (userId === null || userId === undefined) {
     return (
-      <Button asChild className=" rounded-full">
+      <Button asChild className="rounded-full">
         <Link href="/auth/connexion">
-          <FaRegBookmark />
+          <MdOutlineFavorite />
         </Link>
       </Button>
     );
@@ -65,19 +65,27 @@ const BtnAddFavorite = ({
     return (
       <>
         {!isEventCreator ? (
-          <div className="flex items-center gap-2">
-            <Button onClick={handleAddFavorite} className="rounded-full">
+          <div className="flex items-center rounded-sm">
+            <Button
+              onClick={handleAddFavorite}
+              className="bg-transparent hover:bg-transparent rounded-sm"
+            >
               {/* {isFav ? "Retirer des favoris" : "Ajouter aux favoris"} */}
-              <FaRegBookmark className={isFav ? "text-black bg-white" : ""} />
+              <MdOutlineFavorite
+                size={30}
+                className={
+                  isFav
+                    ? "text-second hover:text-third transition-all ease-in-out duration-300"
+                    : "text-white hover:text-third transition-all ease-in-out duration-300"
+                }
+              />
             </Button>
-            <p className="bg-grey-400 p-2 rounded-full text-white text-[0.8rem]">
-              {nbFav ?? "0"}
-            </p>
+            {/* <p className=" text-white rubik text-[0.8rem]">{nbFav ?? "0"}</p> */}
           </div>
         ) : (
           <div className="flex gap-2 items-center">
             <p>{nbFav}</p>
-            <FaRegBookmark />
+            <MdOutlineFavorite />
           </div>
         )}
       </>

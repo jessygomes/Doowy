@@ -40,8 +40,6 @@ export default async function ProfilPublic({
   //! Récupération des infos du profil visité
   const userProfile = await getUserByIdForProfile(id);
 
-  console.log("userProfile", userProfile);
-
   //! Récupération des événements de l'utilisateur
   const page = Number(searchParams?.page) || 1;
 
@@ -53,7 +51,6 @@ export default async function ProfilPublic({
       limit: 6,
     });
   }
-  console.log("eventsByOrganizer", eventsByOrganizer?.data.upcomingEvents);
 
   let eventsUserFav = null;
   if (userProfile && userProfile.role !== "organizer") {

@@ -16,9 +16,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-import { deleteEvent } from "@/lib/actions/event.actions";
+import { deleteUser } from "@/lib/actions/user.actions";
 
-export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
+export const DeleteConfirmation = ({ userId }: { userId: string }) => {
   const pathname = usePathname();
   let [isPending, startTransition] = useTransition();
 
@@ -36,7 +36,7 @@ export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
       <AlertDialogContent className="bg-dark rounded-sm border-second">
         <AlertDialogHeader>
           <AlertDialogTitle className="rubik text-white">
-            Etes-vous sûr de vouloir supprimer cet évenement ?
+            Etes-vous sûr de vouloir supprimer cet utilisateur ?
           </AlertDialogTitle>
           <AlertDialogDescription className="rubik text-second">
             La suppression de cet évenement est irréversible.
@@ -51,7 +51,7 @@ export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
           <AlertDialogAction
             onClick={() =>
               startTransition(async () => {
-                await deleteEvent({ eventId, path: pathname });
+                await deleteUser({ userId, path: pathname });
               })
             }
             className="text-white rubik bg-second hover:bg-third"

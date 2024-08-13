@@ -13,6 +13,21 @@ export const headerLinksOrganizer = [
   },
 ];
 
+export const headerLinksAdmin = [
+  {
+    label: "Accueil",
+    route: "/",
+  },
+  {
+    label: "Events",
+    route: "/admin/events",
+  },
+  {
+    label: "Users",
+    route: "/admin/users",
+  },
+];
+
 export const headerLinksUser = [
   {
     label: "Accueil",

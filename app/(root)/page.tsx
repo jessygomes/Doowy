@@ -42,6 +42,38 @@ export default async function Home({
   const userId = user?.id;
   console.log("userId", user);
 
+  if (user?.role === "admin") {
+    return (
+      <div className="flex justify-center items-center">
+        <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
+          <Ripple />
+          <section className="sm:wrapper z-20">
+            <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2">
+              <div className=" flex flex-col justify-end items-end lg:justify-center lg:items-center gap-4">
+                <h1 className="h1-bold text-dark dark:text-white sm:text-center rubik uppercase">
+                  <BlurIn word="Administration" className="" />
+                  <BlurIn
+                    word="vibey! - Gestion des événements"
+                    className="bg-linear-text h1-bold"
+                  />
+                </h1>
+                <Button
+                  size="sm"
+                  asChild
+                  className="button w-full sm:w-52 lg:w-fit"
+                >
+                  <Link href="#events" className="font-bold tracking-widest">
+                    EXPLORER
+                  </Link>
+                </Button>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex justify-center items-center">
@@ -57,9 +89,6 @@ export default async function Home({
                       word="aux événements de votre ville!"
                       className="bg-linear-text h1-bold"
                     />
-                    {/* <span className="bg-linear-text">
-                      aux événements de votre ville!
-                    </span> */}
                   </h1>
                   <Button
                     size="sm"
@@ -75,6 +104,7 @@ export default async function Home({
             </section>
           </div>
         )}
+
         {/* SECTION SUBSCRIPTION */}
         {userId && (
           <>
@@ -137,6 +167,7 @@ export default async function Home({
         </section>
       </div>
 
+      {/* SECTION ORGANISATEUR */}
       {userId === undefined && (
         <section
           id="organisateur"
@@ -148,22 +179,9 @@ export default async function Home({
             </p>
           </div>
 
-          {/* <div className="h-screen relative w-screen overflow-hidden flex flex-col items-end justify-end rounded-sm">
-            <div className="absolute inset-0 w-full h-full bg-transparent dark:bg-dark z-20 [mask-image:radial-gradient(transparent,black)] pointer-events-none" />
-            <Boxes /> */}
-
           <section className="sm:wrapper">
             <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2 z-20">
               <div className="flex flex-col justify-start items-start gap-4">
-                {/* <div className="w-full h-[10rem] sm:h-[10rem] lg:h-[15rem] z-20 rounded-sm">
-                    <Image
-                      src="/assets/images/organisateur.jpg"
-                      alt="photo d'accueil"
-                      width={1000}
-                      height={1000}
-                      className="object-cover w-full h-full rounded-sm filter grayscale"
-                    />
-                  </div> */}
                 <h1 className="h1-bold text-dark dark:text-white sm:text-left rubik uppercase">
                   Créez vos évenements et <br />
                   <span className="bg-linear-text">
@@ -185,7 +203,6 @@ export default async function Home({
               </div>
             </div>
           </section>
-          {/* </div> */}
         </section>
       )}
     </>

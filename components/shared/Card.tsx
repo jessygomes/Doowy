@@ -43,6 +43,8 @@ const Card = async ({
   //! Vérifier si le User est le créateur de l'event
   const isEventCreator = event.organizer ? userId === event.organizer : false;
 
+  const isAdmin = user?.role === "admin";
+
   //! Vérifier si l'event est passé ou pas :
   const currentDateTime = new Date();
   const startDateTime = new Date(event.startDateTime);
@@ -69,6 +71,22 @@ const Card = async ({
 
       {/* IS EVENT CREATOR */}
       {isEventCreator && !hidePrice && (
+        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm bg-white p-3 transition-all">
+          <Link href={`/events/${event.id}/update`}>
+            <Image
+              src="/assets/icons/edit.svg"
+              alt="edit"
+              width={20}
+              height={20}
+              className="rounded-sm"
+            />
+          </Link>
+
+          <DeleteConfirmation eventId={event.id} />
+        </div>
+      )}
+
+      {isAdmin && !hidePrice && (
         <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm bg-white p-3 transition-all">
           <Link href={`/events/${event.id}/update`}>
             <Image
@@ -136,7 +154,7 @@ const Card = async ({
           <div className="flex-between w-full">
             <Link
               href={`/profil/${event.Organizer?.id}`}
-              className="p-medium-12 md:p-medium-12 hover:text-grey-500 dark:hover:text-grey-500"
+              className="p-medium-12 md:p-medium-12 hover:text-second transition-all ease-in-out duration-300"
             >
               {event.Organizer?.organizationName}
             </Link>

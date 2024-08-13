@@ -82,6 +82,11 @@ export type DeleteEventParams = {
   path: string;
 };
 
+export type DeleteUserParams = {
+  userId: string;
+  path: string;
+};
+
 export type GetAllEventsParams = {
   query: string;
   category: string;

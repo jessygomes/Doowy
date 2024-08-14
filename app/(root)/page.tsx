@@ -40,7 +40,7 @@ export default async function Home({
   //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
   const user = await currentUser();
   const userId = user?.id;
-  console.log("userId", user);
+  console.log(user);
 
   if (user?.role === "admin") {
     return (
@@ -57,15 +57,6 @@ export default async function Home({
                     className="bg-linear-text h1-bold"
                   />
                 </h1>
-                <Button
-                  size="sm"
-                  asChild
-                  className="button w-full sm:w-52 lg:w-fit"
-                >
-                  <Link href="#events" className="font-bold tracking-widest">
-                    EXPLORER
-                  </Link>
-                </Button>
               </div>
             </div>
           </section>

@@ -115,14 +115,14 @@ body {
   }
 
   .bg-linear-text {
-    background: linear-gradient(180deg, #ff4000d5 30.35%, #9000ff 100%);
+    background: linear-gradient(180deg, #ff4000 30.35%, #9000ff 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .bg-linear-hover {
-    background: linear-gradient(180deg, #ff400075 30.35%, #9000ff73 100%);
+    background: linear-gradient(180deg, #ff4000 30.35%, #9000ff 100%);
   }
 
   .border-gradient {

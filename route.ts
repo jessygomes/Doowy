@@ -33,6 +33,8 @@ export const organizerRoutes = ["/events/create", "/events/[id]/update"];
 
 export const adminRoutes = ["/admin", "/admin/users", "/admin/events"];
 
+export const adminPrefix = "/admin";
+
 /**
  * Le préfix pour les routes API utilisées pour l'authentification.
  * Les routes qui commencent par ce préfixe sont utilisées pour l'authentification.

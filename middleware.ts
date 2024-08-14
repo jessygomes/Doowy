@@ -29,6 +29,11 @@ function isPublicRouteFonction(path: any) {
 
 //! Middleware pour protéger les routes : Combiner le pathname et le statut de connexion pour décider ce que je vais faire sur la route ou se situe le user
 export default auth((req) => {
+  console.log("Middleware auth", req.auth);
+  console.log("Middleware auth user", req.auth?.user);
+  console.log("Middleware auth user role", req.auth?.user.role);
+  console.log("Middleware REQ", req.auth?.user.email);
+
   const { nextUrl } = req;
 
   const isLoggedIn = !!req.auth; // Vérifier si l'utilisateur est connecté ou non en convertissant req.auth en booléen
@@ -77,9 +82,11 @@ export default auth((req) => {
     if (!isLoggedIn) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
-    if (isLoggedIn && req.auth?.user.role !== "admin") {
+    if (isLoggedIn && req.auth?.user.email !== process.env.MAIL) {
       return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
     }
+    // L'utilisateur est connecté et a le rôle d'administrateur, il peut accéder à la route
+    return;
   }
 
   // if (isOrganizerRoute) {

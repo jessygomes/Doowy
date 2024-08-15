@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/form";
 import { FileUploader } from "./FileUploader";
 import { useUploadThing } from "@/lib/uploadthing";
+import { revalidatePath } from "next/cache";
 
 type UserFormProps = {
   organizer: {
@@ -47,7 +48,7 @@ const UserForm2 = ({ organizer }: UserFormProps) => {
 
   const initialValue = {
     description: organizer?.description ?? "",
-    image: organizer?.imageProfile ?? "",
+    image: organizer?.image ?? "",
     instagram: organizer?.instagram ?? "",
     twitter: organizer?.twitter ?? "",
     tiktok: organizer?.tiktok ?? "",
@@ -83,6 +84,7 @@ const UserForm2 = ({ organizer }: UserFormProps) => {
             setSuccess(data.success);
           }
           router.push("/profil");
+          revalidatePath("/profil");
         })
         .catch(() => setError("Une erreur est survenue"));
     });

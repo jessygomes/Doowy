@@ -17,8 +17,6 @@ import { FaUser, FaSignOutAlt, FaRegSun } from "react-icons/fa";
 export const UserBtn = () => {
   const user = useCurrentUser();
 
-  console.log(user);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>

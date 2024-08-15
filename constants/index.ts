@@ -74,6 +74,7 @@ export const eventDefaultValues = {
   price: "",
   isFree: false,
   url: "",
+  stock: undefined,
 };
 
 export const departements = {

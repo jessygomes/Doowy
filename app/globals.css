@@ -122,7 +122,7 @@ body {
   }
 
   .bg-linear-hover {
-    background: linear-gradient(180deg, #ff4000 30.35%, #9000ff 100%);
+    background: linear-gradient(180deg, #ff4000ab 30.35%, #9000ff80 100%);
   }
 
   .border-gradient {

@@ -29,16 +29,16 @@ const Card = async ({
   let isFavorite = false;
 
   //! Réupération du tableau des favoris de l'utilisateur
-  if (userId !== null || userId !== undefined) {
-    const favoriteEvent = await getWishlist({ userId: userId || "", page: 1 });
+  // if (userId !== null || userId !== undefined) {
+  //   const favoriteEvent = await getWishlist({ userId: userId || "", page: 1 });
 
-    //! Vérifie si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
-    if (favoriteEvent && favoriteEvent.length > 0) {
-      isFavorite = favoriteEvent.some(
-        (favorite: any) => favorite.eventId === event.id
-      );
-    }
-  }
+  //   //! Vérifie si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
+  //   if (favoriteEvent && favoriteEvent.length > 0) {
+  //     isFavorite = favoriteEvent.some(
+  //       (favorite: any) => favorite.eventId === event.id
+  //     );
+  //   }
+  // }
 
   //! Vérifier si le User est le créateur de l'event
   const isEventCreator = event.organizer ? userId === event.organizer : false;
@@ -71,7 +71,7 @@ const Card = async ({
 
       {/* IS EVENT CREATOR */}
       {isEventCreator && !hidePrice && (
-        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm bg-white p-3 transition-all">
+        <div className="absolute right-2 top-2 flex gap-4 rounded-sm bg-dark/90 p-3 transition-all">
           <Link href={`/events/${event.id}/update`}>
             <Image
               src="/assets/icons/edit.svg"

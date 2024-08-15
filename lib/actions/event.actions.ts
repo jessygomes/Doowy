@@ -57,6 +57,7 @@ export const createEvent = async ({
   path,
 }: CreateEventParams) => {
   try {
+    console.log("FUNCTION CREATE EVENT", event);
     const role = await currentRole();
 
     if (role !== Role.organizer) {

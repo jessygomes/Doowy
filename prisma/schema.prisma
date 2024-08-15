@@ -33,7 +33,6 @@ model User {
   departement            String?
   organizationName       String?
   organizationType       String?
-  imageProfile           String?
   image                  String?
   description            String?
   instagram              String?
@@ -54,6 +53,8 @@ model User {
   accounts               Account[]
   isTwofactorEnabled     Boolean?               @default(false)
   twoFactoFrConfirmation TwoFactorConfirmation?
+  qrCodes                QRCode[]
+  isVerified             Boolean                @default(false)
 
   @@map("user")
 }
@@ -135,6 +136,7 @@ model Event {
   Category      Category?      @relation(fields: [category], references: [id])
   Organizer     User           @relation(fields: [organizer], references: [id], onDelete: Cascade)
   wishlist      UserWishlist[]
+  qrCodes       QRCode[]
 
   @@map("event")
 }
@@ -175,4 +177,15 @@ model UserFollowing {
 
   @@id([userId, followingId])
   @@map("user_following")
+}
+
+model QRCode {
+  id        String   @id @default(uuid())
+  code      String
+  eventId   String
+  Event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

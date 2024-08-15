@@ -29,11 +29,6 @@ function isPublicRouteFonction(path: any) {
 
 //! Middleware pour protéger les routes : Combiner le pathname et le statut de connexion pour décider ce que je vais faire sur la route ou se situe le user
 export default auth((req) => {
-  console.log("Middleware auth", req.auth);
-  console.log("Middleware auth user", req.auth?.user);
-  console.log("Middleware auth user role", req.auth?.user.role);
-  console.log("Middleware REQ", req.auth?.user.email);
-
   const { nextUrl } = req;
 
   const isLoggedIn = !!req.auth; // Vérifier si l'utilisateur est connecté ou non en convertissant req.auth en booléen
@@ -51,7 +46,7 @@ export default auth((req) => {
   const isOrganizerRoute = organizerRoutes.includes(nextUrl.pathname); // Vérifier si la route est une route d'organisateur
 
   /**
-   * L'ordre des conditions est important ici.
+   * ! L'ordre des conditions est important !
    * On check d'abord si c'est une API Route, ensuite si c'est une route d'authentification, et enfin si c'est une route publique et s'il le user est connecté ou non
    * A la fin, on autorise l'accès aux routes qui restent
    */

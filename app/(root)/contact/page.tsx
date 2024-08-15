@@ -14,8 +14,8 @@ export default function ContactPage() {
               <h1 className="h1-bold rubik">Contactez-nous</h1>
               <p className="p-regular-14 rubik">
                 N&apos;hésitez pas à nous contacter pour plus
-                d&apos;informations sur nos services ou pour toute autre
-                demande.
+                d&apos;informations sur nos services ou pour toutes autres
+                demandes.
               </p>
               <ContactForm />
             </div>

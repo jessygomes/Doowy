@@ -1,4 +1,3 @@
-import { departements } from "@/constants";
 import * as z from "zod";
 
 export const eventFormSchema = z.object({
@@ -6,7 +5,7 @@ export const eventFormSchema = z.object({
   description: z
     .string()
     .min(3, "La description doit contenir au moins 3 caractères")
-    .max(800, "La description doit contenir au maximum 800 caractères"),
+    .max(1000, "La description doit contenir au maximum 1000 caractères"),
   location: z
     .string()
     .min(8, "Le lieu doit contenir au moins 8 caractères")
@@ -19,6 +18,7 @@ export const eventFormSchema = z.object({
   price: z.string(),
   isFree: z.boolean(),
   url: z.string().url(),
+  stock: z.number().optional(),
 });
 
 export const userLoginSchema = z.object({

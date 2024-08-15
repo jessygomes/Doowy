@@ -22,6 +22,7 @@ import {
   FormField,
   FormItem,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import {
   Select,
@@ -47,6 +48,7 @@ type EventFormProps = {
     location?: string;
     departement: string;
     imageUrl: string;
+    stock?: number;
     startDateTime: Date;
     endDateTime: Date;
     price?: string;
@@ -92,6 +94,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
+    console.log(values);
     let uploadedImgUrl = values.imageUrl;
 
     if (files.length > 0) {
@@ -103,6 +106,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
     }
 
     if (type === "Créer") {
+      console.log("CREATION", values);
       try {
         const newEvent = await createEvent({
           event: { ...values, imageUrl: uploadedImgUrl },
@@ -365,7 +369,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                       type="number"
                       placeholder="Prix"
                       {...field}
-                      className="p-regular-16 border-0 bg-grey-50 outline-offset-0 focus:border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-dark dark:text-dark"
+                      className="input-field"
                     />
 
                     <FormField
@@ -377,7 +381,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                             <div className="flex items-center">
                               <label
                                 htmlFor="isFree"
-                                className=" whitespace-nowrap pr-3 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                className="rubik whitespace-nowrap pr-3 leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                               >
                                 Gratuit
                               </label>
@@ -426,10 +430,40 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           />
         </div>
 
+        {/* <FormField
+          control={form.control}
+          name="stock"
+          render={({ field }) => (
+            <FormItem className="w-full flex flex-col items-left rounded-sm justify-between p-2 px-4 bg-grey-400 shadow-sm">
+              <div className="space-y-0.5 rubik bg-grey-400">
+                <FormDescription className="text-grey-600">
+                  Si votre événement a un nombre de place limité et/ou si votre
+                  événement est payant,{" "}
+                  <span className="underline">
+                    vous pouvez renseigner le nombre de places disponibles.
+                  </span>{" "}
+                  Un qr code sera généré pour chaque place disponible.{" "}
+                  <span className="font-bold">
+                    Si ce n&apos;est pas le cas, laissez ce champ vide.
+                  </span>
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Input
+                  type="number"
+                  placeholder="Nombre de places"
+                  {...field}
+                  className="input-field"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        /> */}
+
         <Button
           type="submit"
           size="lg"
-          // disabled={form.formState.isSubmitted}
+          disabled={form.formState.isSubmitted}
           className="button col-span-2 w-full"
         >
           {form.formState.isSubmitted ? "En cours..." : `${type} l'événement`}

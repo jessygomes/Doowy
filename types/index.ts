@@ -16,10 +16,11 @@ export type UpdateUserParams = {
     firstName: string;
     lastName: string;
     description?: string;
-    // photo: string;
+    image: string;
     instagram?: string;
     twitter?: string;
     tiktok?: string;
+    isVerified: boolean;
   };
   path: string;
 };
@@ -36,6 +37,7 @@ export type GetUserParams = {
   followers: string[];
   following: string[];
   role: string;
+  isVerified: boolean;
 };
 
 // ====== EVENT PARAMS
@@ -54,6 +56,7 @@ export type CreateEventParams = {
     price: string;
     isFree: boolean;
     url: string;
+    stock?: number;
   };
   path: string;
 };
@@ -73,6 +76,7 @@ export type UpdateEventParams = {
     price: string;
     isFree: boolean;
     url: string;
+    stock?: number;
   };
   path: string;
 };
@@ -139,6 +143,7 @@ export type Event = {
   organizer?: string;
   category?: string | null;
   nbFav: number;
+  stock?: number;
   Category: {
     name?: string;
   } | null;

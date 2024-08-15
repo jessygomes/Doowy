@@ -15,6 +15,7 @@ import { formatDateTime } from "@/lib/utils";
 import BtnAddFavorite from "@/components/shared/BtnAddFavorite";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
+import { DeleteConfirmation } from "./DeleteConfirmation";
 
 export const EventPresentation = async ({
   params: { id },
@@ -53,6 +54,9 @@ export const EventPresentation = async ({
     }
   }
 
+  //! Vérifier si le User est le créateur de l'event
+  const isEventCreator = event.organizer ? userId === event.organizer : false;
+
   //! Vérifier si l'event est passé ou pas :
   const currentDateTime = new Date();
   const startDateTime = new Date(event.startDateTime);
@@ -80,7 +84,22 @@ export const EventPresentation = async ({
               <div className="flex flex-col gap-6">
                 <div className="flex justify-between">
                   <h2 className="h2-bold rubik">{event.title}</h2>
-                  <BtnAddFavorite isFavorite={isFavorite} event={event} />
+                  {isEventCreator ? (
+                    <div className="absolute right-4 top-11 flex gap-4 rounded-sm bg-dark p-3 transition-all">
+                      <Link href={`/events/${event.id}/update`}>
+                        <Image
+                          src="/assets/icons/edit.svg"
+                          alt="edit"
+                          width={20}
+                          height={20}
+                          className="rounded-sm"
+                        />
+                      </Link>
+                      <DeleteConfirmation eventId={event.id} />
+                    </div>
+                  ) : (
+                    <BtnAddFavorite isFavorite={isFavorite} event={event} />
+                  )}
                 </div>
 
                 <div className="flex sm:justify-between items-center gap-3 sm:flex-row sm:items-center">

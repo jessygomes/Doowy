@@ -135,12 +135,12 @@ export default async function ProfilPrivate({
               )}
               {currentUserProfile && currentUserProfile.twitter && (
                 <Link href={currentUserProfile.twitter}>
-                  <FaXTwitter size={40} className="text-white" />
+                  <FaXTwitter size={30} className="text-white" />
                 </Link>
               )}
               {currentUserProfile && currentUserProfile.tiktok && (
                 <Link href={currentUserProfile.tiktok}>
-                  <FaTiktok size={40} className="text-white" />
+                  <FaTiktok size={30} className="text-white" />
                 </Link>
               )}
             </div>

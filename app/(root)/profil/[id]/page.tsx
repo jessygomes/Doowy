@@ -198,17 +198,26 @@ export default async function ProfilPublic({
           <div className="flex gap-8 mt-4">
             {userProfile && userProfile.instagram && (
               <Link href={userProfile.instagram} target="_blank">
-                <CiInstagram size={30} className="text-white" />
+                <CiInstagram
+                  size={30}
+                  className="text-white hover:text-grey-400 transition-colors ease-in-out duration-300"
+                />
               </Link>
             )}
             {userProfile && userProfile.twitter && (
               <Link href={userProfile.twitter} target="_blank">
-                <FaXTwitter size={40} className="text-white" />
+                <FaXTwitter
+                  size={30}
+                  className="text-white hover:text-grey-400 transition-colors ease-in-out duration-300"
+                />
               </Link>
             )}
             {userProfile && userProfile.tiktok && (
               <Link href={userProfile.tiktok} target="_blank">
-                <FaTiktok size={40} className="text-white" />
+                <FaTiktok
+                  size={30}
+                  className="text-white hover:text-grey-400 transition-colors ease-in-out duration-300"
+                />
               </Link>
             )}
           </div>

@@ -1,13 +1,13 @@
-import { formatDateTime } from "@/lib/utils";
-
 import Image from "next/image";
 import Link from "next/link";
-import { DeleteConfirmation } from "./DeleteConfirmation";
-import BtnAddFavorite from "./BtnAddFavorite";
-import { Event } from "@/types";
-import { getWishlist } from "@/lib/actions/user.actions";
 
 import { currentUser } from "@/lib/auth";
+import { formatDateTime } from "@/lib/utils";
+
+import { Event } from "@/types";
+import { DeleteConfirmation } from "./DeleteConfirmation";
+
+import { FaEdit } from "react-icons/fa";
 
 type CardProps = {
   event: Event;
@@ -28,20 +28,10 @@ const Card = async ({
 
   let isFavorite = false;
 
-  //! Réupération du tableau des favoris de l'utilisateur
-  // if (userId !== null || userId !== undefined) {
-  //   const favoriteEvent = await getWishlist({ userId: userId || "", page: 1 });
-
-  //   //! Vérifie si l'event est dans les favoris de l'utilisateur : renvoie TRUE ou FALSE
-  //   if (favoriteEvent && favoriteEvent.length > 0) {
-  //     isFavorite = favoriteEvent.some(
-  //       (favorite: any) => favorite.eventId === event.id
-  //     );
-  //   }
-  // }
-
   //! Vérifier si le User est le créateur de l'event
   const isEventCreator = event.organizer ? userId === event.organizer : false;
+
+  console.log("ID ORG", event.organizer);
 
   const isAdmin = user?.role === "admin";
 
@@ -71,15 +61,9 @@ const Card = async ({
 
       {/* IS EVENT CREATOR */}
       {isEventCreator && !hidePrice && (
-        <div className="absolute right-2 top-2 flex gap-4 rounded-sm bg-dark/90 p-3 transition-all">
+        <div className="absolute right-2 top-2 flex gap-4 rounded-sm transition-all">
           <Link href={`/events/${event.id}/update`}>
-            <Image
-              src="/assets/icons/edit.svg"
-              alt="edit"
-              width={20}
-              height={20}
-              className="rounded-sm"
-            />
+            <FaEdit size={25} className="text-white hover:text-second" />
           </Link>
 
           <DeleteConfirmation eventId={event.id} />
@@ -87,15 +71,9 @@ const Card = async ({
       )}
 
       {isAdmin && !hidePrice && (
-        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm bg-white p-3 transition-all">
+        <div className="absolute right-2 top-2 flex flex-col gap-4 rounded-sm p-3 transition-all">
           <Link href={`/events/${event.id}/update`}>
-            <Image
-              src="/assets/icons/edit.svg"
-              alt="edit"
-              width={20}
-              height={20}
-              className="rounded-sm"
-            />
+            <FaEdit size={25} className="text-white hover:text-second" />
           </Link>
 
           <DeleteConfirmation eventId={event.id} />
@@ -153,7 +131,7 @@ const Card = async ({
           {/* ORGANISATEUR */}
           <div className="flex-between w-full">
             <Link
-              href={`/profil/${event.Organizer?.id}`}
+              href={`/profil/${event.organizer}`}
               className="p-medium-12 md:p-medium-12 hover:text-second transition-all ease-in-out duration-300"
             >
               {event.Organizer?.organizationName}

@@ -283,6 +283,9 @@ export async function getWishlist({
       where: { id: userId },
       select: {
         wishlist: {
+          orderBy: {
+            createdAt: "desc", // Trier par createdAt en ordre décroissant
+          },
           take: 6,
           skip: skipAmount,
         },
@@ -340,6 +343,9 @@ export async function getWishlistProfil({
             id: true,
           },
         },
+      },
+      orderBy: {
+        createdAt: "desc", // Trier par createdAt en ordre décroissant
       },
       skip: skipAmount,
       take: limit,

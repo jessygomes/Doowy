@@ -152,6 +152,7 @@ model Category {
 model UserWishlist {
   userId  String
   eventId String
+  createdAt DateTime @default(now())
   User    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   Event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
 

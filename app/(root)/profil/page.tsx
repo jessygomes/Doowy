@@ -18,8 +18,7 @@ import { Button } from "@/components/ui/button";
 import Collection from "@/components/shared/Collection";
 import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
 import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
-import { FaUser, FaCertificate, FaPen } from "react-icons/fa";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { FaCertificate, FaPen } from "react-icons/fa";
 import Ripple from "@/components/magicui/ripple";
 
 import { CiInstagram } from "react-icons/ci";
@@ -81,7 +80,11 @@ export default async function ProfilPrivate({
                   )}
                 </div>
                 <div className="flex gap-2">
-                  <p className="h3-bold rubik">{currentUserProfile?.name}</p>
+                  <p className="h3-bold rubik">
+                    {currentUserProfile?.role === "organizer"
+                      ? currentUserProfile?.organizationName
+                      : currentUserProfile?.name}
+                  </p>
                   <FaCertificate className="text-white" />
                 </div>
               </div>
@@ -127,7 +130,7 @@ export default async function ProfilPrivate({
               {currentUserProfile?.description ||
                 "Cliquer sur Modifier pour ajouter une description"}
             </p>
-            <div className="max-w-7xl lg:mx-auto px-5 md:px-10 xl:px-0 flex gap-8">
+            <div className="max-w-6xl lg:mx-auto px-5 md:px-10 xl:px-0 flex gap-8">
               {currentUserProfile && currentUserProfile.instagram && (
                 <Link href={currentUserProfile.instagram}>
                   <CiInstagram size={30} className="text-white" />

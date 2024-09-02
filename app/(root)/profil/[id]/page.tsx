@@ -39,6 +39,7 @@ export default async function ProfilPublic({
 
   //! Récupération des infos du profil visité
   const userProfile = await getUserByIdForProfile(id);
+  console.log("userProfile", userProfile);
 
   //! Récupération des événements de l'utilisateur
   const page = Number(searchParams?.page) || 1;
@@ -75,8 +76,8 @@ export default async function ProfilPublic({
   if (userProfile?.role !== "organizer") {
     return (
       <>
-        <section className="bg-gradient-to-t from-dark to-[#ff63be8e]">
-          <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-dark shadowCj">
+        <section className="bg-gradient-to-t from-dark to-[#ff63be8e] ">
+          <div className="relative flex w-screen flex-col items-end justify-end overflow-hidden bg-dark shadowCj">
             <Ripple />
 
             <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
@@ -123,14 +124,14 @@ export default async function ProfilPublic({
         {userProfile?.isHidenWishlist ? (
           <div></div>
         ) : (
-          <>
-            <div className="wrapper flex items-center justify-center sm:justify-between">
+          <div>
+            <div className="wrapper flex items-center justify-center sm:justify-between ">
               <h3 className="h3-bold text-center sm:text-left">Favoris</h3>
             </div>
-            <section className="wrapper my-8">
+            <section className="wrapper my-8 ">
               <Collection
                 data={eventsUserFav?.data}
-                emptyTitle="Aucun Event créé"
+                emptyTitle="Aucun Event en favori"
                 emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
                 collectionType="All_Events"
                 limit={6}
@@ -139,7 +140,7 @@ export default async function ProfilPublic({
                 totalPages={eventsUserFav?.totalPages}
               />
             </section>
-          </>
+          </div>
         )}
       </>
     );
@@ -231,7 +232,7 @@ export default async function ProfilPublic({
           </p>
           <Collection
             data={eventsByOrganizer?.data.upcomingEvents}
-            emptyTitle="Aucun Event créé"
+            emptyTitle="Aucun Event à venir"
             emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
             collectionType="All_Events"
             limit={6}
@@ -249,7 +250,7 @@ export default async function ProfilPublic({
           </p>
           <Collection
             data={eventsByOrganizer?.data.pastEvents}
-            emptyTitle="Aucun Event créé"
+            emptyTitle="Aucun Event passé"
             emptyStateSubtext="Explorez les événements et ajoutez vos favoris"
             collectionType="All_Events"
             limit={6}

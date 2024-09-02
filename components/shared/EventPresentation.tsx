@@ -17,6 +17,8 @@ import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
 import { DeleteConfirmation } from "./DeleteConfirmation";
 
+import { FaEdit } from "react-icons/fa";
+
 export const EventPresentation = async ({
   params: { id },
   searchParams,
@@ -82,17 +84,14 @@ export const EventPresentation = async ({
 
             <div className="flex w-full flex-col gap-8 p-5 md:p-10 bg-transparent backdrop-blur-[4px] shadow-2xl rounded-sm">
               <div className="flex flex-col gap-6">
-                <div className="flex justify-between">
-                  <h2 className="h2-bold rubik">{event.title}</h2>
+                <div className="flex justify-between items-center">
+                  <h2 className="h3-bold sm:h2-bold rubik">{event.title}</h2>
                   {isEventCreator ? (
-                    <div className="absolute right-4 top-11 flex gap-4 rounded-sm bg-dark p-3 transition-all">
+                    <div className="absolute right-4 top-7 flex gap-4">
                       <Link href={`/events/${event.id}/update`}>
-                        <Image
-                          src="/assets/icons/edit.svg"
-                          alt="edit"
-                          width={20}
-                          height={20}
-                          className="rounded-sm"
+                        <FaEdit
+                          size={25}
+                          className="text-white hover:text-second"
                         />
                       </Link>
                       <DeleteConfirmation eventId={event.id} />
@@ -102,7 +101,7 @@ export const EventPresentation = async ({
                   )}
                 </div>
 
-                <div className="flex sm:justify-between items-center gap-3 sm:flex-row sm:items-center">
+                <div className="flex flex-col sm:justify-between items-center gap-3 sm:flex-row sm:items-center">
                   <div className="flex gap-3">
                     <p className="p-bold-16 rubik rounded-sm bg-primary-500 text-white dark:bg-dark-500 dark:text-white px-5 py-2">
                       {event.isFree ? "Gratuit" : `${event.price} €`}
@@ -115,7 +114,7 @@ export const EventPresentation = async ({
                   <p className="p-medium-14 rubik ml-2 mt-2 sm:mt-0">
                     par{" "}
                     <Link
-                      href={`/profil/${event?.Organizer.organizationName}`}
+                      href={`/profil/${event?.organizer}`}
                       className="text-primary-500 hover:text-second transition-all ease-in-out duration-300"
                     >
                       {event?.Organizer.organizationName}

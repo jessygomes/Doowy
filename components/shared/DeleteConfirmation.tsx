@@ -18,6 +18,8 @@ import {
 
 import { deleteEvent } from "@/lib/actions/event.actions";
 
+import { MdDelete } from "react-icons/md";
+
 export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
   const pathname = usePathname();
   let [isPending, startTransition] = useTransition();
@@ -25,12 +27,7 @@ export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Image
-          src="/assets/icons/delete.svg"
-          alt="edit"
-          width={20}
-          height={20}
-        />
+        <MdDelete size={25} className="text-white hover:text-red-600" />
       </AlertDialogTrigger>
 
       <AlertDialogContent className="bg-dark rounded-sm border-second">

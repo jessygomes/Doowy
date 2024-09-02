@@ -12,7 +12,7 @@ export const LogoutBtn = ({ children }: LogoutBtnProps) => {
 
   const onClick = () => {
     logout();
-    // router.push("/");
+    router.push("/");
   };
   return (
     <span onClick={onClick} className="rounded-full cursor-pointer">

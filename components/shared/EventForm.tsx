@@ -37,6 +37,7 @@ import Dropdown from "./Dropdown";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import { FileUploader } from "./FileUploader";
+import { toast } from "sonner";
 
 //! On va afficher soit le form pour CREER soit pour UPDATE grâce au TYPE que l'on passe au composant EVENTFORM
 type EventFormProps = {
@@ -47,14 +48,15 @@ type EventFormProps = {
     description?: string;
     location?: string;
     departement: string;
+    ville: string;
     imageUrl: string;
     stock?: number;
     startDateTime: Date;
     endDateTime: Date;
-    price?: string;
+    price?: string | null;
     isFree: boolean;
-    url?: string;
-    category: string;
+    url?: string | null;
+    category: string | null;
     organizer: string;
     nbFav?: number;
     Category: {
@@ -82,6 +84,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           ...event,
           startDateTime: new Date(event.startDateTime),
           endDateTime: new Date(event.endDateTime),
+          price: event.price ?? "",
+          category: event.category ?? "",
+          url: event.url ?? "",
         }
       : eventDefaultValues;
 
@@ -94,19 +99,15 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    console.log(values);
     let uploadedImgUrl = values.imageUrl;
 
     if (files.length > 0) {
       const uploadedImages = await startUpload(files);
-
       if (!uploadedImages) return;
-
       uploadedImgUrl = uploadedImages[0].url;
     }
 
     if (type === "Créer") {
-      console.log("CREATION", values);
       try {
         const newEvent = await createEvent({
           event: { ...values, imageUrl: uploadedImgUrl },
@@ -116,9 +117,13 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         if (newEvent && "id" in newEvent) {
           form.reset();
           router.push(`/events/${newEvent.id}`);
+          toast.success("L'événement a été créé avec succès");
         }
       } catch (error) {
         console.error(error);
+        toast.error(
+          "Une erreur est survenue lors de la création de l'événement"
+        );
       }
     }
 
@@ -137,9 +142,13 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         if (updatedEvent) {
           form.reset();
           router.push(`/events/${updatedEvent.id}`);
+          toast.success("L'événement a été modifié avec succès");
         }
       } catch (error) {
         console.error(error);
+        toast.error(
+          "Une erreur est survenue lors de la modification de l'événement"
+        );
       }
     }
   }
@@ -221,7 +230,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           />
         </div>
 
-        <div className="flex flex-col gap-5 md:flex-row">
+        <div className="flex flex-col gap-5 md:grid md:grid-cols-3 w-full">
           <FormField
             control={form.control}
             name="location"
@@ -238,7 +247,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                     <Input
                       placeholder="Adresse, Ville ou Evénement en ligne"
                       {...field}
-                      className="input-field"
+                      className="input-field w-full"
                     />
                   </div>
                 </FormControl>
@@ -247,6 +256,30 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
             )}
           />
 
+          <FormField
+            control={form.control}
+            name="ville"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <div className="flex-center h-[40px] w-full overflow-hidden rounded-sm bg-grey-50 px-4 py-2">
+                    <Image
+                      src="/assets/icons/location-grey.svg"
+                      width={24}
+                      height={24}
+                      alt="location icon"
+                    />
+                    <Input
+                      placeholder="Ville"
+                      {...field}
+                      className="input-field w-full"
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name="departement"
@@ -261,7 +294,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                       alt="location icon"
                     />
                     <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="rubik text-[16px] leading-[24px] text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm  px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
+                      <SelectTrigger className="rubik text-[16px] leading-[24px] text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
                         <SelectValue placeholder="Département" />
                       </SelectTrigger>
                       <SelectContent>

@@ -34,7 +34,7 @@ export default async function UpdateEvent({
               {event && (
                 <EventForm
                   type="Modifier"
-                  // event={event}
+                  event={event}
                   eventId={event.id}
                   userId={userId}
                 />

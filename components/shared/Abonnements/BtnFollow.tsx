@@ -5,7 +5,8 @@ import { useState } from "react";
 import { addOrRemoveFollower } from "@/lib/actions/user.actions";
 import { useCurrentUser } from "@/hooks/use-current-user";
 
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
+import { useFollowers } from "./FollowersContext";
 
 const BtnFollow = ({
   userToFollowId,
@@ -14,6 +15,7 @@ const BtnFollow = ({
   userToFollowId: string;
   isFollowing: boolean;
 }) => {
+  const { addFollower, removeFollower } = useFollowers();
   const [isFollow, setIsFollow] = useState(isFollowing);
 
   const user = useCurrentUser();
@@ -27,6 +29,11 @@ const BtnFollow = ({
           targetUserId: userToFollowId,
         });
         setIsFollow(!isFollow);
+        if (!isFollow) {
+          addFollower(currentUserId as any);
+        } else {
+          removeFollower(currentUserId);
+        }
       } catch (error) {
         console.error("Erreur lors de l'ajout aux favoris", error);
       }

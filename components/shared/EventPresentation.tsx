@@ -165,7 +165,9 @@ export const EventPresentation = async ({
                     width={32}
                     height={32}
                   />
-                  <p className="p-regular-16">{event?.location}</p>
+                  <p className="p-regular-16">
+                    {event?.location}, {event?.ville}, {event.departement}
+                  </p>
                 </div>
               </div>
 

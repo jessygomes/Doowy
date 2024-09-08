@@ -1,23 +1,17 @@
 import Link from "next/link";
 import Image from "next/image";
-import { signOut } from "@/auth";
-import { SearchParamProps } from "@/types";
 
 import {
   getUserByIdForProfile,
-  getWishlist,
   getWishlistProfil,
 } from "@/lib/actions/user.actions";
-import {
-  getEventsByUser,
-  getEventsByUserForPrivateProfl,
-} from "@/lib/actions/event.actions";
+import { getEventsByUserForPrivateProfl } from "@/lib/actions/event.actions";
 import { currentUser } from "@/lib/auth";
 
 import { Button } from "@/components/ui/button";
 import Collection from "@/components/shared/Collection";
-import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
-import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
+import { PersonnesFollowers } from "@/components/shared/Abonnements/PersonnesFollowers";
+import { PersonnesSuivies } from "@/components/shared/Abonnements/PersonnesSuivies";
 import { FaCertificate, FaPen } from "react-icons/fa";
 import Ripple from "@/components/magicui/ripple";
 

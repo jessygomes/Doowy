@@ -9,18 +9,19 @@ import {
 } from "@/lib/actions/user.actions";
 import { SearchParamProps } from "@/types";
 
-import BtnFollow from "@/components/shared/BtnFollow";
+import BtnFollow from "@/components/shared/Abonnements/BtnFollow";
 import Collection from "@/components/shared/Collection";
 import { Button } from "@/components/ui/button";
 
-import { PersonnesFollowers } from "@/components/shared/PersonnesFollowers";
-import { PersonnesSuivies } from "@/components/shared/PersonnesSuivies";
+import { PersonnesFollowers } from "@/components/shared/Abonnements/PersonnesFollowers";
+import { PersonnesSuivies } from "@/components/shared/Abonnements/PersonnesSuivies";
 
 import { CiInstagram } from "react-icons/ci";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaTiktok } from "react-icons/fa";
 import { FaCertificate } from "react-icons/fa";
 import Ripple from "@/components/magicui/ripple";
+import { FollowersProvider } from "@/components/shared/Abonnements/FollowersContext";
 
 interface Props {
   params: {
@@ -39,7 +40,6 @@ export default async function ProfilPublic({
 
   //! Récupération des infos du profil visité
   const userProfile = await getUserByIdForProfile(id);
-  console.log("userProfile", userProfile);
 
   //! Récupération des événements de l'utilisateur
   const page = Number(searchParams?.page) || 1;
@@ -108,14 +108,16 @@ export default async function ProfilPublic({
               </div>
 
               <div className="flex gap-6">
-                <PersonnesFollowers userId={userProfile?.id} />
-                <PersonnesSuivies userId={userProfile?.id} />
+                <FollowersProvider>
+                  <PersonnesFollowers userId={userProfile?.id} />
+                  <PersonnesSuivies userId={userProfile?.id} />
 
-                {currentUserId === id ? (
-                  <div></div>
-                ) : (
-                  <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
-                )}
+                  {currentUserId === id ? (
+                    <div></div>
+                  ) : (
+                    <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+                  )}
+                </FollowersProvider>
               </div>
             </div>
           </div>
@@ -182,14 +184,16 @@ export default async function ProfilPublic({
             </div>
 
             <div className="flex gap-6 items-center">
-              <PersonnesFollowers userId={userProfile?.id} />
-              {currentUserId === id ? (
-                <Button asChild size="lg" className="button hidden sm:flex">
-                  <Link href="/profil">Modifier mon profil</Link>
-                </Button>
-              ) : (
-                <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
-              )}
+              <FollowersProvider>
+                <PersonnesFollowers userId={userProfile?.id} />
+                {currentUserId === id ? (
+                  <Button asChild size="lg" className="button hidden sm:flex">
+                    <Link href="/profil">Modifier mon profil</Link>
+                  </Button>
+                ) : (
+                  <BtnFollow userToFollowId={id} isFollowing={isFollowing} />
+                )}
+              </FollowersProvider>
             </div>
           </div>
         </div>

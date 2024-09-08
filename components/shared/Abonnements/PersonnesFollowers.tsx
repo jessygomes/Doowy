@@ -1,11 +1,12 @@
 "use client";
-import { getFollowers } from "@/lib/actions/user.actions";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
+import { getFollowers } from "@/lib/actions/user.actions";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { FaUser } from "react-icons/fa";
+import { useFollowers } from "./FollowersContext";
 
 type Follower = {
   id: string;
@@ -19,26 +20,13 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
   const toggleModal = () => setIsModalOpen(!isModalOpen);
 
   //! State pour les utilisateurs suivis
-  const [followers, setFollowers] = useState<Follower[]>([]);
+  const { followers, loadFollowers } = useFollowers();
 
   useEffect(() => {
     if (userId) {
-      const loadFollowingUsers = async () => {
-        try {
-          const responseFollowers = await getFollowers({ userId });
-          console.log("Followers:", responseFollowers);
-          setFollowers(responseFollowers || []);
-          return responseFollowers;
-        } catch (error) {
-          console.error(
-            "Erreur lors du chargement des utilisateurs suivis:",
-            error
-          );
-          setFollowers([]);
-        }
-      };
-      loadFollowingUsers();
+      loadFollowers(userId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
 
   return (
@@ -63,24 +51,30 @@ export const PersonnesFollowers = ({ userId }: { userId?: string }) => {
               <h2 className="h3-bold text-center rubik">ABONNES</h2>
             </div>
             <ul className="flex flex-col gap-4">
-              {followers.map((user: any) => (
-                <li
-                  key={user.id}
-                  className="p-medium-14 rubik hover:text-grey-400 transition-all ease-in-out"
-                >
-                  <Link href={`/profil/${user.id}`}>
-                    <div className="flex gap-4 items-center">
-                      <Avatar>
-                        <AvatarImage src={user?.image || ""} />
-                        <AvatarFallback className="bg-linear-hover">
-                          <FaUser className="text-white" />
-                        </AvatarFallback>
-                      </Avatar>
-                      {user.organizationName ?? user.name}
-                    </div>
-                  </Link>
+              {followers.length === 0 ? (
+                <li className="p-medium-14 rubik text-center text-grey-400">
+                  Aucun abonné pour le moment.
                 </li>
-              ))}
+              ) : (
+                followers.map((user: any) => (
+                  <li
+                    key={user.id}
+                    className="p-medium-14 rubik hover:text-grey-400 transition-all ease-in-out"
+                  >
+                    <Link href={`/profil/${user.id}`}>
+                      <div className="flex gap-4 items-center">
+                        <Avatar>
+                          <AvatarImage src={user?.image || ""} />
+                          <AvatarFallback className="bg-linear-hover">
+                            <FaUser className="text-white" />
+                          </AvatarFallback>
+                        </Avatar>
+                        {user.organizationName ?? user.name}
+                      </div>
+                    </Link>
+                  </li>
+                ))
+              )}
             </ul>
           </div>
         </div>

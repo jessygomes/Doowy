@@ -49,6 +49,7 @@ export type CreateEventParams = {
     description: string;
     location: string;
     departement: string;
+    ville: string;
     imageUrl: string;
     startDateTime: Date;
     endDateTime: Date;
@@ -70,6 +71,7 @@ export type UpdateEventParams = {
     description: string;
     location: string;
     departement: string;
+    ville: string;
     startDateTime: Date;
     endDateTime: Date;
     category: string;
@@ -137,6 +139,7 @@ export type Event = {
   imageUrl: string;
   location: string;
   departement?: string;
+  ville?: string;
   startDateTime: Date;
   endDateTime: Date;
   url?: string | null;

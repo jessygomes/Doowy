@@ -11,6 +11,7 @@ export const eventFormSchema = z.object({
     .min(8, "Le lieu doit contenir au moins 8 caractères")
     .max(400, "La description doit contenir au maximum 400 caractères"),
   departement: z.string(),
+  ville: z.string(),
   imageUrl: z.string(),
   startDateTime: z.date(),
   endDateTime: z.date(),

@@ -16,9 +16,9 @@ const Header = async () => {
       <div className="wrapper flex items-center justify-between">
         <Link
           href="/"
-          className="text-2xl text-white kronaOne -tracking-[0.35rem] font-semibold"
+          className="text-2xl sm:text-4xl text-white -tracking-[0.40rem] kronaOne font-semibold"
         >
-          DOOWY!
+          doowy!
         </Link>
 
         <div className="flex w-32 justify-end items-center gap-4">

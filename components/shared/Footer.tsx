@@ -10,38 +10,38 @@ const Footer = () => {
           href="/"
           className="text-5xl text-white kronaOne -tracking-[0.40rem] font-semibold"
         >
-          vibey!
+          doowy!
         </Link>
 
         <div className="flex gap-8 uppercase text-white rubik">
           <Link
             href="/"
-            className="hover:text-grey-400 transition-all ease-in-out duration-300"
+            className="text-sm sm:text-lg hover:text-grey-400 transition-all ease-in-out duration-300"
           >
             Accueil
           </Link>
           <Link
             href="/events"
-            className="hover:text-grey-400 transition-all ease-in-out duration-300"
+            className="text-sm sm:text-lg hover:text-grey-400 transition-all ease-in-out duration-300"
           >
             Events
           </Link>
           <Link
             href="/a-propos"
-            className="hover:text-grey-400 transition-all ease-in-out duration-300"
+            className="text-sm sm:text-lg text-nowrap hover:text-grey-400 transition-all ease-in-out duration-300"
           >
             à propos
           </Link>
           <Link
             href="/contact"
-            className="hover:text-grey-400 transition-all ease-in-out duration-300"
+            className="text-sm sm:text-lg hover:text-grey-400 transition-all ease-in-out duration-300"
           >
             Contact
           </Link>
         </div>
 
-        <p className="text-white text-[0.8rem] rubik">
-          Copyright © 2024 vibey! - All Rights reserved | App by{" "}
+        <p className="text-white text-xs rubik w-screen sm:w-full">
+          Copyright © 2024 doowy! - All Rights reserved | App. by{" "}
           <Link
             target="_blank"
             href={"https://www.inthegleam.com/"}

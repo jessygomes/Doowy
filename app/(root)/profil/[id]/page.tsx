@@ -80,7 +80,7 @@ export default async function ProfilPublic({
           <div className="relative flex w-screen flex-col items-end justify-end overflow-hidden bg-dark shadowCj">
             <Ripple />
 
-            <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
+            <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between mt-20 sm:mt-40 w-full z-20">
               <div className="flex gap-4 items-center">
                 <div className="w-20 h-20 sm:w-32 sm:h-32">
                   {userProfile?.image ? (
@@ -154,7 +154,7 @@ export default async function ProfilPublic({
         <div className="relative flex w-screen flex-col items-end justify-end overflow-hidden bg-dark shadowCj">
           <Ripple />
 
-          <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20">
+          <div className="wrapper flex flex-col gap-6 items-center justify-center pt-8 sm:flex-row sm:gap-8 sm:justify-between sm:mt-40 w-full z-20 mt-20">
             <div className="flex gap-4 items-center justify-center">
               <div className=" w-20 h-20 sm:w-32 sm:h-32">
                 {userProfile?.image ? (

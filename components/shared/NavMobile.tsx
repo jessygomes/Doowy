@@ -25,7 +25,7 @@ const NavMobile = () => {
             href="/"
             className="text-4xl text-white kronaOne -tracking-[0.40rem] font-semibold"
           >
-            vibey!
+            Doowy!
           </Link>
           <Separator className="border border-white" />
           <NavItems />

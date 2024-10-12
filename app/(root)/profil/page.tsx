@@ -18,6 +18,7 @@ import Ripple from "@/components/magicui/ripple";
 import { CiInstagram } from "react-icons/ci";
 import { FaXTwitter } from "react-icons/fa6";
 import { FaTiktok } from "react-icons/fa";
+import { FollowersProvider } from "@/components/shared/Abonnements/FollowersContext";
 
 export default async function ProfilPrivate({
   searchParams,
@@ -88,7 +89,9 @@ export default async function ProfilPrivate({
               {/* Les followers sont uniquement disponible pour les organisateurs */}
               {currentUserProfile?.role === "organizer" && (
                 <div className="flex gap-4 sm:gap-8">
-                  <PersonnesFollowers userId={user.id} />
+                  <FollowersProvider>
+                    <PersonnesFollowers userId={user.id} />
+                  </FollowersProvider>
                 </div>
               )}
               <PersonnesSuivies userId={user.id} />

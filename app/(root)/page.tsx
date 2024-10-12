@@ -70,7 +70,9 @@ export default async function Home({
       <div className="flex justify-center items-center">
         {userId === undefined && (
           <div className="relative flex h-screen w-screen flex-col items-end justify-end overflow-hidden bg-background shadowCj">
-            <Ripple />
+            <div className="bg-white">
+              <Ripple />
+            </div>
             <section className="sm:wrapper z-20">
               <div className="wrapper flex flex-col sm:justify-end sm:pt-5 lg:pt-2">
                 <div className=" flex flex-col justify-end items-end lg:justify-center lg:items-center gap-4">

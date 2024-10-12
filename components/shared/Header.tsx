@@ -16,14 +16,12 @@ const Header = async () => {
       <div className="wrapper flex items-center justify-between">
         <Link
           href="/"
-          className="text-4xl text-white kronaOne -tracking-[0.35rem] font-semibold"
+          className="text-2xl text-white kronaOne -tracking-[0.35rem] font-semibold"
         >
           DOOWY!
         </Link>
 
         <div className="flex w-32 justify-end items-center gap-4">
-          <NavMobile />
-
           {session ? (
             <div className="flex gap-16 w-fit">
               <nav className="md:flex-between hidden w-full max-w-xs text-white">
@@ -42,7 +40,7 @@ const Header = async () => {
               <div className="flex gap-2">
                 <Button
                   asChild
-                  className="text-white border border-white bg-transparent uppercase text-[12px] hover:bg-linear-hover hover:text-white"
+                  className="text-white border border-white bg-transparent uppercase text-[10px] sm:text-[12px] hover:bg-linear-hover hover:text-white p-2"
                 >
                   <Link href="/auth/connexion">connexion</Link>
                 </Button>
@@ -50,6 +48,7 @@ const Header = async () => {
               </div>
             </div>
           )}
+          <NavMobile />
         </div>
       </div>
     </header>

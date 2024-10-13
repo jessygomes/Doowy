@@ -117,6 +117,14 @@ export default async function ProfilPrivate({
 
               {/* <UserForm user={userProfile} userId={userId} /> */}
             </Button>
+            <Link
+              href="/profil/reservations"
+              aria-label="Voir les réservations"
+            >
+              <button className="button uppercase">
+                Voir mes réservations
+              </button>
+            </Link>
           </div>
         </div>
 

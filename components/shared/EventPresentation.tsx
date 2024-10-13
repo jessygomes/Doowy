@@ -18,6 +18,9 @@ import { Button } from "@/components/ui/button";
 import { DeleteConfirmation } from "./DeleteConfirmation";
 
 import { FaEdit } from "react-icons/fa";
+import { BilleterieBtn } from "./BilleterieBtn";
+import { getReservationsByEvent } from "@/lib/actions/reservation";
+import { DetailEventOrgBtn } from "./DetailEventOrgBtn";
 
 export const EventPresentation = async ({
   params: { id },
@@ -41,6 +44,7 @@ export const EventPresentation = async ({
   //! Récupérer l'ID de la personnne connecté pour afficher si l'event est dans ses favoris et les afficher
   const user = await currentUser();
   const userId = user?.id;
+  const role = user?.role;
 
   let isFavorite = false;
 
@@ -66,6 +70,17 @@ export const EventPresentation = async ({
   const isPastEvent = currentDateTime > endDateTime;
   const isEnCours =
     currentDateTime >= startDateTime && currentDateTime <= endDateTime;
+
+  //! Les réservations
+  const reservationsResponse = await getReservationsByEvent(
+    userId || "",
+    event.id
+  );
+  const reservations = Array.isArray(reservationsResponse)
+    ? reservationsResponse
+    : [];
+
+  console.log(reservations);
 
   return (
     <>
@@ -184,33 +199,57 @@ export const EventPresentation = async ({
             </p> */}
               </div>
               <div className="flex justify-center items-center gap-8">
-                <Link href={event?.url ? event.url : ""} className="w-full">
+                {role === "organizer" ? (
+                  <>
+                    <DetailEventOrgBtn
+                      eventId={event.id}
+                      reservations={reservations}
+                    />
+                    <p className="text-white">
+                      Nombre de place restantes : {event.stock} sur{" "}
+                      {event.maxPlaces}
+                    </p>
+                  </>
+                ) : (
+                  <BilleterieBtn
+                    eventId={event.id}
+                    eventPrice={event.price || ""}
+                    userId={userId || ""}
+                  />
+                )}
+                {/* <Link href={event?.url ? event.url : ""} className="w-full">
                   <Button className="button rounded-sm uppercase rubik w-full">
                     Prendre mon billet
                   </Button>
-                </Link>
+                </Link> */}
               </div>
+            </div>
+            <div>
+              <h2 className="text-white h3-bold">DETAILS DE L&apos;EVENT</h2>
+              <div></div>
             </div>
           </div>
         </section>
       </div>
 
       {/* EVENT FROM THE SAME ORGANIZER */}
-      <section className="mt-8 shadowCj pb-8">
-        <div className="wrapper flex flex-col gap-8 md:gap-12">
-          <h2 className="h3-bold rubik">D&apos;autres événements</h2>
+      {role !== "organizer" && (
+        <section className="mt-8 shadowCj pb-8">
+          <div className="wrapper flex flex-col gap-8 md:gap-12">
+            <h2 className="h3-bold rubik">D&apos;autres événements</h2>
 
-          <Collection
-            data={relaledEvents?.data || []}
-            emptyTitle="Aucun Event Trouvé"
-            emptyStateSubtext="Revenir plus tard"
-            collectionType="All_Events"
-            limit={3}
-            page={page}
-            totalPages={relaledEvents?.totalPages}
-          />
-        </div>
-      </section>
+            <Collection
+              data={relaledEvents?.data || []}
+              emptyTitle="Aucun Event Trouvé"
+              emptyStateSubtext="Revenir plus tard"
+              collectionType="All_Events"
+              limit={3}
+              page={page}
+              totalPages={relaledEvents?.totalPages}
+            />
+          </div>
+        </section>
+      )}
     </>
   );
 };

@@ -50,7 +50,7 @@ type EventFormProps = {
     departement: string;
     ville: string;
     imageUrl: string;
-    stock?: number;
+    maxPlaces?: number;
     startDateTime: Date;
     endDateTime: Date;
     price?: string | null;
@@ -95,9 +95,10 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   const form = useForm<z.infer<typeof eventFormSchema>>({
     resolver: zodResolver(eventFormSchema),
     defaultValues: initialValues,
+    mode: "onSubmit", // Utilisez 'onSubmit' pour valider le formulaire lors de la soumission
   });
 
-  // 2. Define a submit handler.
+  //! SUBMIT FORM
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
     let uploadedImgUrl = values.imageUrl;
 
@@ -105,6 +106,10 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
       const uploadedImages = await startUpload(files);
       if (!uploadedImages) return;
       uploadedImgUrl = uploadedImages[0].url;
+    }
+
+    if (values.maxPlaces) {
+      values.maxPlaces = Number(values.maxPlaces);
     }
 
     if (type === "Créer") {
@@ -463,9 +468,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           />
         </div>
 
-        {/* <FormField
+        <FormField
           control={form.control}
-          name="stock"
+          name="maxPlaces"
           render={({ field }) => (
             <FormItem className="w-full flex flex-col items-left rounded-sm justify-between p-2 px-4 bg-grey-400 shadow-sm">
               <div className="space-y-0.5 rubik bg-grey-400">
@@ -487,16 +492,18 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                   placeholder="Nombre de places"
                   {...field}
                   className="input-field"
+                  onChange={(e) => field.onChange(Number(e.target.value))}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
 
         <Button
           type="submit"
           size="lg"
-          disabled={form.formState.isSubmitted}
+          disabled={form.formState.isSubmitting}
           className="button col-span-2 w-full"
         >
           {form.formState.isSubmitted ? "En cours..." : `${type} l'événement`}

@@ -163,6 +163,26 @@ export type CreateCategoryParams = {
   categoryName: string;
 };
 
+// ====== RESERVATIONS PARAMS
+export type Reservation = {
+  id: string;
+  event: {
+    id: string;
+    title: string;
+    description: string | null;
+    location: string;
+    ville: string;
+    departement: string;
+    startDateTime: Date;
+    endDateTime: Date;
+    imageUrl: string;
+    maxPlaces: number;
+  };
+  qrCodes: {
+    code: string;
+  }[];
+};
+
 // ====== ORDER PARAMS
 export type CheckoutOrderParams = {
   eventTitle: string;

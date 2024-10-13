@@ -19,7 +19,10 @@ export const eventFormSchema = z.object({
   price: z.string(),
   isFree: z.boolean(),
   url: z.string().url(),
-  stock: z.number().optional(),
+  maxPlaces: z
+    .number()
+    .min(0, "Le nombre de places doit être supérieur ou égal à 0")
+    .optional(),
 });
 
 export const userLoginSchema = z.object({

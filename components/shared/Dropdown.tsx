@@ -68,7 +68,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
             <SelectItem
               key={category.id}
               value={category.id}
-              className="select-item p-regular-14 "
+              className="select-item p-regular-14 bg-dark"
             >
               {category.name}
             </SelectItem>
@@ -76,7 +76,7 @@ const Dropdown = ({ value, onChangeHandler }: DropDownProps) => {
 
         {/* Créer la catégorie */}
         <AlertDialog>
-          <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm py-3 pl-8 hover:bg-primary-50 focus:text-primary-500">
+          <AlertDialogTrigger className="p-medium-14 flex w-full rounded-sm bg-dark py-3 pl-8 hover:bg-dark-50 focus:text-primary-500">
             Ajouter une catégorie
           </AlertDialogTrigger>
 

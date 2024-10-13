@@ -53,7 +53,7 @@ model User {
   accounts               Account[]
   isTwofactorEnabled     Boolean?               @default(false)
   twoFactoFrConfirmation TwoFactorConfirmation?
-  qrCodes                QRCode[]
+  reservations  Reservation[]
   isVerified             Boolean                @default(false)
 
   @@map("user")
@@ -138,6 +138,8 @@ model Event {
   Organizer     User           @relation(fields: [organizer], references: [id], onDelete: Cascade)
   wishlist      UserWishlist[]
   qrCodes       QRCode[]
+  reservations  Reservation[]
+  maxPlaces     Int            @default(0) // Nombre maximum de places disponibles
 
   @@map("event")
 }
@@ -181,13 +183,21 @@ model UserFollowing {
   @@map("user_following")
 }
 
-model QRCode {
-  id        String   @id @default(uuid())
-  code      String
-  eventId   String
-  Event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+model Reservation {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
   userId    String
-  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  event     Event    @relation(fields: [eventId], references: [id])
+  eventId   String
+  qrCodes   QRCode[] // Modifier pour accepter plusieurs QR codes
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+}
+
+model QRCode {
+  id          String       @id @default(cuid())
+  code        String       @unique
+  event       Event        @relation(fields: [eventId], references: [id])
+  eventId     String
+  reservation Reservation? @relation(fields: [reservationId], references: [id])
+  reservationId String?
 }

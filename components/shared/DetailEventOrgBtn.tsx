@@ -2,19 +2,15 @@
 import { useState } from "react";
 
 interface DetailEventOrgBtnProps {
-  userId: string;
-  eventId: string;
   reservations: Array<{
     id: string;
-    user: { name: string };
+    user: { name: string | null };
     qrCodeCount: number;
     createdAt: string;
   }>;
 }
 
 export const DetailEventOrgBtn: React.FC<DetailEventOrgBtnProps> = ({
-  userId,
-  eventId,
   reservations,
 }) => {
   //! Gestion de la modal
@@ -32,7 +28,7 @@ export const DetailEventOrgBtn: React.FC<DetailEventOrgBtnProps> = ({
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm flex justify-center items-center z-10 ">
-          <div className="flex flex-col gap-4 bg-dark/90 p-8 rounded-sm w-full shadow-2xl">
+          <div className="flex flex-col gap-4 bg-dark p-8 rounded-sm w-full shadow-2xl h-full">
             <div className="flex flex-row-reverse justify-between items-center border-b-2 border-white">
               <span
                 className="close cursor-pointer text-center text-2xl text-white hover:text-red-500"
@@ -48,9 +44,9 @@ export const DetailEventOrgBtn: React.FC<DetailEventOrgBtnProps> = ({
               {reservations.map((reservation) => (
                 <div
                   key={reservation.id}
-                  className="flex justify-between items-center py-2"
+                  className="grid grid-cols-3 gap-8 items-center py-2"
                 >
-                  <p className="text-white">{reservation.user.name}</p>
+                  <p className="text-white">{reservation.user.name ?? "N/A"}</p>
                   <p className="text-white">
                     Places réservées: {reservation.qrCodeCount}
                   </p>

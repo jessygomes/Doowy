@@ -16,17 +16,9 @@ export const GenerateBilletPdf: React.FC<GenerateBilletPdfProps> = ({
         document={<BilletPDF reservation={reservation} />}
         fileName={`billet-${reservation.event.title}.pdf`}
       >
-        {({ loading }) =>
-          loading ? (
-            <button className="mt-4 bg-gray-500 text-white py-2 px-4 rounded">
-              Génération du PDF...
-            </button>
-          ) : (
-            <button className="mt-4 bg-blue-500 text-white py-2 px-4 rounded">
-              Afficher mon billet
-            </button>
-          )
-        }
+        <button className="button uppercase text-white py-2 px-4 rounded">
+          Afficher mon billet
+        </button>
       </PDFDownloadLink>
     </div>
   );

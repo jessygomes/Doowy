@@ -74,9 +74,15 @@ export const createEvent = async ({
       throw new Error("Organizer not found");
     }
 
+    // Validation de maxPlaces
+    if (typeof event.maxPlaces !== "number" || event.maxPlaces <= 0) {
+      throw new Error("Invalid maxPlaces value");
+    }
+
     const newEvent = await db.event.create({
       data: {
         ...event,
+        stock: event.maxPlaces,
         category: event.category,
         organizer: userId,
       },
@@ -301,9 +307,21 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
       throw new Error("Unauthorized or event not found");
     }
 
+    let stockDifference = 0;
+    if (
+      event.maxPlaces !== undefined &&
+      event.maxPlaces !== eventToUpdate.maxPlaces
+    ) {
+      stockDifference = event.maxPlaces - eventToUpdate.maxPlaces;
+    }
+
     const updatedEvent = await db.event.update({
       where: { id: event.id },
-      data: { ...event, category: event.category },
+      data: {
+        ...event,
+        category: event.category,
+        stock: eventToUpdate.stock + stockDifference, // Mettre à jour le stock
+      },
     });
 
     revalidatePath(path);

@@ -190,7 +190,7 @@ export const EventPresentation = async ({
                 <p className="p-bold-20 text-grey-600">
                   Ce qu&apos;il faut savoir :{" "}
                 </p>
-                <p className="p-regular-16 lg:p-regular-16">
+                <p className="p-regular-16 lg:p-regular-16 whitespace-pre-line">
                   {event?.description}
                 </p>
 
@@ -202,8 +202,14 @@ export const EventPresentation = async ({
                 {role === "organizer" ? (
                   <>
                     <DetailEventOrgBtn
-                      eventId={event.id}
-                      reservations={reservations}
+                      reservations={reservations.map((reservation) => ({
+                        ...reservation,
+                        user: {
+                          ...reservation.user,
+                          name: reservation.user.name ?? "N/A", // Assurez-vous que name est une chaîne de caractères
+                        },
+                        createdAt: reservation.createdAt.toString(), // Convertir createdAt en chaîne de caractères si nécessaire
+                      }))}
                     />
                     <p className="text-white">
                       Nombre de place restantes : {event.stock} sur{" "}
@@ -223,10 +229,6 @@ export const EventPresentation = async ({
                   </Button>
                 </Link> */}
               </div>
-            </div>
-            <div>
-              <h2 className="text-white h3-bold">DETAILS DE L&apos;EVENT</h2>
-              <div></div>
             </div>
           </div>
         </section>

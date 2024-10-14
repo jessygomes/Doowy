@@ -58,6 +58,7 @@ export type CreateEventParams = {
     isFree: boolean;
     url: string;
     stock?: number;
+    maxPlaces?: number;
   };
   path: string;
 };
@@ -79,6 +80,7 @@ export type UpdateEventParams = {
     isFree: boolean;
     url: string;
     stock?: number;
+    maxPlaces?: number;
   };
   path: string;
 };

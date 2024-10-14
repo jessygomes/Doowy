@@ -121,8 +121,8 @@ export default async function ProfilPrivate({
               href="/profil/reservations"
               aria-label="Voir les réservations"
             >
-              <button className="button uppercase">
-                Voir mes réservations
+              <button className="button uppercase whitespace-nowrap px-2">
+                Mes billets
               </button>
             </Link>
           </div>

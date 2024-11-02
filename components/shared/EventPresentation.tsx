@@ -62,6 +62,7 @@ export const EventPresentation = async ({
 
   //! Vérifier si le User est le créateur de l'event
   const isEventCreator = event.organizer ? userId === event.organizer : false;
+  const isOurBilleterie = event.isBilleterieExterne;
 
   //! Vérifier si l'event est passé ou pas :
   const currentDateTime = new Date();
@@ -199,8 +200,10 @@ export const EventPresentation = async ({
             </p> */}
               </div>
               <div className="flex justify-center items-center gap-8">
-                {role === "organizer" ? (
-                  <>
+                {role === "organizer" &&
+                isEventCreator &&
+                isOurBilleterie === false ? (
+                  <div className="flex flex-col gap-2">
                     <DetailEventOrgBtn
                       reservations={reservations.map((reservation) => ({
                         ...reservation,
@@ -212,22 +215,19 @@ export const EventPresentation = async ({
                       }))}
                     />
                     <p className="text-white">
-                      Nombre de place restantes : {event.stock} sur{" "}
-                      {event.maxPlaces}
+                      Nombre de place restantes : {event.maxPlaces} sur{" "}
+                      {event.stock}
                     </p>
-                  </>
+                  </div>
                 ) : (
                   <BilleterieBtn
                     eventId={event.id}
                     eventPrice={event.price || ""}
                     userId={userId || ""}
+                    isOurBilleterie={isOurBilleterie}
+                    eventUrl={event.url || ""}
                   />
                 )}
-                {/* <Link href={event?.url ? event.url : ""} className="w-full">
-                  <Button className="button rounded-sm uppercase rubik w-full">
-                    Prendre mon billet
-                  </Button>
-                </Link> */}
               </div>
             </div>
           </div>

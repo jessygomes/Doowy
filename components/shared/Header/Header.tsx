@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { auth } from "@/auth";
 
-import NavItems from "./NavItems";
-import NavMobile from "./NavMobile";
-import { UserBtn } from "../auth/UserBtn";
-import { Button } from "../ui/button";
-import { ThemeToggle } from "./ThemeToggle";
+import NavItems from "../NavItems";
+import NavMobile from "../NavMobile";
+import { UserBtn } from "../../auth/UserBtn";
+import { Button } from "../../ui/button";
+import { ThemeToggle } from "../ThemeToggle";
 
 const Header = async () => {
   const session = await auth();

@@ -41,7 +41,6 @@ export type GetUserParams = {
 };
 
 // ====== EVENT PARAMS
-
 export type CreateEventParams = {
   userId?: string;
   event: {
@@ -59,6 +58,7 @@ export type CreateEventParams = {
     url: string;
     stock?: number;
     maxPlaces?: number;
+    isBilleterieExterne: boolean;
   };
   path: string;
 };
@@ -81,6 +81,7 @@ export type UpdateEventParams = {
     url: string;
     stock?: number;
     maxPlaces?: number;
+    isBilleterieExterne: boolean;
   };
   path: string;
 };
@@ -148,7 +149,9 @@ export type Event = {
   organizer?: string;
   category?: string | null;
   nbFav: number;
+  maxPlaces?: number;
   stock?: number;
+  isBilleterieExterne: boolean;
   Category: {
     name?: string;
   } | null;

@@ -23,6 +23,7 @@ import {
   FormItem,
   FormMessage,
   FormDescription,
+  FormLabel,
 } from "@/components/ui/form";
 import {
   Select,
@@ -38,6 +39,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "../ui/checkbox";
 import { FileUploader } from "./FileUploader";
 import { toast } from "sonner";
+import { Switch } from "../ui/switch";
 
 //! On va afficher soit le form pour CREER soit pour UPDATE grâce au TYPE que l'on passe au composant EVENTFORM
 type EventFormProps = {
@@ -59,6 +61,7 @@ type EventFormProps = {
     category: string | null;
     organizer: string;
     nbFav?: number;
+    isBilleterieExterne: boolean;
     Category: {
       name?: string;
     } | null;
@@ -87,6 +90,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           price: event.price ?? "",
           category: event.category ?? "",
           url: event.url ?? "",
+          isBilleterieExterne: event.isBilleterieExterne ?? false,
         }
       : eventDefaultValues;
 
@@ -110,6 +114,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
     if (values.maxPlaces) {
       values.maxPlaces = Number(values.maxPlaces);
+    }
+    if (!values.maxPlaces) {
+      values.maxPlaces = 0;
     }
 
     if (type === "Créer") {
@@ -391,6 +398,69 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
         <div className="flex flex-col gap-5 md:flex-row">
           <FormField
             control={form.control}
+            name="isBilleterieExterne"
+            render={({ field }) => (
+              <FormItem className="w-full flex flex-col items-center rounded-sm justify-around p-2 px-4 bg-grey-50 shadow-sm">
+                <div className="space-y-0.5 rubik">
+                  <FormLabel>Billetterie</FormLabel>
+                  <FormDescription>
+                    Activez cette option si vous souhaitez utiliser une{" "}
+                    <span className="font-bold">billeterie externe</span>. Dans
+                    ce cas, indiquez le lien de la billeterie dans le champs :{" "}
+                    <span className="font-bold">
+                      URL de l&apos;événement/Billetterie
+                    </span>{" "}
+                    et laisser le champs{" "}
+                    <span className="font-bold">Nombre de places</span> vide.
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    id="isBilleterieExterne"
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="maxPlaces"
+            render={({ field }) => (
+              <FormItem className="w-full flex flex-col items-left rounded-sm justify-between p-2 px-4 bg-grey-400 shadow-sm">
+                <div className="space-y-0.5 rubik bg-grey-400">
+                  <FormDescription className="text-grey-600">
+                    Si votre événement a un nombre de place limité et/ou si
+                    votre événement est payant,{" "}
+                    <span className="underline">
+                      vous pouvez renseigner le nombre de places disponibles.
+                    </span>{" "}
+                    Un qr code sera généré pour chaque place disponible.{" "}
+                    <span className="font-bold">
+                      Si ce n&apos;est pas le cas, laissez ce champ vide.
+                    </span>
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Input
+                    type="number"
+                    placeholder="Nombre de places"
+                    {...field}
+                    className="input-field"
+                    onChange={(e) => field.onChange(Number(e.target.value))}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
+        <div className="flex flex-col gap-5 md:flex-row">
+          <FormField
+            control={form.control}
             name="price"
             render={({ field }) => (
               <FormItem className="w-full">
@@ -467,38 +537,6 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
             )}
           />
         </div>
-
-        <FormField
-          control={form.control}
-          name="maxPlaces"
-          render={({ field }) => (
-            <FormItem className="w-full flex flex-col items-left rounded-sm justify-between p-2 px-4 bg-grey-400 shadow-sm">
-              <div className="space-y-0.5 rubik bg-grey-400">
-                <FormDescription className="text-grey-600">
-                  Si votre événement a un nombre de place limité et/ou si votre
-                  événement est payant,{" "}
-                  <span className="underline">
-                    vous pouvez renseigner le nombre de places disponibles.
-                  </span>{" "}
-                  Un qr code sera généré pour chaque place disponible.{" "}
-                  <span className="font-bold">
-                    Si ce n&apos;est pas le cas, laissez ce champ vide.
-                  </span>
-                </FormDescription>
-              </div>
-              <FormControl>
-                <Input
-                  type="number"
-                  placeholder="Nombre de places"
-                  {...field}
-                  className="input-field"
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
 
         <Button
           type="submit"

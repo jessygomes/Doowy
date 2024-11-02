@@ -1,21 +1,28 @@
 "use client";
-import { createReservation } from "@/lib/actions/reservation";
+import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
+import { createReservation } from "@/lib/actions/reservation";
 
 interface BilleterieBtnProps {
   userId: string;
   eventId: string;
   eventPrice?: string;
   eventMaxPlaces?: number;
+  isOurBilleterie?: boolean;
+  eventUrl: string;
 }
 
 export const BilleterieBtn: React.FC<BilleterieBtnProps> = ({
   eventId,
   eventPrice,
   userId,
+  isOurBilleterie,
+  eventUrl,
 }) => {
+  const router = useRouter();
   //! Gestion de la modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const toggleModal = () => setIsModalOpen(!isModalOpen);
@@ -34,6 +41,7 @@ export const BilleterieBtn: React.FC<BilleterieBtnProps> = ({
     try {
       await createReservation(userId, eventId, data.numberOfTickets);
       toggleModal();
+      router.push("/profil/reservations");
     } catch (error) {
       console.error("Erreur lors de la création de la réservation:", error);
     }
@@ -41,12 +49,20 @@ export const BilleterieBtn: React.FC<BilleterieBtnProps> = ({
 
   return (
     <>
-      <button
-        className="button rounded-sm uppercase rubik w-full"
-        onClick={toggleModal}
-      >
-        Prendre mon billet
-      </button>
+      {isOurBilleterie ? (
+        <button className="button rounded-sm uppercase rubik w-full">
+          <Link href={eventUrl} target="_blank">
+            Prendre mon billet
+          </Link>
+        </button>
+      ) : (
+        <button
+          className="button rounded-sm uppercase rubik w-full"
+          onClick={toggleModal}
+        >
+          Prendre mon billet
+        </button>
+      )}
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-filter backdrop-blur-sm flex justify-center items-center z-10 ">

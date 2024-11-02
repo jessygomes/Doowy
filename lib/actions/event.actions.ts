@@ -75,7 +75,7 @@ export const createEvent = async ({
     }
 
     // Validation de maxPlaces
-    if (typeof event.maxPlaces !== "number" || event.maxPlaces <= 0) {
+    if (typeof event.maxPlaces !== "number" || event.maxPlaces < 0) {
       throw new Error("Invalid maxPlaces value");
     }
 

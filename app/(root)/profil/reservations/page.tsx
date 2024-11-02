@@ -1,4 +1,5 @@
 import { GenerateBilletPdf } from "@/components/shared/Billeterie/GeneratePdfBillet";
+import { DeleteReservationModal } from "@/components/shared/Modales/DeleteReservationModal";
 import { getReservationsByUser } from "@/lib/actions/reservation";
 import { currentUser } from "@/lib/auth";
 import Image from "next/image";
@@ -52,8 +53,12 @@ export default async function ProfilReservationsPage() {
                   </p>
                   {/* RAJOUTER LE NOMBRE DE BILLET ACHETE ET LE PRIX TOTAL */}
                 </div>
-                <div className="text-center sm:text-left">
+                <div className="flex flex-col gap-2 text-center sm:text-left">
                   <GenerateBilletPdf reservation={reservation} />
+                  <DeleteReservationModal
+                    reservationId={reservation.id}
+                    userId={currentUserId ?? ""}
+                  />
                 </div>
               </div>
               <div className="bg-gradient-to-r from-second to-third w-full h-[2px]" />

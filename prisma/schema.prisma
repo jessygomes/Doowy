@@ -140,6 +140,7 @@ model Event {
   qrCodes       QRCode[]
   reservations  Reservation[]
   maxPlaces     Int            @default(0) // Nombre maximum de places disponibles
+  isBilleterieExterne Boolean
 
   @@map("event")
 }

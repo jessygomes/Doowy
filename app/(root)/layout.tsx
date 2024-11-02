@@ -1,4 +1,4 @@
-import Header from "@/components/shared/Header";
+import Header from "@/components/shared/Header/Header";
 import Footer from "@/components/shared/Footer";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";

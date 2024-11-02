@@ -69,7 +69,7 @@ export const createReservation = async (
     await db.event.update({
       where: { id: eventId },
       data: {
-        maxPlaces: event.maxPlaces - numberOfTickets,
+        stock: event.maxPlaces - numberOfTickets,
       },
     });
 
@@ -145,13 +145,28 @@ export const cancelReservation = async (
 
     const reservation = await db.reservation.findUnique({
       where: { id: reservationId },
+      include: { qrCodes: true, event: true }, // Inclure les QR codes et l'événement
     });
 
     if (!reservation) {
       throw new Error("Réservation introuvable.");
     }
 
+    const numberOfTickets = reservation.qrCodes.length;
+
     await db.reservation.delete({ where: { id: reservationId } });
+
+    // Mettre à jour le stock de l'événement
+    await db.event.update({
+      where: { id: reservation.eventId },
+      data: {
+        stock: {
+          increment: numberOfTickets, // Incrémenter le stock par le nombre de billets annulés
+        },
+      },
+    });
+
+    revalidatePath(`/profil/reservations`);
 
     return true;
   } catch (error) {

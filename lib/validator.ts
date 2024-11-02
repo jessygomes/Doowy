@@ -23,6 +23,7 @@ export const eventFormSchema = z.object({
     .number()
     .min(0, "Le nombre de places doit être supérieur ou égal à 0")
     .optional(),
+  isBilleterieExterne: z.boolean(),
 });
 
 export const userLoginSchema = z.object({

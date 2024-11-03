@@ -2,9 +2,6 @@
 
 import { CreateCategoryParams } from "@/types";
 import { db } from "../db";
-// import Category from "../mongoDb/database/models/Category";
-// import { handleError } from "../utils";
-// import { connectToDb } from "../mongoDb/database";
 
 // //! Créer une catégorie
 export const createCategory = async ({

@@ -59,6 +59,7 @@ export type CreateEventParams = {
     stock?: number;
     maxPlaces?: number;
     isBilleterieExterne: boolean;
+    // tags?: { id: string; name: string }[];
   };
   path: string;
 };
@@ -82,6 +83,7 @@ export type UpdateEventParams = {
     stock?: number;
     maxPlaces?: number;
     isBilleterieExterne: boolean;
+    // tags?: { id: string; name: string }[];
   };
   path: string;
 };
@@ -166,6 +168,11 @@ export type Event = {
 // ====== CATEGORY PARAMS
 export type CreateCategoryParams = {
   categoryName: string;
+};
+
+// ====== TAG PARAMS
+export type CreateTagParams = {
+  tagName: string;
 };
 
 // ====== RESERVATIONS PARAMS

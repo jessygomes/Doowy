@@ -40,6 +40,7 @@ import { Checkbox } from "../ui/checkbox";
 import { FileUploader } from "./FileUploader";
 import { toast } from "sonner";
 import { Switch } from "../ui/switch";
+import DropdownTags, { ITags } from "./DropdownTags";
 
 //! On va afficher soit le form pour CREER soit pour UPDATE grâce au TYPE que l'on passe au composant EVENTFORM
 type EventFormProps = {
@@ -62,6 +63,7 @@ type EventFormProps = {
     organizer: string;
     nbFav?: number;
     isBilleterieExterne: boolean;
+    // tags: ITags[] | null;
     Category: {
       name?: string;
     } | null;
@@ -80,6 +82,9 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   registerLocale("fr", fr); // On enregistre la locale fr pour les dates
 
   const [files, setFiles] = useState<File[]>([]); // Pour la gestion des fichiers (images)
+  // const [selectedTags, setSelectedTags] = useState<ITags[]>(event?.tags || []); // Pour la gestion des tags sélectionnés
+
+  // console.log("SELECTED TAG", selectedTags);
 
   const initialValues =
     event && type === "Modifier"
@@ -91,6 +96,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           category: event.category ?? "",
           url: event.url ?? "",
           isBilleterieExterne: event.isBilleterieExterne ?? false,
+          // tags: event.tags ?? [],
         }
       : eventDefaultValues;
 
@@ -147,7 +153,12 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
 
       try {
         const updatedEvent = await updateEvent({
-          event: { ...values, imageUrl: uploadedImgUrl, id: eventId },
+          event: {
+            ...values,
+            imageUrl: uploadedImgUrl,
+            id: eventId,
+            // tags: selectedTags,
+          },
           userId,
           path: `/events/${eventId}`,
         });
@@ -204,6 +215,22 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               </FormItem>
             )}
           />
+
+          {/* <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem className="w-full">
+                <FormControl>
+                  <DropdownTags
+                    selectedTags={selectedTags}
+                    onChangeHandler={setSelectedTags}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
         </div>
 
         <div className="flex flex-col gap-5 md:flex-row">

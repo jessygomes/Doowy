@@ -85,14 +85,86 @@ export const createEvent = async ({
         stock: event.maxPlaces,
         category: event.category,
         organizer: userId,
+        tags: {},
       },
     });
+
+    // Associer les tags à l'événement créé
+    // if (event.tags && event.tags.length > 0) {
+    //   await db.event.update({
+    //     where: { id: newEvent.id },
+    //     data: {
+    //       tags: {
+    //         connect: event.tags.map((tag) => ({
+    //           eventId_tagId: { tagId: tag.id, eventId: newEvent.id },
+    //         })),
+    //       },
+    //     },
+    //   });
+    // }
 
     return newEvent;
   } catch (error) {
     console.log(error);
+    throw new Error("Failed to update event");
   }
 };
+
+// //! UPDATE
+export async function updateEvent({ userId, event, path }: UpdateEventParams) {
+  try {
+    const eventToUpdate = await db.event.findUnique({
+      where: { id: event.id },
+      include: { tags: true },
+    });
+
+    if (!eventToUpdate || eventToUpdate.organizer.toString() !== userId) {
+      throw new Error("Unauthorized or event not found");
+    }
+
+    let stockDifference = 0;
+    if (
+      event.maxPlaces !== undefined &&
+      event.maxPlaces !== eventToUpdate.maxPlaces
+    ) {
+      stockDifference = event.maxPlaces - eventToUpdate.maxPlaces;
+    }
+
+    // Déterminer les tags à ajouter et à supprimer
+    // const existingTagIds =
+    //   eventToUpdate.tags.length > 0
+    //     ? eventToUpdate.tags.map((tag) => tag.tagId)
+    //     : [];
+
+    // const newTagIds = event.tags?.map((tag) => tag.id) || [];
+
+    // Préparer `connect` et `disconnect` avec `eventId_tagId`
+    // const tagsToConnect = newTagIds
+    //   .filter((id) => !existingTagIds.includes(id))
+    //   .map((id) => ({ eventId_tagId: { tagId: id, eventId: event.id } }));
+
+    // const tagsToDisconnect = existingTagIds
+    //   .filter((id) => !newTagIds.includes(id))
+    //   .map((id) => ({ eventId_tagId: { tagId: id, eventId: event.id } }));
+
+    const updatedEvent = await db.event.update({
+      where: { id: event.id },
+      data: {
+        ...event,
+        category: event.category,
+        stock: eventToUpdate.stock + stockDifference, // Mettre à jour le stock
+        tags: {},
+      },
+    });
+
+    revalidatePath(path);
+
+    return updatedEvent;
+  } catch (error) {
+    console.log(error);
+    throw new Error("Failed to update event");
+  }
+}
 
 // //! GET EVENT BY ID
 export const getEventById = async (eventId: string) => {
@@ -295,42 +367,6 @@ export const getAllUpcomingEvents = async ({
     handleError(error);
   }
 };
-
-// //! UPDATE
-export async function updateEvent({ userId, event, path }: UpdateEventParams) {
-  try {
-    const eventToUpdate = await db.event.findUnique({
-      where: { id: event.id },
-    });
-
-    if (!eventToUpdate || eventToUpdate.organizer.toString() !== userId) {
-      throw new Error("Unauthorized or event not found");
-    }
-
-    let stockDifference = 0;
-    if (
-      event.maxPlaces !== undefined &&
-      event.maxPlaces !== eventToUpdate.maxPlaces
-    ) {
-      stockDifference = event.maxPlaces - eventToUpdate.maxPlaces;
-    }
-
-    const updatedEvent = await db.event.update({
-      where: { id: event.id },
-      data: {
-        ...event,
-        category: event.category,
-        stock: eventToUpdate.stock + stockDifference, // Mettre à jour le stock
-      },
-    });
-
-    revalidatePath(path);
-
-    return updatedEvent;
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 // //! DELETE EVENT
 export const deleteEvent = async ({ eventId, path }: DeleteEventParams) => {

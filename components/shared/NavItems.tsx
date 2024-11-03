@@ -12,10 +12,20 @@ import {
   headerLinksUser,
 } from "@/constants";
 
-const NavItems = () => {
+interface NavItemsProps {
+  onLinkClick?: () => void;
+}
+
+const NavItems: React.FC<NavItemsProps> = ({ onLinkClick }) => {
   const pathname = usePathname();
 
   const role = useCurrentRole();
+
+  const handleLinkClick = () => {
+    if (onLinkClick) {
+      onLinkClick();
+    }
+  };
 
   if (role === Role.organizer) {
     return (
@@ -29,7 +39,9 @@ const NavItems = () => {
                 isActive && "text-white border-white font-bold"
               } flex-center p-medium-20 sm:p-medium-16 whitespace-nowrap py-2 border-b-2 border-transparent hover:border-white transition-all ease-in-out`}
             >
-              <Link href={link.route}>{link.label}</Link>
+              <Link href={link.route} onClick={handleLinkClick}>
+                {link.label}
+              </Link>
             </li>
           );
         })}
@@ -49,7 +61,9 @@ const NavItems = () => {
                 isActive && "text-white border-white font-bold"
               } flex-center p-medium-20 sm:p-medium-16 whitespace-nowrap py-2 border-b-2 border-transparent hover:border-white transition-all ease-in-out`}
             >
-              <Link href={link.route}>{link.label}</Link>
+              <Link href={link.route} onClick={handleLinkClick}>
+                {link.label}
+              </Link>
             </li>
           );
         })}
@@ -69,7 +83,9 @@ const NavItems = () => {
                 isActive && "text-white border-white font-bold"
               } flex-center p-medium-20 sm:p-medium-16 whitespace-nowrap py-2 border-b-2 border-transparent hover:border-white transition-all ease-in-out`}
             >
-              <Link href={link.route}>{link.label}</Link>
+              <Link href={link.route} onClick={handleLinkClick}>
+                {link.label}
+              </Link>
             </li>
           );
         })}
@@ -89,7 +105,9 @@ const NavItems = () => {
                 isActive && "text-white border-white font-bold"
               } flex-center p-medium-20 sm:p-medium-16 whitespace-nowrap py-2 border-b-2 border-transparent hover:border-white transition-all ease-in-out`}
             >
-              <Link href={link.route}>{link.label}</Link>
+              <Link href={link.route} onClick={handleLinkClick}>
+                {link.label}
+              </Link>
             </li>
           );
         })}

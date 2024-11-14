@@ -55,7 +55,7 @@ model User {
   twoFactoFrConfirmation TwoFactorConfirmation?
   reservations  Reservation[]
   isVerified             Boolean                @default(false)
-  tags                   UserTag[]    
+  tags                   Tag[]                  @relation("UserTags")  
 
   @@map("user")
 }
@@ -142,7 +142,7 @@ model Event {
   reservations  Reservation[]
   maxPlaces     Int            @default(0) // Nombre maximum de places disponibles
   isBilleterieExterne Boolean
-  tags          EventTag[]      
+  tags          Tag[]          @relation("EventTags")  // Relation simplifiée avec les tags
 
   @@map("event")
 }
@@ -158,28 +158,8 @@ model Category {
 model Tag {
   id     String   @id @default(uuid())
   name   String   @unique
-  events EventTag[]
-  users  UserTag[]
-}
-
-model EventTag {
-  eventId String
-  tagId   String
-  Event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  Tag     Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@id([eventId, tagId])
-  @@map("event_tag")
-}
-
-model UserTag {
-  userId String
-  tagId  String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@id([userId, tagId])
+  events Event[]  @relation("EventTags") // Relation directe avec les événements
+  users  User[]   @relation("UserTags")  // Relation directe avec les utilisateurs
 }
 
 model UserWishlist {

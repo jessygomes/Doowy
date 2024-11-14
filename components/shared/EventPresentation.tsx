@@ -81,7 +81,7 @@ export const EventPresentation = async ({
     ? reservationsResponse
     : [];
 
-  console.log(reservations);
+  console.log(event);
 
   return (
     <>
@@ -198,6 +198,17 @@ export const EventPresentation = async ({
                 {/* <p className="p-medium-16 lg:p-regular-18 truncate text-primary-500 underline">
             {event.url}
             </p> */}
+              </div>
+
+              <div className="flex justify-center gap-2">
+                {event?.tags.map((tag) => (
+                  <span
+                    key={tag.name}
+                    className="bg-gray-200 text-gray-800 p-1 rounded"
+                  >
+                    {tag.name}
+                  </span>
+                ))}
               </div>
               <div className="flex justify-center items-center gap-8">
                 {role === "organizer" &&

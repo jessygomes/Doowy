@@ -59,7 +59,7 @@ export type CreateEventParams = {
     stock?: number;
     maxPlaces?: number;
     isBilleterieExterne: boolean;
-    // tags?: { id: string; name: string }[];
+    tags?: { id: string; name: string }[];
   };
   path: string;
 };
@@ -83,7 +83,7 @@ export type UpdateEventParams = {
     stock?: number;
     maxPlaces?: number;
     isBilleterieExterne: boolean;
-    // tags?: { id: string; name: string }[];
+    tags?: { id: string; name: string }[];
   };
   path: string;
 };

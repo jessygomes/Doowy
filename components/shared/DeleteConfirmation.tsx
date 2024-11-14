@@ -2,7 +2,7 @@
 
 import { useTransition } from "react";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import {
   AlertDialog,
@@ -23,6 +23,9 @@ import { MdDelete } from "react-icons/md";
 export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
   const pathname = usePathname();
   let [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  console.log(pathname);
 
   return (
     <AlertDialog>
@@ -48,7 +51,8 @@ export const DeleteConfirmation = ({ eventId }: { eventId: string }) => {
           <AlertDialogAction
             onClick={() =>
               startTransition(async () => {
-                await deleteEvent({ eventId, path: pathname });
+                await deleteEvent({ eventId, path: "/events" });
+                router.push("/events");
               })
             }
             className="text-white rubik bg-second hover:bg-third"

@@ -1,5 +1,5 @@
 "use client";
-import { startTransition, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { createTag, getAllTags } from "@/lib/actions/tags.actions";
 
 import {
@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Input } from "../ui/input";
 
-export interface ITags extends Document {
+export interface ITags {
   id: string;
   name: string;
 }
@@ -40,6 +40,7 @@ const DropdownTags = ({ selectedTags, onChangeHandler }: DropDownProps) => {
   const handleAddTag = () => {
     createTag({ tagName: newTag.trim() }).then((tag) => {
       setTags((prevState) => [...prevState, tag]);
+      onChangeHandler([...selectedTags, tag]);
       setNewTag("");
     });
   };
@@ -66,30 +67,39 @@ const DropdownTags = ({ selectedTags, onChangeHandler }: DropDownProps) => {
 
   return (
     <div>
-      <Select
-        onValueChange={(value) =>
-          handleTagSelect(tags.find((tag) => tag.id === value)!)
-        }
-      >
-        <SelectTrigger>
-          <SelectValue placeholder="Sélectionner des tags" />
-        </SelectTrigger>
-        <SelectContent>
-          {tags.map((tag) => (
-            <SelectItem key={tag.id} value={tag.id}>
-              {tag.name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      <div className="flex flex-col lg:flex-row lg:items-center gap-2">
+        <Select
+          onValueChange={(value) =>
+            handleTagSelect(tags.find((tag) => tag.id === value)!)
+          }
+        >
+          <SelectTrigger className="lg:w-1/4 text-dark bg-white">
+            <SelectValue placeholder="Sélectionner des tags" />
+          </SelectTrigger>
+          <SelectContent>
+            {tags.map((tag) => (
+              <SelectItem
+                key={tag.id}
+                value={tag.id}
+                className="select-item p-regular-14 bg-dark"
+              >
+                {tag.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
 
-      <div className="mt-4">
-        {selectedTags.map((tag) => (
-          <div key={tag.id} className="flex items-center gap-2">
-            <span>{tag.name}</span>
-            <button onClick={() => handleTagRemove(tag.id)}>Remove</button>
-          </div>
-        ))}
+        <div className="flex gap-2 flex-wrap">
+          {selectedTags.map((tag) => (
+            <div
+              key={tag.id}
+              className="flex items-center gap-2 border-2 px-2 py-1 rounded-md"
+            >
+              <span className="text-white ">{tag.name}</span>
+              <button onClick={() => handleTagRemove(tag.id)}>x</button>
+            </div>
+          ))}
+        </div>
       </div>
 
       <AlertDialog>

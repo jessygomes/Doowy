@@ -79,29 +79,18 @@ export const createEvent = async ({
       throw new Error("Invalid maxPlaces value");
     }
 
+    // Créer l'événement sans les tags
     const newEvent = await db.event.create({
       data: {
         ...event,
         stock: event.maxPlaces,
         category: event.category,
         organizer: userId,
-        tags: {},
+        tags: {
+          connect: event.tags?.map((tag) => ({ id: tag.id })) || [],
+        },
       },
     });
-
-    // Associer les tags à l'événement créé
-    // if (event.tags && event.tags.length > 0) {
-    //   await db.event.update({
-    //     where: { id: newEvent.id },
-    //     data: {
-    //       tags: {
-    //         connect: event.tags.map((tag) => ({
-    //           eventId_tagId: { tagId: tag.id, eventId: newEvent.id },
-    //         })),
-    //       },
-    //     },
-    //   });
-    // }
 
     return newEvent;
   } catch (error) {
@@ -110,9 +99,9 @@ export const createEvent = async ({
   }
 };
 
-// //! UPDATE
 export async function updateEvent({ userId, event, path }: UpdateEventParams) {
   try {
+    // Récupérer l'événement à mettre à jour, y compris les tags actuels
     const eventToUpdate = await db.event.findUnique({
       where: { id: event.id },
       include: { tags: true },
@@ -122,6 +111,7 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
       throw new Error("Unauthorized or event not found");
     }
 
+    // Calculer la différence de stock
     let stockDifference = 0;
     if (
       event.maxPlaces !== undefined &&
@@ -130,33 +120,35 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
       stockDifference = event.maxPlaces - eventToUpdate.maxPlaces;
     }
 
-    // Déterminer les tags à ajouter et à supprimer
-    // const existingTagIds =
-    //   eventToUpdate.tags.length > 0
-    //     ? eventToUpdate.tags.map((tag) => tag.tagId)
-    //     : [];
+    // Gérer les tags
+    const currentTagIds = eventToUpdate.tags.map((tag) => tag.id);
+    const newTagIds = event.tags?.map((tag) => tag.id) || [];
 
-    // const newTagIds = event.tags?.map((tag) => tag.id) || [];
+    // Tags à ajouter
+    const tagsToConnect = newTagIds
+      .filter((id) => !currentTagIds.includes(id))
+      .map((id) => ({ id }));
 
-    // Préparer `connect` et `disconnect` avec `eventId_tagId`
-    // const tagsToConnect = newTagIds
-    //   .filter((id) => !existingTagIds.includes(id))
-    //   .map((id) => ({ eventId_tagId: { tagId: id, eventId: event.id } }));
+    // Tags à retirer
+    const tagsToDisconnect = currentTagIds
+      .filter((id) => !newTagIds.includes(id))
+      .map((id) => ({ id }));
 
-    // const tagsToDisconnect = existingTagIds
-    //   .filter((id) => !newTagIds.includes(id))
-    //   .map((id) => ({ eventId_tagId: { tagId: id, eventId: event.id } }));
-
+    // Mettre à jour l'événement avec les nouveaux tags
     const updatedEvent = await db.event.update({
       where: { id: event.id },
       data: {
         ...event,
         category: event.category,
         stock: eventToUpdate.stock + stockDifference, // Mettre à jour le stock
-        tags: {},
+        tags: {
+          disconnect: tagsToDisconnect,
+          connect: tagsToConnect,
+        },
       },
     });
 
+    // Revalidation du chemin pour les changements côté client
     revalidatePath(path);
 
     return updatedEvent;
@@ -180,6 +172,11 @@ export const getEventById = async (eventId: string) => {
         Organizer: {
           select: {
             organizationName: true, // Sélectionne uniquement le nom de l'organisateur
+          },
+        },
+        tags: {
+          select: {
+            name: true,
           },
         },
       },

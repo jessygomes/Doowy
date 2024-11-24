@@ -1,7 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { getAllUpcomingEvents } from "@/lib/actions/event.actions";
+import {
+  getAllUpcomingEvents,
+  getEventsByUserPreferences,
+} from "@/lib/actions/event.actions";
 import { SearchParamProps } from "@/types";
 import { currentUser } from "@/lib/auth";
 import { departements } from "@/constants";
@@ -40,7 +43,16 @@ export default async function Home({
   //! Récupérer l'ID de la personnne connecté pour afficher les events auxquels il est abonné
   const user = await currentUser();
   const userId = user?.id;
-  console.log(user);
+
+  const eventsSuggestions = userId
+    ? await getEventsByUserPreferences({
+        userId,
+        departement,
+        limit: 6,
+        page,
+        nbFav: 0,
+      })
+    : { data: [], totalPages: 0 };
 
   if (user?.role === "admin") {
     return (
@@ -119,8 +131,44 @@ export default async function Home({
         )}
       </div>
 
+      {/* SECTION EVENT ALGO */}
+      {userId && (
+        <>
+          <div className="bg-gradient-to-t from-[#9000ff73]  to-[#ff4000c0] shadowCj">
+            <section
+              id="events"
+              className="wrapper py-10 lg:py-20 flex flex-col gap-8 md:gap-12"
+            >
+              <div className="flex justify-start items-center gap-8 pt-5 kronaOne">
+                <p className="h4-bold sm:h3-bold text-white uppercase">
+                  SUGGESTIONS!
+                </p>
+              </div>
+
+              <Collection
+                data={eventsSuggestions?.data}
+                emptyTitle="Aucun Event Trouvé"
+                emptyStateSubtext="Revenir plus tard"
+                collectionType="All_Events"
+                limit={6}
+                page={page}
+                totalPages={eventsSuggestions?.totalPages}
+              />
+
+              {/* <div className="flex justify-center">
+                <Button asChild className="button w-full sm:w-fit uppercase">
+                  <Link href="/events" className="">
+                    Voir tous les événements
+                  </Link>
+                </Button>
+              </div> */}
+            </section>
+          </div>
+        </>
+      )}
+
       {/* SECTION TREND */}
-      <div className="bg-gradient-to-t from-[#9000ff73]  to-[#ff4000c0] shadowCj">
+      <div className="bg-gdark shadowCj">
         <section
           id="events"
           className="wrapper py-10 lg:py-20 flex flex-col gap-8 md:gap-12"

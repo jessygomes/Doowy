@@ -15,8 +15,6 @@ export default async function ProfilReservationsPage() {
     ? reservationsResponse
     : [];
 
-  console.log(reservations);
-
   return (
     <div className="relative flex w-screen flex-col items-end justify-end overflow-hidden shadowCj pt-20 sm:pt-0">
       <div className="wrapper flex flex-col gap-6  pt-8 mt-20 sm:mt-40 w-full z-20">

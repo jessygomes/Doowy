@@ -131,4 +131,12 @@ export const userSettingSchema = z.object({
   organizationName: z.optional(z.string()),
   organizationType: z.optional(z.string()),
   isHidenWishlist: z.optional(z.boolean()),
+  tags: z
+    .array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      })
+    )
+    .optional(),
 });

@@ -20,6 +20,7 @@ export async function getUserById(id: string) {
   try {
     const user = await db.user.findUnique({
       where: { id },
+      include: { tags: true },
     });
     return user;
   } catch {
@@ -81,6 +82,12 @@ export async function getUserByIdForProfile(userId: string) {
         followingList: {
           select: {
             followingId: true,
+          },
+        },
+        tags: {
+          select: {
+            id: true,
+            name: true,
           },
         },
       },
@@ -158,10 +165,23 @@ export async function updateSettingUser(
     };
   }
 
+  // Gérer les tags
+  const existingTagIds = dbUser.tags.map((tag) => tag.id);
+  const newTagIds = values.tags?.map((tag) => tag.id) || [];
+
+  const tagsToConnect = newTagIds.filter((id) => !existingTagIds.includes(id));
+  const tagsToDisconnect = existingTagIds.filter(
+    (id) => !newTagIds.includes(id)
+  );
+
   await db.user.update({
     where: { id: dbUser.id },
     data: {
       ...values,
+      tags: {
+        connect: tagsToConnect.map((id) => ({ id })),
+        disconnect: tagsToDisconnect.map((id) => ({ id })),
+      },
     },
   });
 

@@ -9,6 +9,7 @@ import { Role } from "@prisma/client";
 import { getTwoFactorConfirmationByUserId } from "./lib/actions/two-factor-confirmation";
 import { getUserById } from "./lib/actions/user.actions";
 import { getAccountByUserId } from "./lib/actions/account";
+import { ITags } from "./components/shared/DropdownTags";
 
 //! Pour éviter les erreurs de type (erreur de type pour session.user.role : il ne reconnait pas "role")
 type ExtentedUser = DefaultSession["user"] & {
@@ -16,6 +17,7 @@ type ExtentedUser = DefaultSession["user"] & {
   isTwofactorEnabled: boolean;
   isOAuth: boolean;
   departement: string;
+  tags: ITags[];
 };
 
 declare module "next-auth" {
@@ -82,6 +84,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.departement = token.departement as string;
         session.user.email = token.email as string;
         session.user.isOAuth = token.isOAuth as boolean;
+        session.user.tags = token.tags as ExtentedUser["tags"];
       }
 
       return session;
@@ -106,6 +109,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       token.role = existingUser.role;
       token.isTwofactorEnabled = existingUser.isTwofactorEnabled;
+      token.tags = existingUser.tags;
       return token;
     },
   },

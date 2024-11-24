@@ -10,6 +10,7 @@ import {
   GetEventsByUserParams,
   GetFavoriteEvent,
   GetRelatedEventsByCategoryParams,
+  GetSuggestionEventsParams,
   UpdateEventParams,
 } from "@/types";
 
@@ -124,6 +125,8 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
     const currentTagIds = eventToUpdate.tags.map((tag) => tag.id);
     const newTagIds = event.tags?.map((tag) => tag.id) || [];
 
+    console.log("CURRENT TAGS", currentTagIds);
+
     // Tags à ajouter
     const tagsToConnect = newTagIds
       .filter((id) => !currentTagIds.includes(id))
@@ -176,6 +179,7 @@ export const getEventById = async (eventId: string) => {
         },
         tags: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -579,3 +583,64 @@ export async function getRelatedEventsByCategory({
     handleError(error);
   }
 }
+
+export const getEventsByUserPreferences = async ({
+  userId,
+  limit,
+  page,
+}: GetSuggestionEventsParams) => {
+  // Récupérer l'utilisateur et ses tags
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    include: { tags: true },
+  });
+
+  console.log("USER", user);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const userDepartment = user.departement;
+  const userTagIds = user.tags.map((tag) => tag.id);
+
+  console.log("USER DEPARTMENT", userDepartment);
+  console.log("USER TAG IDS", userTagIds);
+
+  const skipAmount = (Number(page) - 1) * limit;
+
+  // Récupérer les événements ayant le même département et au moins un tag similaire
+  const events = await db.event.findMany({
+    where: {
+      departement: userDepartment ?? undefined,
+      // tags: {
+      //   some: {
+      //     id: { in: userTagIds },
+      //   },
+      // },
+    },
+    include: {
+      Category: {
+        select: {
+          name: true,
+        },
+      },
+      Organizer: {
+        select: {
+          organizationName: true,
+          id: true,
+        },
+      },
+    },
+    orderBy: { nbFav: "desc" },
+    skip: skipAmount,
+    take: limit,
+  });
+
+  console.log("EVENTS", events);
+
+  return {
+    data: events,
+    totalPages: Math.ceil(events.length / limit),
+  };
+};

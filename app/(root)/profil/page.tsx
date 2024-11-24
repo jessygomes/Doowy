@@ -35,6 +35,8 @@ export default async function ProfilPrivate({
 
   const currentUserProfile = await getUserByIdForProfile(userId || "");
 
+  console.log("CURRENT USER PROFILE", currentUserProfile);
+
   //! Paramètre pour la recherche et les filtres : ces variables sont ensuites utilisé pour la fonction "getAllEvents" juste en dessous
   const page = Number(searchParams?.page) || 1;
 
@@ -85,6 +87,18 @@ export default async function ProfilPrivate({
               </div>
             </div>
 
+            {/* BTN ADD TAGS USER */}
+            {currentUserProfile?.tags.length === 0 && (
+              <section className=" w-full text-center lg:text-end">
+                <Link
+                  href={`/profil/${user?.id}/parametres`}
+                  className="text-white rubik text-center underline hover:text-white/80"
+                >
+                  Compléter mes préférences
+                </Link>
+              </section>
+            )}
+
             <div className="flex gap-4 items-center sm:gap-8 ">
               {/* Les followers sont uniquement disponible pour les organisateurs */}
               {currentUserProfile?.role === "organizer" && (
@@ -94,7 +108,9 @@ export default async function ProfilPrivate({
                   </FollowersProvider>
                 </div>
               )}
+
               <PersonnesSuivies userId={user.id} />
+
               <Button asChild size="lg" className="button hidden sm:flex">
                 {user.role === "organizer" ? (
                   <Link
@@ -104,10 +120,10 @@ export default async function ProfilPrivate({
                     <FaPen />
                   </Link>
                 ) : null}
-
                 {/* <UserForm user={userProfile} userId={userId} /> */}
               </Button>
             </div>
+
             <Button asChild size="lg" className="button sm:hidden">
               {user.role === "organizer" ? (
                 <Link href={`/profil/${user.id}/update`} aria-label="Modifier">
@@ -117,6 +133,7 @@ export default async function ProfilPrivate({
 
               {/* <UserForm user={userProfile} userId={userId} /> */}
             </Button>
+
             <Link
               href="/profil/reservations"
               aria-label="Voir les réservations"

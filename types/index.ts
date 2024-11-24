@@ -107,6 +107,14 @@ export type GetAllEventsParams = {
   nbFav: number;
 };
 
+export type GetSuggestionEventsParams = {
+  userId: string;
+  departement: string;
+  limit: number;
+  page: number;
+  nbFav: number;
+};
+
 export type GetEventsByUserParams = {
   userId?: string;
   limit?: number;

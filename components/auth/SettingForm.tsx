@@ -3,7 +3,7 @@ import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import Image from "next/image";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useSession } from "next-auth/react";
 import { useCurrentUser } from "@/hooks/use-current-user";
@@ -34,6 +34,8 @@ import {
 import { FormError } from "../shared/FormError";
 import { FormSuccess } from "../shared/FormSuccess";
 import { Switch } from "../ui/switch";
+import { ITags } from "../shared/DropdownTags";
+import { getAllTags } from "@/lib/actions/tags.actions";
 
 type SettingFormProps = {
   userProfile?: {
@@ -47,16 +49,37 @@ type SettingFormProps = {
     organizationType?: string | null;
     isHidenWishlist?: boolean | null;
     role?: string | null;
+    tags: ITags[] | null;
   };
 };
 
 export const SettingForm = ({ userProfile }: SettingFormProps) => {
   const user = useCurrentUser();
 
+  console.log(user);
+
+  const [allTags, setAllTags] = useState<ITags[]>([]);
+  const [selectedTags, setSelectedTags] = useState<ITags[]>(user?.tags || []); // Pour la gestion des tags sélectionnés
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const { update } = useSession();
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    const getTags = async () => {
+      const tagsList = await getAllTags();
+      tagsList && setAllTags(tagsList as ITags[]); // On vérifie si la liste des tags est définie avant de la mettre à jour dans le state
+    };
+    getTags();
+  }, [setAllTags]);
+
+  const handleTagClick = (tag: ITags) => {
+    if (selectedTags.some((t) => t.id === tag.id)) {
+      setSelectedTags(selectedTags.filter((t) => t.id !== tag.id));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
 
   const form = useForm<z.infer<typeof userSettingSchema>>({
     resolver: zodResolver(userSettingSchema),
@@ -70,6 +93,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
       organizationName: userProfile?.organizationName || undefined,
       organizationType: userProfile?.organizationType || undefined,
       isHidenWishlist: userProfile?.isHidenWishlist || undefined,
+      tags: userProfile?.tags || undefined,
     },
   });
 
@@ -77,10 +101,8 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
     setError("");
     setSuccess("");
 
-    console.log(values);
-
     // Création d'une copie des valeurs pour les modifier
-    let updatedValues = { ...values };
+    let updatedValues = { ...values, tags: selectedTags };
 
     // Si firstName ou lastName est présent, mettre à jour le champ name
     if (values.firstName || values.lastName) {
@@ -207,7 +229,7 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
         )}
 
         <div className="flex flex-col gap-6">
-          {user?.isOAuth === false && (
+          {user?.isOAuth === false ? (
             <>
               <div className="flex flex-col gap-2 w-full">
                 <Label htmlFor="email" className="text-white rubik">
@@ -233,43 +255,89 @@ export const SettingForm = ({ userProfile }: SettingFormProps) => {
                 />
               </div>
             </>
+          ) : (
+            <div className="flex flex-col gap-2 w-full">
+              <Label htmlFor="email" className="text-white rubik">
+                Email
+              </Label>
+              <FormItem className="w-full">
+                <FormControl>
+                  <Input
+                    type="email"
+                    id="email"
+                    value={userProfile?.email || ""}
+                    className="input-field"
+                    disabled={true}
+                  />
+                </FormControl>
+              </FormItem>
+            </div>
           )}
 
           <FormField
             control={form.control}
             name="departement"
             render={({ field }) => (
-              <FormItem className="w-full">
-                <FormControl>
-                  <div className="flex-center h-[40px] w-full overflow-hidden rounded-sm bg-grey-50 px-4 py-2 text-dark">
-                    <Image
-                      src="/assets/icons/location-grey.svg"
-                      width={24}
-                      height={24}
-                      alt="location icon"
-                    />
-                    <Select onValueChange={field.onChange} value={field.value}>
-                      <SelectTrigger className="rubik text-[16px] leading-[24px] text-dark dark:text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
-                        <SelectValue placeholder="Département" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {departements.departements.map((departement) => (
-                          <SelectItem
-                            key={departement.numero}
-                            value={departement.numero}
-                            className="rubik text-white bg-dark"
-                          >
-                            {departement.nom} - {departement.numero}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              <div className="flex flex-col gap-2 w-full">
+                <Label htmlFor="email" className="text-white rubik">
+                  Département
+                </Label>
+                <FormItem className="w-full">
+                  <FormControl>
+                    <div className="flex-center h-[40px] w-full overflow-hidden rounded-sm bg-grey-50 px-4 py-2 text-dark">
+                      <Image
+                        src="/assets/icons/location-grey.svg"
+                        width={24}
+                        height={24}
+                        alt="location icon"
+                      />
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value}
+                      >
+                        <SelectTrigger className="rubik text-[16px] leading-[24px] text-dark dark:text-dark w-full bg-transparent h-[40px] placeholder:text-dark dark:placeholder:text-dark rounded-sm px-5 py-2 border-none focus-visible:ring-transparent focus:ring-transparent">
+                          <SelectValue placeholder="Département" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {departements.departements.map((departement) => (
+                            <SelectItem
+                              key={departement.numero}
+                              value={departement.numero}
+                              className="rubik text-white bg-dark"
+                            >
+                              {departement.nom} - {departement.numero}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              </div>
             )}
           />
+        </div>
+
+        <div>
+          <Label htmlFor="preférences" className="text-white rubik">
+            Préférences
+          </Label>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {allTags.map((tag) => (
+              <span
+                key={tag.id}
+                onClick={() => handleTagClick(tag)}
+                className={`cursor-pointer px-2 py-1 rounded ${
+                  selectedTags.some((t) => t.id === tag.id)
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200 text-gray-800"
+                }`}
+              >
+                {tag.name}
+              </span>
+            ))}
+          </div>
         </div>
 
         <div className="flex flex-col gap-2 w-full">

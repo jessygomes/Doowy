@@ -84,8 +84,6 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   const [files, setFiles] = useState<File[]>([]); // Pour la gestion des fichiers (images)
   const [selectedTags, setSelectedTags] = useState<ITags[]>(event?.tags || []); // Pour la gestion des tags sélectionnés
 
-  console.log("SELECTED TAG", selectedTags);
-
   const initialValues =
     event && type === "Modifier"
       ? {
@@ -225,6 +223,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
               <FormControl>
                 <DropdownTags
                   selectedTags={selectedTags}
+                  setSelectedTags={setSelectedTags}
                   onChangeHandler={setSelectedTags}
                 />
               </FormControl>

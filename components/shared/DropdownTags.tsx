@@ -29,10 +29,15 @@ export interface ITags {
 
 type DropDownProps = {
   selectedTags: ITags[];
+  setSelectedTags: (tags: ITags[]) => void;
   onChangeHandler: (tags: ITags[]) => void;
 };
 
-const DropdownTags = ({ selectedTags, onChangeHandler }: DropDownProps) => {
+const DropdownTags = ({
+  selectedTags,
+  setSelectedTags,
+  onChangeHandler,
+}: DropDownProps) => {
   const [tags, setTags] = useState<ITags[]>([]);
   const [newTag, setNewTag] = useState("");
 
@@ -62,8 +67,14 @@ const DropdownTags = ({ selectedTags, onChangeHandler }: DropDownProps) => {
   };
 
   const handleTagRemove = (tagId: string) => {
-    onChangeHandler(selectedTags.filter((tag) => tag.id !== tagId));
+    const updatedTags = selectedTags.filter((tag) => tag.id !== tagId);
+
+    onChangeHandler(updatedTags); // Met à jour le parent
+
+    console.log("UPDATED TAGS", updatedTags);
   };
+
+  console.log("SELECTED TAGS DROPDOWN", selectedTags);
 
   return (
     <div>

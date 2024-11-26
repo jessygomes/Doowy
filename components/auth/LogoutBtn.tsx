@@ -1,10 +1,8 @@
 "use client";
 
 import { logout } from "@/lib/actions/auth.actions";
-import { revalidatePath } from "next/cache";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { useAuth } from "../shared/Header/AuthContext";
 
 interface LogoutBtnProps {
   children?: React.ReactNode;
